@@ -5,7 +5,7 @@ services:
     command: npm start
     container_name: frontend
     build:
-      context: ./jansori
+      context: ./frontend/frontapp
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
