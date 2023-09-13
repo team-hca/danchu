@@ -3,10 +3,13 @@ from pymongo import MongoClient
 from textrank.utils import preprocess_titles
 from textrank.utils import word_count
 from textrank.summarizer import KeysentenceSummarizer
+from datetime import datetime, timedelta
 
 # MongoDB 연결
 client = MongoClient('localhost', 27017)
-db = client.test_mongodb
+news_db = client.test_mongodb
+keyword_db = client.daily_keyword
+quiz_db = client.daily_quiz
 
 app = FastAPI()
 
@@ -22,18 +25,19 @@ def read_root():
 
 @app.get("/get-all-titles")
 def get_titles() :
-    titles = list(db.articles.find({}, {"title": 1, "_id": 0}))
+    titles = list(news_db.articles.find({}, {"title": 1, "_id": 0}))
     return titles
 
 @app.get("/get-topkeyword-titles")
 def get_titles_by_topkeyword(topkeyword: str) :
-    titles = list(db.articles.find({"title": {"$regex": topkeyword, "$options": "i"}}, {"title": 1, "_id": 0}))
+    titles = list(news_db.articles.find({"title": {"$regex": topkeyword, "$options": "i"}}, {"title": 1, "_id": 0}))
     return titles
 
 @app.get("/generate-quiz-by-keyword")
 def generate_quiz(keyword) :
     # return : [quiz, [answer1, answer2, answer3]]
     result = []
+    quiz = ""
 
     # 1. 정답이 될 키워드 찾기
     title_json = get_titles_by_topkeyword(keyword) # keyword가 들어간 제목들을 받아오기
@@ -55,7 +59,20 @@ def generate_quiz(keyword) :
 
     for _, _, title in keysents:
         result.append(title)
+        quiz = title
     
     result.append(quiz_answers)
+
+    # MongoDB에 저장할 데이터 생성
+    quiz_data = {
+        "date": (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d"), # 다음날 날짜
+        "quiz": quiz,
+        "word1": answer01,
+        "word2" : answer02,
+        "word3" : answer03
+    }
+
+    # MongoDB에 저장
+    quiz_db.history.insert_one(quiz_data)
 
     return result
