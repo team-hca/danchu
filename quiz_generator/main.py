@@ -7,9 +7,10 @@ from datetime import datetime, timedelta
 
 # MongoDB 연결
 client = MongoClient('localhost', 27017)
-news_db = client.test_mongodb
-keyword_db = client.daily_keyword
-quiz_db = client.daily_quiz
+db = client.danchu_test_db
+news_collection = db.news.history
+quiz_collection = db.daily_quiz.history
+keyword_collection = db.daily_keyword.history
 
 app = FastAPI()
 
@@ -25,20 +26,19 @@ def read_root():
 
 @app.get("/get-all-titles")
 def get_titles() :
-    titles = list(news_db.articles.find({}, {"title": 1, "_id": 0}))
+    titles = list(news_collection.find({}, {"title": 1, "_id": 0}))
     return titles
 
 @app.get("/get-topkeyword-titles")
 def get_titles_by_topkeyword(topkeyword: str) :
-    titles = list(news_db.articles.find({"title": {"$regex": topkeyword, "$options": "i"}}, {"title": 1, "_id": 0}))
+    titles = list(news_collection.find({"title": {"$regex": topkeyword, "$options": "i"}}, {"title": 1, "_id": 0}))
     return titles
 
 @app.get("/get-answers-three-days")
 def get_answers() :
-    collection = quiz_db.history
 
     # MongoDB에서 key가 "word1", "word2", "word3"인 값을 가져오기
-    tmp = collection.find({
+    tmp = quiz_collection.find({
             "date": {
                 "$in": [datetime.now().strftime("%Y-%m-%d"), 
                 (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d"), 
@@ -58,7 +58,7 @@ def get_answers() :
     return result
 
 @app.get("/generate-quiz-by-keyword")
-def generate_quiz(keyword) : # 키워드로 퀴즈, 정답 생성 (3일간의 정답 필터링 X)
+def generate_quiz(keyword) :
     # return : [quiz, [answer1, answer2, answer3]]
     result = []
     quiz = ""
@@ -97,12 +97,12 @@ def generate_quiz(keyword) : # 키워드로 퀴즈, 정답 생성 (3일간의 �
     }
 
     # MongoDB에 저장
-    quiz_db.history.insert_one(quiz_data)
+    quiz_collection.insert_one(quiz_data)
 
     return result
 
 @app.get("/generate-quiz")
-def generate_quiz() : # 퀴즈, 정답 생성 (키워드 및 정답에서 이전 3일간의 정답 제외)
+def generate_quiz() :
     # return : [quiz, [answer1, answer2, answer3]]
     result = []
     quiz = ""
@@ -114,13 +114,12 @@ def generate_quiz() : # 퀴즈, 정답 생성 (키워드 및 정답에서 이전
     keyword = ""
     quiz_answers = []
     rank = 1
-    collection = keyword_db.history
     titles = []
 
     while True :
         # 3. 정답이 될 키워드 찾기
         print("rank : " + str(rank))
-        tmp = collection.find({"rank": rank}, {"keyword":1, "_id":0}) # 순위가 rank인 키워드 가져옴
+        tmp = keyword_collection.find({"rank": rank}, {"keyword":1, "_id":0}) # 순위가 rank인 키워드 가져옴
         for document in tmp : keyword = document["keyword"]
         
         if keyword not in answers_three_days : # 키워드가 지난 정답 중에 없음 -> 키워드로 뽑은 정답과 지난 정답이 안 겹치는지 확인
@@ -146,7 +145,7 @@ def generate_quiz() : # 퀴즈, 정답 생성 (키워드 및 정답에서 이전
     for title in titles :
         if quiz_answers[0] in title and quiz_answers[1] in title and quiz_answers[2] in title :
             title_filtered.append(title)
-        if len(title_filtered) == 0 : # 3개 정답이 모두 들어가는 제목 없으면 2개 키워드 있는 제목으로 필터링
+        if len(title_filtered) == 0 :
             quiz_answers[2] = ""
             if quiz_answers[0] in title and quiz_answers[1] in title :
                 title_filtered.append(title)
@@ -170,6 +169,6 @@ def generate_quiz() : # 퀴즈, 정답 생성 (키워드 및 정답에서 이전
     }
 
     # MongoDB에 저장
-    quiz_db.history.insert_one(quiz_data)
+    quiz_collection.insert_one(quiz_data)
 
     return result
