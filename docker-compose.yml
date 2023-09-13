@@ -1,0 +1,32 @@
+version: "3.8"
+services:
+  frontend:
+    restart: always
+    command: npm start
+    container_name: frontend
+    build:
+      context: ./frontend/frontapp
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    stdin_open: true
+   backend_green:
+      build:
+        context: ./backend/java
+        dockerfile: Dockerfile
+      restart: always
+      ports:
+      - 8081:8080
+      container_name: backend_green
+      networks:
+      - be-net
+    backend_blue:
+      build:
+        context: ./backend/java
+        dockerfile: Dockerfile
+      restart: always
+      ports:
+      - 8082:8080
+      container_name: backend_blue
+      networks:
+      - be-net
