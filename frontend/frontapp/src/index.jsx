@@ -3,8 +3,10 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import ResetStyle from './styles/reset';
+
 import { RouterProvider } from 'react-router-dom';
 import router from './Router';
+import GlobalVariableStyle from './styles/global';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -12,6 +14,7 @@ root.render(
   <React.StrictMode>
     <ResetStyle />
     <RouterProvider router={router}/>
+    <GlobalVariableStyle></GlobalVariableStyle>
   </React.StrictMode>
 );
 

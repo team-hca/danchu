@@ -14,9 +14,9 @@ const GlobalVariableStyle = createGlobalStyle`
   --mobile-label: 11px;
 
   // color
-  --primary: #6F19FF;
-  --secondary: #6850A4;
-  --background: #030712;
+  --primary: black;
+  --secondary: #5F4A8C;
+  --background: black;
   --starColor1:#f5fcfd;
   --starColor2:#fff5f5;
   --starColor3: #fffddd;
@@ -34,6 +34,7 @@ const GlobalVariableStyle = createGlobalStyle`
   --gray-800: #1f2937;
   --gray-900: #111827;
   --gray-1000: #030712;
+  --white: white;
 
 }
 #root {
