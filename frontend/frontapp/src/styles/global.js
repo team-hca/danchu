@@ -14,15 +14,9 @@ const GlobalVariableStyle = createGlobalStyle`
   --mobile-label: 11px;
 
   // color
-  --primary: black;
-  --secondary: #5F4A8C;
-  --background: black;
-  --starColor1:#f5fcfd;
-  --starColor2:#fff5f5;
-  --starColor3: #fffddd;
-  --starColor4: #e8ffeb;
-  --red: red;
-  --blue: blue;
+  --primary: #EF3C5F;
+  --secondary: #253846;
+  --background: #FFF7D4;
   --gray-50: #f9fafb;
   --gray-100: #f3f4f6;
   --gray-200: #e5e7eb;
@@ -42,7 +36,7 @@ const GlobalVariableStyle = createGlobalStyle`
 }
 
 body {
-  background: #030712;
+  background: #FFF7D4;
 }
 `;
 
