@@ -1,4 +1,4 @@
-FROM 8.3.0-jdk17
+FROM jdk17
 WORKDIR /backend/java
 COPY *.jar danchu.jar
 RUN ls /
