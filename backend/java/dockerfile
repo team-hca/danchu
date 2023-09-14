@@ -1,6 +1,5 @@
-FROM gradle:8.2.1-jdk17
+FROM 8.3.0-jdk17
 WORKDIR /backend/java
-COPY *.jar /backend/java/danchu.jar
-RUN ls -la /backend/java
-RUN chmod +r /backend/java/danchu.jar
-ENTRYPOINT ["java", "-jar", "/backend/java/danchu.jar"]
+COPY *.jar danchu.jar
+RUN ls /
+ENTRYPOINT ["java", "-jar", "danchu.jar"]
