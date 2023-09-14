@@ -1,5 +1,6 @@
 FROM openjdk:17
 WORKDIR /backend/java
+RUN ls /backend/java
 COPY *.jar danchu.jar
 RUN ls /backend/java
 RUN ls /backend
