@@ -2,3 +2,4 @@ FROM gradle:8.2.1-jdk17
 WORKDIR /backend/java
 ARG JAR_FILE=*.jar
 COPY ${JAR_FILE} danchu.jar
+ENTRYPOINT ["java", "-jar", "danchu.jar"]
