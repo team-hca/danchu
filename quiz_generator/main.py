@@ -153,18 +153,20 @@ def generate_quiz() :
             "quiz": quiz,
             "word1": quiz_answers[0],
             "word2" : quiz_answers[1],
-            "word3" : quiz_answers[2]
+            "word3" : quiz_answers[2],
+            "created_at" : datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "modified_at" : datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         }
 
         # MongoDB에 저장
         quiz_collection.insert_one(quiz_data)
 
         return {"quiz": quiz,
-                "answers" : {
-                    "word1": quiz_answers[0],
-                    "word2": quiz_answers[1],
-                    "word3": quiz_answers[2]
-                    }
+                "word1": quiz_answers[0],
+                "word2": quiz_answers[1],
+                "word3": quiz_answers[2],
+                "created_at" : datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "modified_at" : datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 }
     
     except Exception as e:
@@ -173,7 +175,7 @@ def generate_quiz() :
 
 
 # 키워드 입력하여 퀴즈 생성
-@app.get("/generate-quiz-by-keyword")
+@app.get("/api/v1/question/generatequizbykeyword")
 def generate_quiz(keyword) :
     try : 
 
@@ -205,18 +207,20 @@ def generate_quiz(keyword) :
             "quiz": quiz,
             "word1": quiz_answers[0],
             "word2" : quiz_answers[1],
-            "word3" : quiz_answers[2]
+            "word3" : quiz_answers[2],
+            "created_at" : datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "modified_at" : datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         }
 
         # MongoDB에 저장
         quiz_collection.insert_one(quiz_data)
 
         return {"quiz": quiz,
-                "answers" : {
-                    "word1": quiz_answers[0],
-                    "word2": quiz_answers[1],
-                    "word3": quiz_answers[2]
-                    }
+                "word1": quiz_answers[0],
+                "word2": quiz_answers[1],
+                "word3": quiz_answers[2],
+                "created_at" : datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "modified_at" : datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 }
     
     except Exception as e:
