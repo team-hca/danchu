@@ -1,5 +1,5 @@
 import logging
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pymongo import MongoClient
 from textrank.utils import preprocess_titles
 from textrank.utils import word_count
@@ -196,10 +196,15 @@ def generate_quiz(keyword) :
                 title_filtered.append(title)
 
         # 제목들 중에서 추출
-        keysents = summarizer.summarize(title_filtered, topk=1)
+        if len(title_filtered) == 1 :
+            quiz = title_filtered[0]
+        else :
+            keysents = summarizer.summarize(title_filtered, topk=1)
+            print("여기1?")
 
-        for _, _, title in keysents:
-            quiz = title
+            for _, _, title in keysents:
+                print("여기2?")
+                quiz = title
 
         # MongoDB에 저장할 데이터 생성
         quiz_data = {
