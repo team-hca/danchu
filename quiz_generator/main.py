@@ -26,18 +26,32 @@ def read_root():
 
 @app.get("/get-all-titles")
 def get_titles() :
-    titles = list(news_collection.find({}, {"title": 1, "_id": 0}))
+    # 오늘의 날짜를 가져오기
+    today = datetime.today().strftime('%Y%m%d')
+
+    # today = "20230907"
+
+    # MongoDB에서 오늘 날짜에 해당하는 기사 가져오기
+    titles = list(news_collection.find({"date" : today}, {"title": 1, "_id": 0}))
+
     return titles
 
 @app.get("/get-topkeyword-titles")
 def get_titles_by_topkeyword(topkeyword: str) :
-    titles = list(news_collection.find({"title": {"$regex": topkeyword, "$options": "i"}}, {"title": 1, "_id": 0}))
+
+    # MongoDB에서 오늘 날짜에 해당하는 기사 가져오기
+    titles = list(news_collection.find({
+        "date" : datetime.today().strftime('%Y%m%d'),
+        # "date" : "20230907",
+        "title": {"$regex": topkeyword, "$options": "i"}
+    }, {"title": 1, "_id": 0}))
+
     return titles
 
 @app.get("/get-answers-three-days")
 def get_answers() :
 
-    # MongoDB에서 key가 "word1", "word2", "word3"인 값을 가져오기
+    # MongoDB에서 최근 3일 간의 key가 "word1", "word2", "word3"인 값을 가져오기
     tmp = quiz_collection.find({
             "date": {
                 "$in": [datetime.now().strftime("%Y-%m-%d"), 
@@ -59,8 +73,7 @@ def get_answers() :
 
 @app.get("/generate-quiz-by-keyword")
 def generate_quiz(keyword) :
-    # return : [quiz, [answer1, answer2, answer3]]
-    result = []
+
     quiz = ""
 
     # 1. 정답이 될 키워드 찾기
@@ -72,39 +85,40 @@ def generate_quiz(keyword) :
 
     # 2. 정답 포함된 제목만 추출
     title_filtered = []
-    answer01, answer02, answer03 = quiz_answers[0], quiz_answers[1], quiz_answers[2]
 
     for title in titles :
-        if answer01 in title and answer02 in title and answer03 in title :
+        if quiz_answers[0] in title and quiz_answers[1] in title and quiz_answers[2] in title :
             title_filtered.append(title)
 
     # 제목들 중에서 추출
     keysents = summarizer.summarize(title_filtered, topk=1)
 
     for _, _, title in keysents:
-        result.append(title)
         quiz = title
-    
-    result.append(quiz_answers)
 
     # MongoDB에 저장할 데이터 생성
     quiz_data = {
         "date": (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d"), # 다음날 날짜
         "quiz": quiz,
-        "word1": answer01,
-        "word2" : answer02,
-        "word3" : answer03
+        "word1": quiz_answers[0],
+        "word2" : quiz_answers[1],
+        "word3" : quiz_answers[2]
     }
 
     # MongoDB에 저장
     quiz_collection.insert_one(quiz_data)
 
-    return result
+    return {"quiz": quiz,
+            "answers" : {
+                "word1": quiz_answers[0],
+                "word2": quiz_answers[1],
+                "word3": quiz_answers[2]
+                }
+            }
 
 @app.get("/generate-quiz")
 def generate_quiz() :
-    # return : [quiz, [answer1, answer2, answer3]]
-    result = []
+
     quiz = ""
 
     # 1. 지난 3일간의 정답 가져오기
@@ -154,10 +168,7 @@ def generate_quiz() :
     keysents = summarizer.summarize(title_filtered, topk=1)
 
     for _, _, title in keysents:
-        result.append(title)
         quiz = title
-    
-    result.append(quiz_answers)
 
     # MongoDB에 저장할 데이터 생성
     quiz_data = {
@@ -171,4 +182,10 @@ def generate_quiz() :
     # MongoDB에 저장
     quiz_collection.insert_one(quiz_data)
 
-    return result
+    return {"quiz": quiz,
+            "answers" : {
+                "word1": quiz_answers[0],
+                "word2": quiz_answers[1],
+                "word3": quiz_answers[2]
+                }
+            }
