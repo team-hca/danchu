@@ -1,6 +1,6 @@
 FROM gradle:8.2.1-jdk17
 WORKDIR /backend/java
-COPY /build/libs/*.jar /backend/java/danchu.jar
+COPY /backend/java/build/libs/*.jar /backend/java/danchu.jar
 RUN ls -la /backend/java
 RUN chmod +r /backend/java/danchu.jar
 ENTRYPOINT ["java", "-jar", "/backend/java/danchu.jar"]
