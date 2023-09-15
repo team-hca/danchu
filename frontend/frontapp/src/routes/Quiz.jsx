@@ -1,103 +1,160 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { useState } from "react";
 import H1 from "../components/H1";
 import H2 from "../components/H2";
-import Text from "../components/Text";
+// import H2 from "../components/H3";
 import Button from "../components/Button";
 import QuestionMark from "../icon/QuestionMark";
 import Icon from "../components/Icon";
 import H4 from "../components/H4";
+import P from "../components/P";
+import { Tabs, Tab, Content } from "../components/Tabs";
+import Text from "../components/Text";
+import GuessContainer from "../components/GuessContainer";
 
 const Container = styled.div`
-  height: 100vh;
   width: 100vw;
   max-width: 100vw;
   display: flex;
   flex-direction: column;
-`;
-
-const LeftContainer = styled.div`
-color: var(--white);
-  width: 100%;
-  height: 100%;
-  background: #9498F2;
-
-  // padding: 18px;
-  display: flex;
-  flex-direction: column;
-  place-content: center;
   place-items: center;
 `;
 
-// const ButtonStyle = styled.div`
+const QuestionMarkContainer = styled.div`
+  margin-right: 60px;
+  margin-top: 60px;
+  place-self: flex-end;
+`;
 
-// width: 40px;
-// height: 40px;
-
-// `
-
-const QuizContainer = styled.div`
-  color: var(--white);
-  padding: 18px;
-  margin: 18px;
-  border-radius: 8px;
-  border: 1px solid var(--primary);
-  background: var(--background);
-  // background: #9498F2;
-  width:80%;
-  height:100%;
-  justify-content:center;
+const CenterContainer = styled.div`
+  // background-color: var(--primary);
+  // border: 1px solid var(--primary);
+  width: 720px;
+  display: flex;
+  flex-direction: column;
+  place-items: center;
 `;
 
 const LogoContainer = styled.div`
-color: white;
-  margin-bottom: 18px;
-`
+  padding: 60px;
+`;
+
+const DateDanchuContentContainer = styled.div`
+  padding: 16px;
+`;
+
+const H6Styled = styled.h6`
+  display: inline-block;
+  color: ${(props) => props.color};
+`;
+
+const QuizContainer = styled.div`
+  background-color: var(--white);
+  max-width: 720px;
+  padding: 60px;
+  border-radius: 5px;
+  margin-bottom: 60px;
+`;
 
 const QuizSentenceContainer = styled.div`
-  // height: 100%;
-  padding: 18px;
-  color: var(--white);
+  display:flex;
+  flex-direction: column;
+`;
+const QuizSentenceAnswerContainer = styled.div`
+  display:flex;
+  flex-direction: row;
+`;
+
+const TabContainer = styled.div`
+  width: 720px;
+  text-align: center;
+  
+`;
+
+const ContentContainer = styled.div`
+  text-align: -webkit-center;
+  // width: 720px;
+  width: 90%;
+  background-color: var(--primary);
+  border-radius: 0px 0px 18px 18px;
+  box-shadow: 5px 5px 5px;
+`;
+
+const Answer = styled.div`
+  background-color: var(--background);
+  height: 50px;
+  width: 50%;
   text-align: center;
 `;
 
-const ButtonStyle = styled.div`
-  // justify-content: center;
-  width: 80%;
-`
 
-const RightContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  background: blue;
-`;
 
 export default function Quiz() {
+  const [active, setActive] = useState(0);
+  const handleClick = (e) => {
+    const index = parseInt(e.target.id, 0);
+    if (index !== active) {
+      setActive(index);
+    }
+  };
   return (
     <Container>
-      <LeftContainer>
-        
-          <LogoContainer> 
-            <H1 >DanChu</H1>
-          </LogoContainer>
-          <QuizContainer>
-        
-          <H4>2023년 09월 13일의 단추를 끼워보세요!</H4>
-     
-          <Icon inSize={"24px"} outSize={"36px"} color="#6F19FF"
-            >
-            <QuestionMark/>
-          </Icon>
+      <QuestionMarkContainer>
+        <QuestionMark />
+      </QuestionMarkContainer>
+      <CenterContainer>
+        <LogoContainer>
+          <H1 color="var(--secondary)">DANCHU</H1>
+        </LogoContainer>
+        <DateDanchuContentContainer>
+          <H6Styled color="var(--secondary)">2023년 09월 14일의 </H6Styled>
+          <H6Styled color="var(--primary)">&nbsp;단추</H6Styled>
+          <H6Styled color="var(--secondary)">를 끼워보세요!</H6Styled>
+        </DateDanchuContentContainer>
+        <QuizContainer> 
+{/* 퀴즈 몇 줄인지 받아서 일정 길이 이상이면 나눠서 보내기 */}
+          {/* <H1>노는 것처럼 보여?</H1> */}
+          {/* <H1>가 되면 뭔가를 보여준다고</H1> */}
           <QuizSentenceContainer>
-            <H2>100억에 팔린 강남 아파트…</H2>
-            <H2>집들이 직접 가봤더니 '깜짝'</H2>
+            <QuizSentenceAnswerContainer>
+              <Answer><H2>1</H2></Answer>
+              <H1>·김오수로 향하는 김만배 허위인터뷰 '배후' 의혹, 與, 김어준·주진우·최경영 고발…</H1>
+            </QuizSentenceAnswerContainer>
+            <QuizSentenceAnswerContainer>
+
+              <H1>"대선 후보 명예 크게 훼손" 등</H1>
+            </QuizSentenceAnswerContainer>
           </QuizSentenceContainer>
-          <ButtonStyle>
-          <Button>포기하기</Button></ButtonStyle>
         </QuizContainer>
-      </LeftContainer>
-      <RightContainer>b</RightContainer>
+        <TabContainer>
+          <Tabs>
+            <Tab onClick={handleClick} active={active === 0} id={0}>
+              Content1
+            </Tab>
+
+            <Tab onClick={handleClick} active={active === 1} id={1}>
+              Content2
+            </Tab>
+            <Tab onClick={handleClick} active={active === 2} id={2}>
+              Content3
+            </Tab>
+          </Tabs>
+          </TabContainer>
+          <ContentContainer>
+            <Content active={active === 0}>
+              <GuessContainer></GuessContainer>
+            </Content>
+            <Content active={active === 1}>
+              <h1>Content 2</h1>
+              <GuessContainer/>
+            </Content>
+            <Content active={active === 2}>
+              <h1>Content 3</h1>
+              <GuessContainer></GuessContainer>
+            </Content>
+          </ContentContainer>
+        
+      </CenterContainer>
     </Container>
   );
 }
