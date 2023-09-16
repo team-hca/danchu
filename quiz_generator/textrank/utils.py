@@ -60,9 +60,8 @@ def word_count(titles) :
   tmp_list = [(value * (-1), key) for key, value in tmp_dic.items()]
   heapq.heapify(tmp_list)
 
-  for i in range(3) : # 빈도수 상위 3개 키워드
+  for _ in range(3) : # 빈도수 상위 3개 키워드
      _, keyword = heapq.heappop(tmp_list)
      result.append(keyword)
 
   return result
-

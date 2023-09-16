@@ -5,12 +5,13 @@ from textrank.utils import preprocess_titles
 from textrank.utils import word_count
 from textrank.summarizer import KeysentenceSummarizer
 from datetime import datetime, timedelta
+from config import MONGO_URI
 
 # MongoDB 연결
-client = MongoClient('localhost', 27017)
-db = client.danchu_test_db
-news_collection = db.news.history
+client = MongoClient(MONGO_URI)
+db = client.danchu
 quiz_collection = db.daily_quiz.history
+news_collection = db.news.history
 keyword_collection = db.daily_keyword.history
 
 app = FastAPI()
@@ -91,123 +92,78 @@ def get_answers() :
 
 
 # 퀴즈 생성
-@app.get("/api/v1/question/generatequiz")
+@app.get("/api/v1/quiz/generatequiz")
 def generate_quiz() :
     try:
-
         quiz = ""
 
-        # 1. 지난 3일간의 정답 가져오기
+        # 1. 최근 3일 간의 정답을 가져옴 (확인 완료)
         answers_three_days = get_answers()
+        logging.info(answers_three_days)
 
-        # 2. 1위 키워드 가져오기 (그런데 3일 전 정답 중에 있으면 안됨 !)
-        keyword = ""
-        quiz_answers = []
+        top_keyword = ""
         rank = 1
-        titles = []
 
         while True :
-            # 3. 정답이 될 키워드 찾기
-            print("rank : " + str(rank))
+            # 2. 이슈 키워드 가져와서 3일간의 정답과 비교 
+            # (겹치면 키워드 다시 가져옴)
+            tmp_keyword = ""
             tmp = keyword_collection.find({"rank": rank}, {"keyword":1, "_id":0}) # 순위가 rank인 키워드 가져옴
-            for document in tmp : keyword = document["keyword"]
-            
-            if keyword not in answers_three_days : # 키워드가 지난 정답 중에 없음 -> 키워드로 뽑은 정답과 지난 정답이 안 겹치는지 확인
-                
-                title_json = get_titles_by_topkeyword(keyword) # keyword가 들어간 제목들을 받아오기
+            for document in tmp :
+                tmp_keyword = document["keyword"]
+                logging.info("tmp_keyword : " + tmp_keyword)
+
+            if tmp_keyword in answers_three_days :
+                rank += 1 # 다음 순위 키워드 찾으러 가기
+            else : # tmp_keyword not in answers_three_days
+                # 3. 이슈 키워드가 있는 제목만 가져오기
+                title_json = get_titles_by_topkeyword(tmp_keyword)
                 titles = [item["title"] for item in title_json] # json -> list
+                logging.info("=====전처리 전 기사 제목 시작=====")
+                for title in titles : logging.info(title)
+                logging.info("=====전처리 전 기사 제목 끝=====")
                 titles = preprocess_titles(titles) # 가져온 제목들 전처리
-                titles = list(set(titles)) # 중복 제목 제거 (제목이 중복 때문에 선택되지 않도록)
-                quiz_answers = word_count(titles) # 가져온 제목들에서 word count
+                titles = list(set(titles)) # 중복 제목 제거
 
-                cnt = 0
-                for answer in quiz_answers :
-                    if answer in answers_three_days : break
-                    else : cnt += 1
-                if cnt == len(quiz_answers) : break # 키워드로 뽑은 정답과 지난 정답이 겹치지 않음
-            else : pass # 키워드가 3일간 정답 중에 있으면 
+                # 4. 제목에서 word count해서 상위 3개 키워드(정답) 뽑기
+                # (이 때, 정답과 3일간의 정답이 겹치면 다시 2로)            
+                quiz_answers = word_count(titles)
+                logging.info("quiz_answers : " + quiz_answers[0] + ", " + quiz_answers[1] + ", " + quiz_answers[2]) # 퀴즈 정답 확인
+
+                # 5. 3개 키워드가 모두 있는 제목만 필터링
+                # (이 때, 결과가 0이면 상위 2개로만 필터링)            
+                titles_filtered = []
+                if quiz_answers[0] in answers_three_days or quiz_answers[1] in answers_three_days or quiz_answers[2] in answers_three_days : # 정답이 겹치면
+                    rank += 1 #
+                else :
+                    top_keyword = tmp_keyword
+                    for title in titles :
+                        if quiz_answers[0] in title and quiz_answers[1] in title and quiz_answers[2] in title :
+                            titles_filtered.append(title)
+                
+                    if len(titles_filtered) == 0 :
+                        quiz_answers[2] = ""
+                        for title in titles :
+                            if quiz_answers[0] in title and quiz_answers[1] in title :
+                                titles_filtered.append(title)
             
-            rank += 1
-
-        # 4. 정답 포함된 제목만 추출
-        title_filtered = []
-
-        for title in titles :
-            if quiz_answers[0] in title and quiz_answers[1] in title and quiz_answers[2] in title :
-                title_filtered.append(title)
-
-        if len(title_filtered) == 0 :
-            quiz_answers[2] = ""
-            if quiz_answers[0] in title and quiz_answers[1] in title :
-                title_filtered.append(title)
+                logging.info(titles_filtered)
         
-        # 제목들 중에서 추출
-        keysents = summarizer.summarize(title_filtered, topk=1)
+            if top_keyword != "" : break # top keyword 정하면 끝냄
 
-        for _, _, title in keysents:
-            quiz = title
-
-        # MongoDB에 저장할 데이터 생성
-        quiz_data = {
-            "date": (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d"), # 다음날 날짜
-            "quiz": quiz,
-            "word1": quiz_answers[0],
-            "word2" : quiz_answers[1],
-            "word3" : quiz_answers[2],
-            "created_at" : datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            "modified_at" : datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        }
-
-        # MongoDB에 저장
-        quiz_collection.insert_one(quiz_data)
-
-        return {"quiz": quiz,
-                "word1": quiz_answers[0],
-                "word2": quiz_answers[1],
-                "word3": quiz_answers[2],
-                "created_at" : datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                "modified_at" : datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                }
-    
-    except Exception as e:
-        logging.error(f"An error occurred: {e}")
-        raise HTTPException(status_code=400, detail="BAD REQUEST")
-
-
-# 키워드 입력하여 퀴즈 생성
-@app.get("/api/v1/question/generatequizbykeyword")
-def generate_quiz(keyword) :
-    try : 
-
-        quiz = ""
-
-        # 1. 정답이 될 키워드 찾기
-        title_json = get_titles_by_topkeyword(keyword) # keyword가 들어간 제목들을 받아오기
-        titles = [item["title"] for item in title_json]
-        titles = preprocess_titles(titles) # 가져온 제목들 전처리
-        titles = list(set(titles)) # 중복 제목 제거 (중복 때문에 제목이 추출되지 않도록)
-        quiz_answers = word_count(titles) # 가져온 제목들에서 word count
-
-        # 2. 정답 포함된 제목만 추출
-        title_filtered = []
-
-        for title in titles :
-            if quiz_answers[0] in title and quiz_answers[1] in title and quiz_answers[2] in title :
-                title_filtered.append(title)
-
-        # 제목들 중에서 추출
-        if len(title_filtered) == 1 :
-            quiz = title_filtered[0]
+        # 6. 결과 중에서 퀴즈가 될 제목 선택 (text rank)
+        if len(titles_filtered) == 1 : # 정답으로 필터링한 제목이 하나면 바로 퀴즈로 선택
+            quiz = titles_filtered[0]
         else :
-            keysents = summarizer.summarize(title_filtered, topk=1)
-            print("여기1?")
+            # text rank로 제목 선택
+            keysents = summarizer.summarize(titles_filtered, topk=1)
 
-            for _, _, title in keysents:
-                print("여기2?")
-                quiz = title
+            for _, _, title in keysents: quiz = title
+    
+        logging.info(quiz)
 
-        # MongoDB에 저장할 데이터 생성
-        quiz_data = {
+        # 7. 퀴즈와 정답을 mongo db에 저장
+        quiz_today = {
             "date": (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d"), # 다음날 날짜
             "quiz": quiz,
             "word1": quiz_answers[0],
@@ -217,17 +173,10 @@ def generate_quiz(keyword) :
             "modified_at" : datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         }
 
-        # MongoDB에 저장
-        quiz_collection.insert_one(quiz_data)
+        quiz_collection.insert_one(quiz_today)
 
-        return {"quiz": quiz,
-                "word1": quiz_answers[0],
-                "word2": quiz_answers[1],
-                "word3": quiz_answers[2],
-                "created_at" : datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                "modified_at" : datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                }
-    
+        logging.info("quiz : " + quiz + ", answer1 : " + quiz_answers[0] + ", answer2 : " + quiz_answers[1] + ", answer3 : " + quiz_answers[2])
+        
     except Exception as e:
         logging.error(f"An error occurred: {e}")
         raise HTTPException(status_code=400, detail="BAD REQUEST")
