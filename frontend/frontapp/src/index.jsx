@@ -1,13 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
+import ResetStyle from './styles/reset';
+
+import { RouterProvider } from 'react-router-dom';
+import router from './Router';
+import GlobalVariableStyle from './styles/global';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
+  
   <React.StrictMode>
-    <App />
+    <ResetStyle />
+    <RouterProvider router={router}/>
+    <GlobalVariableStyle></GlobalVariableStyle>
   </React.StrictMode>
 );
 
