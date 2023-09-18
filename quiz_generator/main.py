@@ -149,10 +149,18 @@ def generate_quiz() :
                         for title in titles :
                             if quiz_answers[0] in title and quiz_answers[1] in title :
                                 titles_filtered.append(title)
+                        
+                        if len(titles_filtered) == 0 :
+                            quiz_answers[1] = ""
+                            for title in titles :
+                                if quiz_answers[0] in title :
+                                    titles_filtered.append(title)
             
                 logging.info(titles_filtered)
         
-            if top_keyword != "" : break # top keyword 정하면 끝냄
+            if top_keyword != "" : 
+                logging.info("top keyword : " + top_keyword)
+                break # top keyword 정하면 끝냄
 
         # 6. 결과 중에서 퀴즈가 될 제목 선택 (text rank)
         if len(titles_filtered) == 1 : # 정답으로 필터링한 제목이 하나면 바로 퀴즈로 선택
