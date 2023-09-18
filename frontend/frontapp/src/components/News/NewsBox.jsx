@@ -63,6 +63,7 @@ const ScrollableContent = styled.div`
   flex-direction: column;
   max-height: 100%;
   overflow-y: auto;
+  box-shadow: 1px 1px 2px rgba(37, 56, 70, 1);
 `;
 
 const DummyItem = styled.div`
