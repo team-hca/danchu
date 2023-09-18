@@ -65,16 +65,21 @@ const MainButton = styled.button`
   background: none;
   border: none;
   cursor: pointer;
-  transition: color 0.3s;
   margin-left: 450px;
   &:focus {
     outline: none;
   }
 
-  // hover 되면 이미지 색 변경하는 것도 짜보기~
-  &:hover {
-    color: #ffc40e;
-    text-shadow: none;
+  img {
+    transition: transform 0.3s;
+  }
+
+  &:hover img {
+    transform: scale(1.1);
+  }
+
+  &:active img {
+    opacity: 0.7;
   }
 `;
 
