@@ -22,19 +22,40 @@ const Logo = styled.img`
   transform: translateX(-50%);
 `;
 
-const QuestionMark = styled.img`
+const QuestionMark = styled.button`
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
   width: 50px;
   position: absolute;
   right: 10px;
   top: 50px;
   transform: translateY(-50%);
+  &:focus {
+    outline: none;
+  }
+
+  img {
+    transition: transform 0.3s;
+  }
+
+  &:hover img {
+    transform: scale(1.1);
+  }
+
+  &:active img {
+    opacity: 0.7;
+  }
 `;
 
 export default function Header() {
   return (
     <Container>
       <Logo src={danchuPath} alt="Logo"></Logo>
-      <QuestionMark src={questionMarkPath} alt="QuestionMark"></QuestionMark>
+      <QuestionMark>
+        <img src={questionMarkPath} alt="QuestionMark"></img>
+      </QuestionMark>
     </Container>
   );
 }
