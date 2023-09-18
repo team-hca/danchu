@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import headerBoxImagePath from "../../icon/header_box.png";
+import mainBoxImagePath from "../../icon/main_box.png";
 import moveToMainPath from "../../icon/move_to_main.png";
 
 const Container = styled.div`
@@ -88,7 +88,7 @@ export default function MainBox() {
   return (
     <Container>
       <BoxImage>
-        <img src={headerBoxImagePath} alt="headerBoxImagePath"></img>
+        <img src={mainBoxImagePath} alt="headerBoxImagePath"></img>
         <OverlayText>
           <span>
             <AnswerHighlight1>내가</AnswerHighlight1> 노는 것처럼 보여?
