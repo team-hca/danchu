@@ -46,7 +46,6 @@ def preprocess_titles(titles) : # 특수문자 안 내용 제거
   return result
 
 def word_count(titles) :
-  # okt = Okt()
   mecab = MeCab()
 
   result = []
@@ -87,8 +86,17 @@ def word_count(titles) :
   tmp_list = [(value * (-1), key) for key, value in tmp_dic.items()]
   heapq.heapify(tmp_list)
 
-  for _ in range(3) : # 빈도수 상위 3개 키워드
-     _, keyword = heapq.heappop(tmp_list)
+  while True : # 빈도수 상위 3개 키워드
+    _, keyword = heapq.heappop(tmp_list)
+    
+    if len(result) == 0 :
      result.append(keyword)
+    elif len(result) == 1 :
+      if keyword not in result[0] and result[0] not in keyword :
+        result.append(keyword)
+    elif len(result) == 2 :
+       if (keyword not in result[0] and result[0] not in keyword) and (keyword not in result[1] and result[1] not in keyword) : 
+        result.append(keyword)
+    else : break
 
   return result

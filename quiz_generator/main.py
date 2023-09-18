@@ -105,7 +105,16 @@ def generate_quiz() :
         rank = 1
 
         # 현재 날짜와 시간을 가져옴
-        today = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+        # today = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+
+        # 현재 날짜와 시간을 가져옴
+        today = datetime.today()
+
+        # 어제 날짜를 계산
+        today = today - timedelta(days=1)
+
+        # 어제 날짜를 문자열로 포맷팅
+        today = today.strftime('%Y-%m-%d %H:%M:%S')
 
         while True :
             # 2. 이슈 키워드 가져와서 3일간의 정답과 비교 
@@ -137,7 +146,7 @@ def generate_quiz() :
                 # (이 때, 결과가 0이면 상위 2개로만 필터링)            
                 titles_filtered = []
                 if quiz_answers[0] in answers_three_days or quiz_answers[1] in answers_three_days or quiz_answers[2] in answers_three_days : # 정답이 겹치면
-                    rank += 1 #
+                    rank += 1
                 else :
                     top_keyword = tmp_keyword
                     for title in titles :
@@ -161,6 +170,7 @@ def generate_quiz() :
             if top_keyword != "" : 
                 logging.info("top keyword : " + top_keyword)
                 break # top keyword 정하면 끝냄
+        
 
         # 6. 결과 중에서 퀴즈가 될 제목 선택 (text rank)
         if len(titles_filtered) == 1 : # 정답으로 필터링한 제목이 하나면 바로 퀴즈로 선택
@@ -168,7 +178,6 @@ def generate_quiz() :
         else :
             # text rank로 제목 선택
             keysents = summarizer.summarize(titles_filtered, topk=1)
-
             for _, _, title in keysents: quiz = title
     
         logging.info(quiz)
