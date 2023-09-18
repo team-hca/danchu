@@ -67,8 +67,8 @@ const ScrollableContent = styled.div`
 
 const DummyItem = styled.div`
   padding: 20px;
-  margin-bottom: 20px;
-  margin-top: 20px;
+  margin-bottom: 10px;
+  margin-top: 10px;
   border-bottom: 1px solid #ccc;
   display: flex;
   flex-direction: column;
@@ -79,7 +79,7 @@ const DummyItem = styled.div`
 const TitleText = styled.div`
   font-size: 30px;
   font-weight: bold;
-  margin-bottom: 10px;
+  margin-bottom: 40px;
 `;
 
 const ContentText = styled.div`
