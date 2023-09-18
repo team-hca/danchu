@@ -57,7 +57,6 @@ const OverlayText = styled.div`
 `;
 const ScrollableContent = styled.div`
   border: none;
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
   border-radius: 6px;
   display: flex;
   flex-direction: column;
