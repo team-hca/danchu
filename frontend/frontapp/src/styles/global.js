@@ -37,7 +37,11 @@ const GlobalVariableStyle = createGlobalStyle`
 
 body {
   // background: #FFF7D4;
-  background: linear-gradient(135deg, #FFFFF4, #FFE4B5);
+  background: linear-gradient(180deg, #FFFFF4, #FFE4B5);
+
+
+
+
   
 }
 `;
