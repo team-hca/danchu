@@ -6,8 +6,9 @@ const Container = styled.div`
   flex: 1;
   height: auto;
   width: 100%;
+  max-width: 100%;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   position: relative;
   justify-content: center;
@@ -18,10 +19,10 @@ const BoxImage = styled.div`
   flex: 1;
   display: flex;
   justify-content: center;
-  overflow: hidden;
+  // overflow: hidden;
   position: relative;
-  // width: 100vw;
-  // height: auto;
+  width: 1080px;
+  height: 320px;
 `;
 
 const OverlayText = styled.div`
