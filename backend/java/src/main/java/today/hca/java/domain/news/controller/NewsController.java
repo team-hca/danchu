@@ -15,10 +15,9 @@ public class NewsController {
 
     @GetMapping("/news")
     public ResponseEntity<?> getNewsByAnswer(@RequestParam String ansewr) {
-        System.out.println("date: " + ansewr);
-        Quiz quiz = quizService.getQuizByDate(ansewr);
-        System.out.println("quiz: " + quiz.toString());
+        System.out.println("answer: " + ansewr);
+        String ans = "";
 
-        return new ResponseEntity(quiz, HttpStatus.OK);
+        return new ResponseEntity(ans, HttpStatus.OK);
     }
 }
