@@ -71,15 +71,15 @@ const MainButton = styled.button`
   }
 
   img {
-    transition: transform 0.3s;
+    transition: transform 0.1s;
   }
 
   &:hover img {
     transform: scale(1.1);
+    opacity: 0.7;
   }
 
   &:active img {
-    opacity: 0.7;
   }
 `;
 
