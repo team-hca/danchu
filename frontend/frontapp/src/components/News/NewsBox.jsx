@@ -48,6 +48,7 @@ const OverlayText = styled.div`
   transform: translate(-50%, -50%);
   padding: 30px;
   height: 90%;
+  width: 680px;
   display: flex;
   justify-content: center;
   white-space: pre-line;
