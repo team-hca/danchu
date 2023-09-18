@@ -96,6 +96,10 @@ const ButtonWrapper = styled.button`
   text-align: left;
   margin-bottom: 10px;
 
+  &:hover {
+    transform: scale(1.02);
+  }
+
   &:hover ${TitleText} {
     color: #ffc40e;
     text-shadow: none;
