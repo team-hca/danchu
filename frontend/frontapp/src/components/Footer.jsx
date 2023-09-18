@@ -21,6 +21,7 @@ const Message = styled.div`
   font-weight: bold;
   font-size: 40px;
   overflow: hidden;
+  padding: 5px 0;
 `;
 
 export default function Footer() {
