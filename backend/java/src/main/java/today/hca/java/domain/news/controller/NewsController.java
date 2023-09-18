@@ -15,7 +15,7 @@ public class NewsController {
 
     @GetMapping("/news")
     public ResponseEntity<?> getNewsByAnswer(@RequestParam String ansewr) {
-        System.out.println("datae: " + ansewr);
+        System.out.println("date: " + ansewr);
         Quiz quiz = quizService.getQuizByDate(ansewr);
         System.out.println("quiz: " + quiz.toString());
 
