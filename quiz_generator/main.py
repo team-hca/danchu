@@ -104,11 +104,14 @@ def generate_quiz() :
         top_keyword = ""
         rank = 1
 
+        # 현재 날짜와 시간을 가져옴
+        today = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+
         while True :
             # 2. 이슈 키워드 가져와서 3일간의 정답과 비교 
             # (겹치면 키워드 다시 가져옴)
             tmp_keyword = ""
-            tmp = keyword_collection.find({"rank": rank}, {"keyword":1, "_id":0}) # 순위가 rank인 키워드 가져옴
+            tmp = keyword_collection.find({"rank": rank, "created_at": {"$gte": today}}, {"keyword": 1, "_id": 0})
             for document in tmp :
                 tmp_keyword = document["keyword"]
                 logging.info("tmp_keyword : " + tmp_keyword)
