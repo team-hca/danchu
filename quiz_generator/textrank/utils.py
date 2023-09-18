@@ -1,8 +1,12 @@
+import logging
 from collections import Counter
 from scipy.sparse import csr_matrix
 from konlpy.tag import *
 import re
 import heapq
+from mecab import MeCab
+
+logging.basicConfig(level=logging.INFO)
 
 def scan_vocabulary(sents, tokenize=None, min_count=2):
 
@@ -42,13 +46,36 @@ def preprocess_titles(titles) : # 특수문자 안 내용 제거
   return result
 
 def word_count(titles) :
-  okt = Okt()
+  # okt = Okt()
+  mecab = MeCab()
 
   result = []
   noun_list = []
 
   for title in titles :
-    tmp_list = okt.nouns(title) # 명사로 쪼개기
+     # 1. 띄어쓰기 단위로 split
+    title_list = title.split()
+
+    tmp_list = []
+    for splited in title_list :
+      splited_tuples = mecab.pos(splited)
+      tmp_word = ''
+
+      # 2. 품사가 NNP, NNG, XSN인 것만 이용
+      for i in range(len(splited_tuples)) :
+        splited_tuple = splited_tuples[i]
+        if splited_tuple[1] in ['NNP', 'NNG', 'XSN'] :
+          tmp_word += splited_tuple[0]
+            
+        else :
+          if tmp_word != '' :
+            tmp_list.append(tmp_word)
+            tmp_word = ''
+          
+        if tmp_word != '' and i == len(splited_tuples) - 1 :
+          tmp_list.append(tmp_word)
+          tmp_word = ''
+
     noun_list += tmp_list
 
   tmp_dic = {}
