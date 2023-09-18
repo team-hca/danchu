@@ -116,6 +116,18 @@ const ButtonWrapper = styled.button`
   }
 `;
 
+const LastItemTitleText = styled(TitleText)`
+  color: #ffc40e; // 색상 변경
+  font-size: 35px; // 크기 변경
+  text-align: center;
+`;
+
+const LastItemContentText = styled(ContentText)`
+  color: #007bff; // 색상 변경
+  font-size: 25px; // 크기 변경
+  text-align: center;
+`;
+
 export default function NewsBox() {
   function generateDummyData(count) {
     return Array.from({ length: count }, (_, index) => ({
@@ -144,22 +156,46 @@ export default function NewsBox() {
 
   const dummyData = generateDummyData(12);
 
+  // 마지막 항목 추가
+  dummyData.push({
+    title: "끝",
+    content: "더 이상의 뉴스가 없습니다.",
+    url: "#",
+  });
+
   return (
     <Container>
       <BoxImage>
         <img src={newsBoxImagePath} alt="headerBoxImagePath" />
         <OverlayText>
           <ScrollableContent>
-            {dummyData.map((data, index) => (
-              <DummyItem key={data.title + index}>
-                <ButtonWrapper onClick={() => window.open(data.url, "_blank")}>
-                  <TitleText>{data.title}</TitleText>
-                  <ContentText>
-                    <NewlineText text={data.content} />
-                  </ContentText>
-                </ButtonWrapper>
-              </DummyItem>
-            ))}
+            {dummyData.map((data, index) => {
+              const isLastItem = index === dummyData.length - 1;
+
+              if (isLastItem) {
+                return (
+                  <DummyItem key={data.title + index}>
+                    <LastItemTitleText>{data.title}</LastItemTitleText>
+                    <LastItemContentText>
+                      <NewlineText text={data.content} />
+                    </LastItemContentText>
+                  </DummyItem>
+                );
+              }
+
+              return (
+                <DummyItem key={data.title + index}>
+                  <ButtonWrapper
+                    onClick={() => window.open(data.url, "_blank")}
+                  >
+                    <TitleText>{data.title}</TitleText>
+                    <ContentText>
+                      <NewlineText text={data.content} />
+                    </ContentText>
+                  </ButtonWrapper>
+                </DummyItem>
+              );
+            })}
           </ScrollableContent>
         </OverlayText>
       </BoxImage>
