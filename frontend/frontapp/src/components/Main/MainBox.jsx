@@ -51,6 +51,7 @@ const AnswerHighlight1 = styled.span`
   color: white;
   padding: 2px 5px;
   border-radius: 5px;
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
 `;
 
 const AnswerHighlight2 = styled.span`
@@ -58,6 +59,7 @@ const AnswerHighlight2 = styled.span`
   color: white;
   padding: 2px 5px;
   border-radius: 5px;
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
 `;
 
 const MainButton = styled.button`
