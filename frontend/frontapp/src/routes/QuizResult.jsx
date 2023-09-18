@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import Footer from "../components/Footer";
-import Header from "../components/Header";
+import Footer from "../components/Common/Footer";
+import Header from "../components/Common/Header";
 import Main from "../components/Main/Main";
 import News from "../components/News/News";
 
