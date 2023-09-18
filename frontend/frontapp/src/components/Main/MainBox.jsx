@@ -32,18 +32,46 @@ const OverlayText = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  height: 90%;
+  width: 680px;
+  display: flex;
+  justify-content: center;
+  white-space: pre-line;
+  overflow: auto;
+
+  // 스크롤 바 스타일
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 5px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+`;
+
+const ScrollableContent = styled.div`
+  border: none;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-height: 100%;
+  overflow-y: auto;
   color: #253846;
   text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
   font-weight: bold;
   font-size: 30px;
-  width: 70%;
-  height: 70%;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  white-space: pre-line; // 개행이 포함된 문자열을 그대로 표현
 `;
 
 const AnswerHighlight1 = styled.span`
@@ -92,19 +120,51 @@ export default function MainBox() {
     navigate("/"); // 메인 페이지로 이동
   };
 
+  const word1 = "내가";
+  const word2 = "때";
+
+  function StyledWord({ word }) {
+    if (word.includes(word1)) {
+      return word.split(word1).reduce((acc, part, idx) => {
+        if (idx === 0) return [...acc, part];
+        return [
+          ...acc,
+          <AnswerHighlight1 key={idx}>{word1}</AnswerHighlight1>,
+          part,
+        ];
+      }, []);
+    }
+    if (word.includes(word2)) {
+      return word.split(word2).reduce((acc, part, idx) => {
+        if (idx === 0) return [...acc, part];
+        return [
+          ...acc,
+          <AnswerHighlight2 key={idx}>{word2}</AnswerHighlight2>,
+          part,
+        ];
+      }, []);
+    }
+    return word;
+  }
+
+  const words =
+    word1 + " 노는 것 처럼 보여?\n\n\n" + word2 + "가 되면 뭔가를 보여준다고";
+
+  const splitWords = words.split(/(\s+|\n+)/).flatMap((word, idx) => {
+    if (word === "\n") {
+      return [<br key={idx} />];
+    }
+    return <StyledWord key={idx} word={word} />;
+  });
+
   return (
     <Container>
       <BoxImage>
         <img src={mainBoxImagePath} alt="headerBoxImagePath"></img>
         <OverlayText>
-          <span>
-            <AnswerHighlight1>내가</AnswerHighlight1> 노는 것처럼 보여?
-          </span>
-          <br />
-          <br />
-          <span>
-            <AnswerHighlight2>때</AnswerHighlight2> 가되면 뭔가를 보여준다고
-          </span>
+          <ScrollableContent>
+            <span>{splitWords}</span>
+          </ScrollableContent>
         </OverlayText>
       </BoxImage>
 
