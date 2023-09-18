@@ -11,7 +11,7 @@ const Container = styled.div`
   position: relative;
   justify-content: center;
   overflow: hidden;
-  margin-bottom: 50px;
+  margin-bottom: 20px;
 `;
 
 const Message = styled.div`
@@ -21,6 +21,7 @@ const Message = styled.div`
   font-weight: bold;
   font-size: 30px;
   overflow: hidden;
+  padding: 5px 0;
 `;
 
 const RedText = styled.span`

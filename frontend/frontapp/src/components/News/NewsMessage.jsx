@@ -11,7 +11,7 @@ const Container = styled.div`
   position: relative;
   justify-content: center;
   overflow: hidden;
-  margin-bottom: 50px;
+  margin-bottom: 20px;
 `;
 
 const Message = styled.div`
@@ -21,14 +21,22 @@ const Message = styled.div`
   font-weight: bold;
   font-size: 30px;
   overflow: hidden;
+  padding: 5px 0;
+`;
+
+const BlueText = styled.span`
+  color: #2879ff;
 `;
 
 export default function NewsMessage() {
-  const message = "오늘의 단추 뉴스";
+  const message = "오늘의 단추";
 
   return (
     <Container>
-      <Message>{message}</Message>
+      <Message>
+        {message}
+        <BlueText> 뉴스</BlueText>
+      </Message>
     </Container>
   );
 }
