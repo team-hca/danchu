@@ -8,6 +8,7 @@ db = client.danchu
 quiz_collection = db.daily_quiz.history
 keyword_collection = db.daily_keyword.history
 
+import pytz
 from textrank.utils import preprocess_titles, get_titles_by_topkeyword, get_answers, word_count
 from textrank.summarizer import KeysentenceSummarizer
 from datetime import datetime, timedelta
@@ -34,8 +35,7 @@ while True :
         top_keyword = ""
 
         # 현재 날짜와 시간을 가져옴
-        # today = datetime.today().strftime('%Y-%m-%d %H:%M:%S') # todo : 실제 배포 때에는 이 코드
-        today = "2023-09-18 00:00:00"
+        today = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
 
         while True :
             # 2. 이슈 키워드 가져와서 3일간의 정답과 비교 
@@ -94,14 +94,16 @@ while True :
             for _, _, title in keysents: quiz = title
 
         # 7. 퀴즈와 정답을 mongo db에 저장
+        korea_tz = pytz.timezone('Asia/Seoul') # 시간대 설정
+
         quiz_today = {
             "date": (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d"), # 다음날 날짜
             "quiz": quiz,
             "word1": quiz_answers[0],
             "word2" : quiz_answers[1],
             "word3" : quiz_answers[2],
-            "created_at" : datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            "modified_at" : datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            "created_at" : datetime.now(korea_tz).strftime("%Y-%m-%d %H:%M:%S"),
+            "modified_at" : datetime.now(korea_tz).strftime("%Y-%m-%d %H:%M:%S")
         }
 
         quiz_collection.insert_one(quiz_today)
