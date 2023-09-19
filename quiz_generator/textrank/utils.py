@@ -5,6 +5,14 @@ from konlpy.tag import *
 import re
 import heapq
 from mecab import MeCab
+from pymongo import MongoClient
+from config import MONGO_URI
+
+# MongoDB 연결
+client = MongoClient(MONGO_URI)
+db = client.danchu
+quiz_collection = db.daily_quiz.history
+news_collection = db.news.history
 
 logging.basicConfig(level=logging.INFO)
 
@@ -100,3 +108,47 @@ def word_count(titles) :
     else : break
 
   return result
+
+# 키워드로 제목 필터링
+def get_titles_by_topkeyword(topkeyword: str) : 
+
+    # MongoDB에서 오늘 날짜에 해당하는 기사 가져오기
+    titles = list(news_collection.find({
+        # "date" : datetime.today().strftime('%Y%m%d'),
+        "date" : "20230918",
+        "title": {"$regex": topkeyword, "$options": "i"}
+    }, {"title": 1, "_id": 0}))
+
+    logging.info("=====키워드 필터링한 기사 제목 시작=====")
+    for title in titles : logging.info(title)
+    logging.info("=====키워드 필터링한 기사 제목 끝=====")
+
+    return titles
+
+# 지난 3일간의 정답 가져오기
+def get_answers() :
+
+    # MongoDB에서 최근 3일 간의 key가 "word1", "word2", "word3"인 값을 가져오기
+    tmp = quiz_collection.find({
+            "date": {
+                # "$in": [datetime.now().strftime("%Y-%m-%d"), 
+                # (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d"), 
+                # (datetime.now() - timedelta(days=2)).strftime("%Y-%m-%d")]
+                "$in": ["2023-09-18", "2023-09-17", "2023-09-16"]
+            }
+        }, 
+        {
+            "word1":1, "word2":1, "word3":1, "_id":0
+        })
+
+    quiz_answers = []
+    for document in tmp : 
+        quiz_answers.append(document["word1"])
+        quiz_answers.append(document["word2"])
+        quiz_answers.append(document["word3"])
+
+    logging.info("=====최근 3일 정답 시작=====")
+    for quiz_answer in quiz_answers : logging.info(quiz_answer)
+    logging.info("=====최근 3일 정답 끝=====")
+
+    return quiz_answers
