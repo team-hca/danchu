@@ -89,6 +89,13 @@ const ContentText = styled.div`
   margin-bottom: 10px;
 `;
 
+const DateText = styled.div`
+  font-size: 15px;
+  align-self: flex-start;
+  margin-left: auto; // Pushes the date to the far right
+  color: #777;
+`;
+
 const ButtonWrapper = styled.button`
   background: none;
   border: none;
@@ -142,6 +149,7 @@ export default function NewsBox() {
 무궁화 삼천리 화려강산
 대한사람 대한으로 길이 보전하세`,
       url: `https://www.naver.com`,
+      date: `2023-09-19`,
     }));
   }
 
@@ -167,6 +175,7 @@ export default function NewsBox() {
     title: "끝",
     content: "더 이상의 뉴스가 없습니다.",
     url: "#",
+    date: "",
   });
 
   return (
@@ -185,6 +194,7 @@ export default function NewsBox() {
                     <LastItemContentText>
                       <NewlineText text={data.content} />
                     </LastItemContentText>
+                    {data.date && <DateText>{data.date}</DateText>}
                   </DummyItem>
                 );
               }
@@ -199,6 +209,7 @@ export default function NewsBox() {
                       <NewlineText text={data.content} />
                     </ContentText>
                   </ButtonWrapper>
+                  {data.date && <DateText>{data.date}</DateText>}
                 </DummyItem>
               );
             })}

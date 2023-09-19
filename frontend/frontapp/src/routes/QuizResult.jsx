@@ -7,7 +7,7 @@ import Main from "../components/Main/Main";
 import News from "../components/News/News";
 
 const Container = styled.div`
-  // width: auto;
+  width: auto;
   display: flex;
   flex-direction: column;
   // overflow-y: auto;

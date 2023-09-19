@@ -15,6 +15,7 @@ const Container = styled.div`
   position: relative;
   justify-content: center;
   margin-top: 20px;
+  margin-bottom: 80px;
 `;
 
 const BoxImage = styled.div`

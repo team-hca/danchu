@@ -8,9 +8,7 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: stretch;
-  width: 100%;
-  height: auto;
-  margin-top: 150px;
+  width: 720px;
 `;
 
 export default function News() {

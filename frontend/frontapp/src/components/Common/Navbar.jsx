@@ -76,7 +76,7 @@ const Navbar = () => {
 
   return (
     <Container isVisible={isVisible}>
-      <Logo>MyApp</Logo>
+      <Logo>DANCHU</Logo>
       <NavCenter>
         <NavItems>
           <NavItem>★☆★☆★☆</NavItem>
