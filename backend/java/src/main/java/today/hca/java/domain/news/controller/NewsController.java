@@ -20,6 +20,7 @@ public class NewsController {
     @GetMapping("/link")
     public ResponseEntity<?> getNewsByWord(@ModelAttribute @Valid WordDto wordDto) {
         System.out.println("NewsController - getNewsByWord 실행");
+        long startTime = System.nanoTime();
         String word1 = wordDto.getWord1();
         String word2 = wordDto.getWord2();
         String word3 = wordDto.getWord3();
@@ -36,8 +37,13 @@ public class NewsController {
             System.out.println("뉴스가 없습니다.");
             return new ResponseEntity<>("FAIL", HttpStatus.NO_CONTENT);
         }
+        long endTime = System.nanoTime();
+        long duration = endTime - startTime;
+        double milliseconds = duration / 1e9;
 
         System.out.println("NewsController - getNewsByWord 종료");
+        System.out.println("수행 시간 : " + milliseconds+"sec");
+
         return new ResponseEntity(newsList, HttpStatus.OK);
     }
 }

@@ -10,11 +10,21 @@ import java.util.List;
 
 @Repository
 public interface NewsRepository extends MongoRepository<News, String> {
+    @Query("{'$or' : " +
+            "[" +
+            "{'title' :  {$regex :  ?0}}, " +
+            "]" +
+            "}")
+    List<News> findByWord(String word1);
 
-//    @Query
-//    public List<News> findByDate(String date);
+    @Query("{'$or' : " +
+            "[" +
+            "{'title' :  {$regex :  ?0}}, " +
+            "{'title' :  {$regex :  ?1}}, " +
+            "]" +
+            "}")
+    List<News> findByWord(String word1, String word2);
 
-    // todo - 수정중 작업
     @Query("{'$or' : " +
             "[" +
             "{'title' :  {$regex :  ?0}}, " +
@@ -22,7 +32,11 @@ public interface NewsRepository extends MongoRepository<News, String> {
             "{'title' :  {$regex :  ?2}}" +
             "]" +
             "}")
-    List<News> findByTitleContainsWord(String word1, String word2, String word3);
+    List<News> findByWord(String word1, String word2, String word3);
+
+
+
+
 
 
 }
