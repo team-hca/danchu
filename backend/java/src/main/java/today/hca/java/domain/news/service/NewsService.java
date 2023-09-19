@@ -96,31 +96,6 @@ public class NewsService {
             }
         }
 
-//            for(News news: combinedList) {
-////                System.out.println("처리 전 : " + news.getTitle());
-//                String title = news.getTitle();
-//
-//                title = title.replaceAll("[^가-힣\\s]", "").strip().trim(); // 한글만 가져와
-//
-//                if(title.length() == 0) {
-////                    System.out.println("타이틀 없애버렸음");
-//                    continue;
-//                }
-//
-////                System.out.println("처리 후 : " + title);
-//
-//                String[] textString = title.split(" "); // 띄어쓰기 단위로 타이틀 가져와
-//
-//                // 단어 위로 쪼개서 정확히 일치하는 단어위주로 가져오기
-//                for(String temp : textString) {
-//                    if (temp != null && (temp.equals(word1) || (word2 != null && temp.equals(word2)) || (word3 != null && temp.equals(word3)))) {
-//                        newsByWordList.add(news);
-////                        System.out.println("넣습니다 : " + title);
-//                    }
-//                }
-//            }
-
-
         System.out.println("담긴 뉴스 Size : " + newsByWordList.size());
 
 
