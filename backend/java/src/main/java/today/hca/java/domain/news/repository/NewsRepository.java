@@ -11,7 +11,12 @@ import java.util.List;
 @Repository
 public interface NewsRepository extends MongoRepository<News, String> {
 
-    @Query
-    public List<News> findByDate(String date);
+//    @Query
+//    public List<News> findByDate(String date);
+
+    // todo - 수정중 작업
+    @Query()
+    List<News> findByTitleContainsWord(String word1);
+
 
 }
