@@ -37,7 +37,8 @@ while True :
         top_keyword = ""
 
         # 현재 날짜와 시간을 가져옴
-        today = datetime.today(korea_tz).strftime('%Y-%m-%d %H:%M:%S')
+        today = datetime.now(korea_tz).strftime('%Y-%m-%d %H:%M:%S')
+        today = today[:11] + "00:00:00"
 
         while True :
             # 2. 이슈 키워드 가져와서 3일간의 정답과 비교 

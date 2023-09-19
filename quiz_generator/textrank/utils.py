@@ -121,10 +121,11 @@ def word_count(titles) :
 # 키워드로 제목 필터링
 def get_titles_by_topkeyword(topkeyword: str) : 
     logging.info("빈도수 최상위 키워드로 기사 제목을 조회합니다.")
+    today = datetime.now(korea_tz)
 
     # MongoDB에서 오늘 날짜에 해당하는 기사 가져오기
     titles = list(news_collection.find({
-        "date" : datetime.today(korea_tz).strftime('%Y%m%d'),
+        "date" : today.strftime('%Y%m%d'),
         "title": {"$regex": topkeyword, "$options": "i"}
     }, {"title": 1, "_id": 0}))
 
