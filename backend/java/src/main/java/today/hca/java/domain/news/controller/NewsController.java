@@ -1,12 +1,15 @@
 package today.hca.java.domain.news.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import today.hca.java.domain.news.dto.WordDto;
 import today.hca.java.domain.news.entity.News;
 import today.hca.java.domain.news.service.NewsService;
-import today.hca.java.domain.quiz.service.QuizService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/news")
@@ -14,12 +17,27 @@ import today.hca.java.domain.quiz.service.QuizService;
 public class NewsController {
     private final NewsService newsService;
 
-    @GetMapping("/today")
-    public ResponseEntity<?> getQuizByDate(@RequestParam String date) {
-        System.out.println("date: " + date);
-        News news = newsService.getQuizByDate(date);
-        System.out.println("news: " + news.toString());
+    @GetMapping("/link")
+    public ResponseEntity<?> getNewsByWord(@ModelAttribute @Valid WordDto wordDto) {
+        System.out.println("NewsController - getNewsByWord 실행");
+        String word1 = wordDto.getWord1();
+        String word2 = wordDto.getWord2();
+        String word3 = wordDto.getWord3();
 
-        return new ResponseEntity(news, HttpStatus.OK);
+        System.out.println("word1: " + word1);
+        System.out.println("word2: " + word2);
+        System.out.println("word3: " + word3);
+
+        List<News> newsList;
+
+        newsList = newsService.getNewsByWord(wordDto);
+
+        if(newsList == null) {
+            System.out.println("뉴스가 없습니다.");
+            return new ResponseEntity<>("FAIL", HttpStatus.NO_CONTENT);
+        }
+
+        System.out.println("NewsController - getNewsByWord 종료");
+        return new ResponseEntity(newsList, HttpStatus.OK);
     }
 }
