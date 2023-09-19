@@ -13,6 +13,7 @@ import today.hca.java.global.model.BaseTimeEntity;
 @Document(collection="news.history")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+// todo : createAt , updateAt이 null 값으로 전달되는 부분 수정 필요
 public class News extends BaseTimeEntity {
 
     @Id

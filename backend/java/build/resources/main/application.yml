@@ -1,6 +1,8 @@
 # server setting
 server:
   port: 8080
+  address: 0.0.0.0
+
 
 # spring setting
 spring:
@@ -14,10 +16,14 @@ spring:
     show-sql: true
   data:
     mongodb:
-#      host: localhost
+#      host: j9a302.p.ssafy.io
 #      port: 27017
+#      authentication-database: admin
 #      database: danchu
-      uri: mongodb://localhost:27017/danchu
+#      username: hca
+#      password: danchu1213!
+
+      uri: mongodb://hca:danchu1213!@j9a302.p.ssafy.io:27017/danchu?authSource=admin
   main:
     allow-bean-definition-overriding: true
   autoconfigure:
