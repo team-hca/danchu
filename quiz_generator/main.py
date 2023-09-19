@@ -30,12 +30,12 @@ while True :
 
         # 1. 최근 3일 간의 정답을 가져옴 (확인 완료)
         answers_three_days = get_answers()
-        logging.info(answers_three_days)
 
         top_keyword = ""
 
         # 현재 날짜와 시간을 가져옴
-        today = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+        # today = datetime.today().strftime('%Y-%m-%d %H:%M:%S') # todo : 실제 배포 때에는 이 코드
+        today = "2023-09-18 00:00:00"
 
         while True :
             # 2. 이슈 키워드 가져와서 3일간의 정답과 비교 
@@ -44,7 +44,6 @@ while True :
             tmp = keyword_collection.find({"rank": rank, "created_at": {"$gte": today}}, {"keyword": 1, "_id": 0})
             for document in tmp :
                 tmp_keyword = document["keyword"]
-                logging.info("tmp_keyword : " + tmp_keyword)
 
             if tmp_keyword in answers_three_days :
                 rank += 1 # 다음 순위 키워드 찾으러 가기
@@ -52,9 +51,6 @@ while True :
                 # 3. 이슈 키워드가 있는 제목만 가져오기
                 title_json = get_titles_by_topkeyword(tmp_keyword)
                 titles = [item["title"] for item in title_json] # json -> list
-                logging.info("=====전처리 전 기사 제목 시작=====")
-                for title in titles : logging.info(title)
-                logging.info("=====전처리 전 기사 제목 끝=====")
                 titles = preprocess_titles(titles) # 가져온 제목들 전처리
                 titles = list(set(titles)) # 중복 제목 제거
 
@@ -85,11 +81,8 @@ while True :
                             for title in titles :
                                 if quiz_answers[0] in title :
                                     titles_filtered.append(title)
-                
-                logging.info(titles_filtered)
             
             if top_keyword != "" : 
-                logging.info("top keyword : " + top_keyword)
                 break # top keyword 정하면 끝냄
 
         # 6. 결과 중에서 퀴즈가 될 제목 선택 (text rank)

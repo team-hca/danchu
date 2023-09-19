@@ -1,6 +1,9 @@
+import logging
 import numpy as np
 from .rank import pagerank
 from .sentence import sent_graph
+
+logging.basicConfig(level=logging.INFO)
 
 class KeysentenceSummarizer:
 
@@ -22,12 +25,11 @@ class KeysentenceSummarizer:
 
     def train_textrank(self, sents, bias=None):
         g = sent_graph(sents, self.tokenize, self.min_count,
-            self.min_sim, self.similarity, self.vocab_to_idx, self.verbose)
+            self.min_sim, self.similarity, self.vocab_to_idx, self.verbose) # 여기다
         self.R = pagerank(g, self.df, self.max_iter, bias).reshape(-1)
-        if self.verbose:
-            print('trained TextRank. n sentences = {}'.format(self.R.shape[0]))
 
     def summarize(self, sents, topk=30, bias=None):
+        
         n_sents = len(sents)
         if isinstance(bias, np.ndarray):
             if bias.shape != (n_sents,):
@@ -35,7 +37,7 @@ class KeysentenceSummarizer:
         elif bias is not None:
             raise ValueError('The type of bias must be None or numpy.ndarray but the type is {}'.format(type(bias)))
 
-        self.train_textrank(sents, bias)
+        self.train_textrank(sents, bias) # 여기다 !!
         idxs = self.R.argsort()[-topk:]
         keysents = [(idx, self.R[idx], sents[idx]) for idx in reversed(idxs)]
         return keysents

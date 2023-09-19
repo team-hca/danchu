@@ -7,6 +7,7 @@ import heapq
 from mecab import MeCab
 from pymongo import MongoClient
 from config import MONGO_URI
+from datetime import datetime, timedelta
 
 # MongoDB 연결
 client = MongoClient(MONGO_URI)
@@ -43,6 +44,7 @@ def vectorize(tokens, vocab_to_idx):
     return x
 
 def preprocess_titles(titles) : # 특수문자 안 내용 제거
+  logging.info("기사 제목을 전처리합니다.")
   result = []
 
   for title in titles :
@@ -51,9 +53,11 @@ def preprocess_titles(titles) : # 특수문자 안 내용 제거
     title = title.strip() # 공백 strip
     result.append(title)
 
+  logging.info("기사 제목 전처리 완료")
   return result
 
 def word_count(titles) :
+  logging.info("기사 제목에서 word count를 합니다.")
   mecab = MeCab()
 
   result = []
@@ -107,34 +111,32 @@ def word_count(titles) :
         result.append(keyword)
     else : break
 
+  logging.info("기사 제목에서 word count 완료")
   return result
 
 # 키워드로 제목 필터링
 def get_titles_by_topkeyword(topkeyword: str) : 
+    logging.info("빈도수 최상위 키워드로 기사 제목을 조회합니다.")
 
     # MongoDB에서 오늘 날짜에 해당하는 기사 가져오기
     titles = list(news_collection.find({
-        # "date" : datetime.today().strftime('%Y%m%d'),
-        "date" : "20230918",
+        "date" : datetime.today().strftime('%Y%m%d'),
         "title": {"$regex": topkeyword, "$options": "i"}
     }, {"title": 1, "_id": 0}))
 
-    logging.info("=====키워드 필터링한 기사 제목 시작=====")
-    for title in titles : logging.info(title)
-    logging.info("=====키워드 필터링한 기사 제목 끝=====")
-
+    logging.info("기사 제목 조회 완료")
     return titles
 
 # 지난 3일간의 정답 가져오기
 def get_answers() :
+    logging.info("최근 3일간의 정답을 조회합니다.")
 
     # MongoDB에서 최근 3일 간의 key가 "word1", "word2", "word3"인 값을 가져오기
     tmp = quiz_collection.find({
             "date": {
-                # "$in": [datetime.now().strftime("%Y-%m-%d"), 
-                # (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d"), 
-                # (datetime.now() - timedelta(days=2)).strftime("%Y-%m-%d")]
-                "$in": ["2023-09-18", "2023-09-17", "2023-09-16"]
+                "$in": [datetime.now().strftime("%Y-%m-%d"), 
+                (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d"), 
+                (datetime.now() - timedelta(days=2)).strftime("%Y-%m-%d")]
             }
         }, 
         {
@@ -147,8 +149,6 @@ def get_answers() :
         quiz_answers.append(document["word2"])
         quiz_answers.append(document["word3"])
 
-    logging.info("=====최근 3일 정답 시작=====")
-    for quiz_answer in quiz_answers : logging.info(quiz_answer)
-    logging.info("=====최근 3일 정답 끝=====")
+    logging.info("최근 3일간의 정답 조회 완료")
 
     return quiz_answers
