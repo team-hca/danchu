@@ -22,6 +22,8 @@ summarizer = KeysentenceSummarizer(
     verbose = False
 )
 
+# 시간대 설정
+korea_tz = pytz.timezone('Asia/Seoul') 
 # 퀴즈 생성
 rank = 1
 
@@ -35,7 +37,7 @@ while True :
         top_keyword = ""
 
         # 현재 날짜와 시간을 가져옴
-        today = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+        today = datetime.today(korea_tz).strftime('%Y-%m-%d %H:%M:%S')
 
         while True :
             # 2. 이슈 키워드 가져와서 3일간의 정답과 비교 
@@ -94,10 +96,8 @@ while True :
             for _, _, title in keysents: quiz = title
 
         # 7. 퀴즈와 정답을 mongo db에 저장
-        korea_tz = pytz.timezone('Asia/Seoul') # 시간대 설정
-
         quiz_today = {
-            "date": (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d"), # 다음날 날짜
+            "date": (datetime.now(korea_tz) + timedelta(days=1)).strftime("%Y-%m-%d"), # 다음날 날짜
             "quiz": quiz,
             "word1": quiz_answers[0],
             "word2" : quiz_answers[1],

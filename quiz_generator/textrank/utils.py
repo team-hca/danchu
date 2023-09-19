@@ -8,6 +8,10 @@ from mecab import MeCab
 from pymongo import MongoClient
 from config import MONGO_URI
 from datetime import datetime, timedelta
+import pytz
+
+# 시간대 설정
+korea_tz = pytz.timezone('Asia/Seoul') 
 
 # MongoDB 연결
 client = MongoClient(MONGO_URI)
@@ -120,7 +124,7 @@ def get_titles_by_topkeyword(topkeyword: str) :
 
     # MongoDB에서 오늘 날짜에 해당하는 기사 가져오기
     titles = list(news_collection.find({
-        "date" : datetime.today().strftime('%Y%m%d'),
+        "date" : datetime.today(korea_tz).strftime('%Y%m%d'),
         "title": {"$regex": topkeyword, "$options": "i"}
     }, {"title": 1, "_id": 0}))
 
@@ -134,9 +138,9 @@ def get_answers() :
     # MongoDB에서 최근 3일 간의 key가 "word1", "word2", "word3"인 값을 가져오기
     tmp = quiz_collection.find({
             "date": {
-                "$in": [datetime.now().strftime("%Y-%m-%d"), 
-                (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d"), 
-                (datetime.now() - timedelta(days=2)).strftime("%Y-%m-%d")]
+                "$in": [datetime.now(korea_tz).strftime("%Y-%m-%d"), 
+                (datetime.now(korea_tz) - timedelta(days=1)).strftime("%Y-%m-%d"), 
+                (datetime.now(korea_tz) - timedelta(days=2)).strftime("%Y-%m-%d")]
             }
         }, 
         {
