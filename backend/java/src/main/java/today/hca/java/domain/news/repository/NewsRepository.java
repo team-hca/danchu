@@ -15,8 +15,14 @@ public interface NewsRepository extends MongoRepository<News, String> {
 //    public List<News> findByDate(String date);
 
     // todo - 수정중 작업
-    @Query()
-    List<News> findByTitleContainsWord(String word1);
+    @Query("{'$or' : " +
+            "[" +
+            "{'title' :  {$regex :  ?0}}, " +
+            "{'title' :  {$regex :  ?1}}, " +
+            "{'title' :  {$regex :  ?2}}" +
+            "]" +
+            "}")
+    List<News> findByTitleContainsWord(String word1, String word2, String word3);
 
 
 }

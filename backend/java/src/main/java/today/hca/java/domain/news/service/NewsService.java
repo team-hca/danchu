@@ -101,7 +101,7 @@ public class NewsService {
         String word2 = wordDto.getWord2();
         String word3 = wordDto.getWord3();
 
-        combinedList = newsRepository.findByTitleContainsWord(word1);
+        combinedList = newsRepository.findByTitleContainsWord(word1, word2, word3);
 
         if(combinedList.size() == 0) {
             System.out.println("service : 못 가져온다");
