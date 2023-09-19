@@ -15,10 +15,6 @@ const Container = styled.div`
   box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
 `;
 
-const A = styled.div`
-  widht: 720px;
-`;
-
 const ProjectTitle = styled.div`
   color: #fff;
   font-size: 70px;
