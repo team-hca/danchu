@@ -11,19 +11,19 @@ const LinkStyle = styled(Link)`
 const ButtonStyle = styled.button`
   width: 60%;
   height: 54px;
-  background-color: transparent;
+  background-color: var(--gray-300);
 
 //   border: 1px solid var(--gray-500);
   border-radius: 8px;
 
-  color: var(--gray-500);
+  color: var(--secondary);
   font-size: 16px;
 
   &:hover {
     // border: 1px solid var(--primary);
     border-radius: 8px;
     // border: 1px solid var(--red); 
-    background-color: var(--primary);
+    background-color: var(--secondary);
     color: var(--gray-200);
   }
 `;
