@@ -15,8 +15,8 @@ public class WordController {
 
     private final WordService wordService;
 
-    @GetMapping("/guess")
-    public ResponseEntity<?> wordGuess(@RequestParam String quizNum, @RequestParam String guessWord) {
-
-    }
+//    @GetMapping("/guess")
+//    public ResponseEntity<?> wordGuess(@RequestParam String quizNum, @RequestParam String guessWord) {
+//
+//    }
 }
