@@ -36,41 +36,46 @@ public class NewsService {
     // todo -  수정중 2
     public List<News> getNewsByWord(WordDto wordDto) {
 
-        // 여기에 저장
         List<News> newsByWordList;
 
         String word1 = wordDto.getWord1();
         String word2 = wordDto.getWord2();
         String word3 = wordDto.getWord3();
 
-
         // null처리
         if(word2 == null) {
-            newsByWordList = newsRepository.findByWord(word1);
+            newsByWordList = newsRepository.findByWord(word1, getDate(0), getDate(1), getDate(2));
+
+            return newsByWordList;
         } else if(word3 == null) {
-            newsByWordList = newsRepository.findByWord(word1, word2);
+            newsByWordList = newsRepository.findByWord(word1, word2, getDate(0), getDate(1), getDate(2));
+            if(newsByWordList.size() < 3) return newsRepository.findByWord(word1, getDate(0), getDate(1), getDate(2));
+
         } else {
-            newsByWordList = newsRepository.findByWord(word1, word2, word3);
+            // 우선 3개일 때 전부다 가져오기
+            newsByWordList = newsRepository.findByWord(word1, word2, word3, getDate(0), getDate(1), getDate(2));
+
+            if(newsByWordList.size() < 3) {
+                newsByWordList =  newsRepository.findByWord(word1, word2, getDate(0), getDate(1), getDate(2));
+
+                if(newsByWordList.size() < 3) return newsRepository.findByWord(word1, getDate(0), getDate(1), getDate(2));
+
+                return newsByWordList;
+            }
+            return newsByWordList;
+
         }
 
-        System.out.println("가져온 뉴스 Size : " + newsByWordList.size());
-
         if(newsByWordList.size() == 0) {
-            System.out.println("service : 못 가져온다");
-        } else {
-            Iterator<News> iterator = newsByWordList.iterator();
-            while(iterator.hasNext()) {
-                News news = iterator.next();
+            System.out.println("service : 뉴스가 없습니다.");
+        }
 
-                // 3일 전 뉴스까지 가져오기
-                if(!(news.getDate().equals(getDate(0))) &&
-                        !(news.getDate().equals(getDate(1))) &&
-                        !(news.getDate().equals(getDate(2)))) {
-                    iterator.remove();
-                }
+        return newsByWordList;
+    }
+}
 
-//                else {
-//                    // todo : 정확히 일치하는 단어로 가져오기 - 구현해야 할지 아직 확신이 안 섬, 기사를 못 가져오는 경우가 많음
+//              else {
+//                    // 추후를 위한 기능 주석처리
 //                    String[] compare = news.getTitle().replaceAll("[^가-힣\\s]", " ").trim().split("\\s+");
 //                    System.out.println(Arrays.toString(compare));
 //
@@ -93,13 +98,22 @@ public class NewsService {
 //                    if(!isOk) iterator.remove();
 //                }
 
-            }
-        }
+// 여기에 저장 - 가독성 좋고 속도 2.0 나옴
+//        List<News> newsByWordList1 = newsRepository.findByWord(word1, getDate(0), getDate(1), getDate(2));
+//        List<News> newsByWordList2;
+//        List<News> newsByWordList3 = new ArrayList<>();
+//
+//
+//        if(word2 == null) {
+//            return newsByWordList1;
+//        } else if(word3 == null) {
+//            newsByWordList2 = newsRepository.findByWord(word1, word2, getDate(0), getDate(1), getDate(2));
+//        } else {
+//            newsByWordList2 = newsRepository.findByWord(word1, word2, getDate(0), getDate(1), getDate(2));
+//            newsByWordList3 = newsRepository.findByWord(word1, word2, word3, getDate(0), getDate(1), getDate(2));
+//        }
+//
+//        if(newsByWordList3.size() > 3) return newsByWordList3;
+//        if(newsByWordList2.size() >2) return newsByWordList2;
+//        return newsByWordList1;
 
-        System.out.println("담긴 뉴스 Size : " + newsByWordList.size());
-
-
-        return newsByWordList;
-    }
-
-}

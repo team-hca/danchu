@@ -22,5 +22,6 @@ public class News extends BaseTimeEntity {
     private String url; // 뉴스 주소
     private String date; // 뉴스 날짜
     private String content; // 뉴스 내용
+    private String date_time;
 
 }
