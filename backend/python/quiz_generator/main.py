@@ -1,18 +1,9 @@
-from pymongo import MongoClient
-
-from config import MONGO_URI
-
-# MongoDB 연결
-client = MongoClient(MONGO_URI)
-db = client.danchu
-quiz_collection = db.daily_quiz.history
-keyword_collection = db.daily_keyword.history
-
 import pytz
 from textrank.utils import preprocess_titles, get_titles_by_topkeyword, get_answers, word_count
 from textrank.summarizer import KeysentenceSummarizer
 from datetime import datetime, timedelta
 import logging
+from dao import QuizDao, KeywordDao
 
 logging.basicConfig(level=logging.INFO)
 
@@ -27,11 +18,14 @@ korea_tz = pytz.timezone('Asia/Seoul')
 # 퀴즈 생성
 rank = 1
 
+quiz_dao = QuizDao()
+keyword_dao = KeywordDao()
+
 while True : 
     try:
         quiz = ""
 
-        # 1. 최근 3일 간의 정답을 가져옴 (확인 완료)
+        # 1. 최근 3일 간의 정답을 가져옴
         answers_three_days = get_answers()
 
         top_keyword = ""
@@ -44,9 +38,9 @@ while True :
             # 2. 이슈 키워드 가져와서 3일간의 정답과 비교 
             # (겹치면 키워드 다시 가져옴)
             tmp_keyword = ""
-            tmp = keyword_collection.find({"rank": rank, "created_at": {"$gte": today}}, {"keyword": 1, "_id": 0})
-            for document in tmp :
-                tmp_keyword = document["keyword"]
+            tmp = keyword_dao.find_keyword_by_rank_and_date(rank, today)
+            if tmp:
+                tmp_keyword = tmp["keyword"]
 
             if tmp_keyword in answers_three_days :
                 rank += 1 # 다음 순위 키워드 찾으러 가기
@@ -107,7 +101,7 @@ while True :
             "modified_at" : datetime.now(korea_tz).strftime("%Y-%m-%d %H:%M:%S")
         }
 
-        quiz_collection.insert_one(quiz_today)
+        quiz_dao.insert_quiz(quiz_today)
 
         logging.info("quiz : " + quiz + ", answer1 : " + quiz_answers[0] + ", answer2 : " + quiz_answers[1] + ", answer3 : " + quiz_answers[2])
         break
