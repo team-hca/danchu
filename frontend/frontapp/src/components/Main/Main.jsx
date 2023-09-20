@@ -9,6 +9,7 @@ const Container = styled.div`
   justify-content: center;
   align-items: stretch;
   width: 720px;
+  margin-bottom: 30px;
 `;
 
 export default function Main() {

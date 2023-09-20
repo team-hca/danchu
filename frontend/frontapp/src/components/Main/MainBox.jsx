@@ -15,7 +15,6 @@ const Container = styled.div`
   position: relative;
   justify-content: center;
   margin-top: 20px;
-  margin-bottom: 80px;
 `;
 
 const BoxImage = styled.div`
@@ -118,7 +117,7 @@ export default function MainBox() {
   const navigate = useNavigate();
 
   const handleButtonClick = () => {
-    navigate("/"); // 메인 페이지로 이동
+    navigate("/quiz"); // /quiz로 이동
   };
 
   const word1 = "내가";

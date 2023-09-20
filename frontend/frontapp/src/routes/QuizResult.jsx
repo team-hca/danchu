@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import Footer from "../components/Common/Footer";
 import Header from "../components/Common/Header";
-import Navbar from "../components/Common/Navbar";
 import Main from "../components/Main/Main";
 import News from "../components/News/News";
 
@@ -18,7 +17,7 @@ const Container = styled.div`
 export default function QuizResult() {
   return (
     <>
-      <Navbar />
+      {/* <Navbar /> */}
       <Container>
         <Header />
         <Main />
