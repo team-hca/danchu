@@ -19,15 +19,66 @@ const Table = styled.table`
 `;
 
 const Thead = styled.thead`
-  text-align: center;
+  text-align: left;
 `;
 
-const Th = styled.th`
+const ThNumber = styled.th`
   padding: 15px;
+  width: 70px;
+  max-width: 70px;
+  min-width: 70px;
+  font-weight: 1000;
 `;
 
-const Td = styled.td`
-  padding: 5px;
+const ThGuess = styled.th`
+  padding: 15px;
+  width: 140px;
+  max-width: 140px;
+  min-width: 140px;
+  font-weight: 1000;
+
+`;
+const ThPercent = styled.th`
+  padding: 15px;
+  width: 100px;
+  max-width: 100px;
+  min-width: 100px;
+  font-weight: 1000;
+`;
+
+const ThRank = styled.th`
+  padding: 15px;
+  width: 280px;
+  max-width: 280px;
+  min-width: 280px;
+  font-weight: 1000;
+`;
+const TdNumber = styled.th`
+  padding: 15px;
+  width: 70px;
+  max-width: 70px;
+  min-width: 70px;
+
+`;
+
+const TdGuess = styled.th`
+  padding: 15px;
+  width: 140px;
+  max-width: 140px;
+  min-width: 140px;
+`;
+const TdPercent = styled.th`
+  padding: 15px;
+  width: 100px;
+  max-width: 100px;
+  min-width: 100px;
+`;
+
+const TdRank = styled.th`
+  padding: 15px;
+  width: 280px;
+  max-width: 280px;
+  min-width: 280px;
 `;
 
 
@@ -40,22 +91,22 @@ export default function GuessContainer() {
       </TextContainer>
       <TableContainer>
         <Table>
-          <Thead>
+          {/* <Thead> */}
             <tr>
-              <Th>#</Th>
-              <Th>단어추측</Th>
-              <Th>유사도</Th>
-              <Th>유사도 순위</Th>
+              <ThNumber>#</ThNumber>
+              <ThGuess>단어추측</ThGuess>
+              <ThPercent>유사도</ThPercent>
+              <ThRank>유사도 순위</ThRank>
             </tr>
-          </Thead>
-          <tbody>
+          {/* </Thead> */}
+          {/* <tbody> */}
             <tr>
-              <Td>이름</Td>
-              <Td>이메일</Td>
-              <Td>7.0</Td>
-              <Td>1000</Td>
+              <TdNumber>이름</TdNumber>
+              <TdGuess>이메일</TdGuess>
+              <TdPercent>7.0</TdPercent>
+              <TdRank>1000</TdRank>
             </tr>
-          </tbody>
+          {/* </tbody> */}
         </Table>
       </TableContainer>
     </>

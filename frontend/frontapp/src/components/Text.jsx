@@ -5,8 +5,8 @@ const TextStyled = styled.input`
   color: ${(props) => props.color};
   weight: 300;
   word-break: break-all;
-  width: 500px;
-  height: 40px;
+  width: 88%;
+  height: 50px;
   border-radius: 18px;
 `;
 

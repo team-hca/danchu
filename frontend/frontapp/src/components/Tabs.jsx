@@ -10,12 +10,12 @@ export const Tab = styled.button`
   border: none;
   outline: none;
   cursor: pointer;
-  width: 30%;
+  width: 33.33333333333333333333333333333333333333333333333333333333333333333333333333333333333%;
   position: relative;
   border-radius: 18px 18px 0px 0px;
-  box-shadow: 5px 5px 5px;
+  // box-shadow: 5px 5px 5px;
 
-  margin-right: 0.1em;
+  // margin-right: 0.1em;
   font-size: 1em;
   border: ${props => (props.active ? "1px solid #ccc" : "")};
   border-bottom: ${props => (props.active ? "none" : "")};
