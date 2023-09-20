@@ -1,0 +1,6 @@
+FROM openjdk:17
+WORKDIR /backend/java
+RUN ls -la /backend/java
+COPY /build/libs/*.jar danchu.jar
+RUN ls -la /backend/java
+ENTRYPOINT ["java", "-jar", "danchu.jar"]
