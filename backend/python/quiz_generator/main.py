@@ -1,5 +1,5 @@
 import pytz
-from textrank.utils import preprocess_titles, get_titles_by_topkeyword, get_answers, word_count
+from textrank.utils import preprocess_titles, get_titles_by_topkeyword,  word_count
 from textrank.summarizer import KeysentenceSummarizer
 from datetime import datetime, timedelta
 import logging
@@ -26,7 +26,7 @@ while True :
         quiz = ""
 
         # 1. 최근 3일 간의 정답을 가져옴
-        answers_three_days = get_answers()
+        answers_three_days = quiz_dao.get_answers()
 
         top_keyword = ""
 
