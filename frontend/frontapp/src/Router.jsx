@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import Root from "./Root";
 import Quiz from "./routes/Quiz";
 import QuizResult from "./routes/QuizResult";
+import Congrat from "./components/CongratModal";
 
 const router = createBrowserRouter([
   {
@@ -15,6 +16,10 @@ const router = createBrowserRouter([
       {
         path: "result",
         element: <QuizResult />,
+      },
+      {
+        path: "congrat",
+        element: <Congrat />,
       },
     ],
   },
