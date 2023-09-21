@@ -138,4 +138,4 @@ def findTodayWordsSimilarity():
         return JSONResponse(content=e, status_code=400)
 
     else:
-        return JSONResponse(status_code = 200)
+        return JSONResponse(content="성공", status_code = 200)
