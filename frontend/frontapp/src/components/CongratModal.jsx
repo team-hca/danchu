@@ -21,6 +21,7 @@ const CongratTitle = styled.span`
   font-size: 30px;
   margin: 40px 0px 40px 0px;
 `
+
 const DanchuDate = styled.div`
   color: #FFF7D4;
   font-weight: bold;
@@ -58,6 +59,7 @@ const ResultCopyButton = styled.button`
   font-size: 20px;
   font-weight: bold;
   padding: 10px;
+  margin: 5px 20px;
 `
 
 const RelatedNewsButton = styled.button`
@@ -69,7 +71,14 @@ const RelatedNewsButton = styled.button`
   font-size: 20px;
   font-weight: bold;
   padding: 10px;
+  margin: 5px 20px;
 `
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  max-width: 300px; /* 버튼이 최대한 어떤 곳에서든 넘치지 않게 설정 */
+`;
 
 const now = new Date();
 const options = { timeZone: 'Asia/Seoul' };
@@ -104,8 +113,10 @@ export default function CongratModal() {
         <DanchuRank>{danchuRank}</DanchuRank>
       </SuccessContent>
 
-      <ResultCopyButton>결과 복사</ResultCopyButton>
-      <RelatedNewsButton>관련 뉴스</RelatedNewsButton>
+      <ButtonContainer>
+        <ResultCopyButton>결과 복사</ResultCopyButton>
+        <RelatedNewsButton>관련 뉴스</RelatedNewsButton>
+      </ButtonContainer>
 
     </ModalContainer>
   );
