@@ -143,6 +143,7 @@ const LastItemContentText = styled(ContentText)`
 `;
 
 export default function NewsBox({ newsData }) {
+  // 미정이한테 받아올 words 배열
   const [words, setWords] = useState({ word1: "", word2: "", word3: "" });
 
   // 초기 words 설정
