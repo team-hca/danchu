@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import styled from "styled-components";
 
 const ModalContainer = styled.div`
@@ -75,8 +75,6 @@ const CongratContentButton = styled.button`
 const ButtonOverlayRectangle = styled.div`
   position: absolute;
   bottom: 1px;
-  // width: 95px;
-  // height: 40px;
   background-color: #FFF7D4;
   border: 1px solid #C9C7B1;
   border-radius: 10px;
@@ -122,13 +120,27 @@ const danchuStreak = "연속으로 맞은 횟수: " + streakCnt
 const danchuRank = "유저랭킹: 상위 " + rankPercentage + "%"
 
 export default function CongratModal() {
+  const successContentCopy = useRef(null);
+
+  const handleCopyResult = () => {
+    const successContent = successContentCopy.current.innerText;
+    navigator.clipboard.writeText(successContent)
+      .then(() => {
+        alert('결과를 복사하였습니다!');
+      })
+      .catch(e => {
+        console.error('복사 실패:', e);
+        alert('결과를 복사하지 못했습니다.');
+      });
+  }
+
   return (
     <ModalContainer>
       <CongratTitle>
         축하합니다! <br />
         오늘의 단추를 맞혔습니다!
       </CongratTitle>
-      <SuccessContent>
+      <SuccessContent ref={successContentCopy}>
         <DanchuDate>{danchuDate}</DanchuDate>
         <DanchuTrial>{danchuTrial}</DanchuTrial>
         <DanchuStreak>{danchuStreak}</DanchuStreak>
@@ -136,7 +148,7 @@ export default function CongratModal() {
       </SuccessContent>
 
       <ButtonContainer>
-        <CongratContentButton>결과 복사</CongratContentButton>
+        <CongratContentButton onClick={handleCopyResult}>결과 복사</CongratContentButton>
         <CopyButtonOverlayRectangle />
         <CongratContentButton>관련 뉴스</CongratContentButton>
         <NewsButtonOverlayRectangle />
@@ -145,3 +157,4 @@ export default function CongratModal() {
     </ModalContainer>
   );
 }
+
