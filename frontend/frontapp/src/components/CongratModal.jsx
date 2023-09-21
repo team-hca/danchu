@@ -8,46 +8,51 @@ const ModalContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh; // 화면 전체 높이
+  height: 100vh;
 `
 
 const SuccessContent = styled.div`
+  margin: 50px 0px;
 
+  & > div {
+    margin-bottom: 12px;
+  }
 `
 
 const CongratTitle = styled.span`
   color: #FFF7D4;
   font-weight: bold;
   font-size: 30px;
-  margin: 40px 0px 40px 0px;
+  line-height: 1.3;
+  margin: 50px 0px;
 `
 
 const DanchuDate = styled.div`
   color: #FFF7D4;
   font-weight: bold;
   font-size: 20px;
-  margin: 10px 0px 10px 0px;
+  margin: 10px 0px;
 `
 
 const DanchuTrial = styled.div`
   color: #FFF7D4;
   font-weight: bold;
   font-size: 20px;
-  margin: 10px 0px 10px 0px;
+  margin: 10px 0px;
 `
 
 const DanchuStreak = styled.div`
   color: #FFF7D4;
   font-weight: bold;
   font-size: 20px;
-  margin: 10px 0px 10px 0px;
+  margin: 10px 0px;
 `
 
 const DanchuRank = styled.div`
   color: #FFF7D4;
   font-weight: bold;
   font-size: 20px;
-  margin: 10px 0px 10px 0px;
+  margin: 10px 0px;
 `
 
 const CongratContentButton = styled.button`
