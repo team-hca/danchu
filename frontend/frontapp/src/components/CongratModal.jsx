@@ -50,34 +50,43 @@ const DanchuRank = styled.div`
   margin: 10px 0px 10px 0px;
 `
 
-const ResultCopyButton = styled.button`
+const CongratContentButton = styled.button`
   position: relative;
-  background: none;
-  border: 2px solid #FFF7D4;
+  background: #253846;
+  border: 1px solid #C9C7B1;
   cursor: pointer;
   color: #FFF7D4;
   font-size: 20px;
   font-weight: bold;
   padding: 10px;
-  margin: 5px 20px;
+  margin: 5px 10px;
+  border-radius: 10px;
+  z-index: 1;
 `
+const ButtonOverlayRectangle = styled.div`
+  position: absolute;
+  bottom: 1px;
+  width: 95px;
+  height: 40px;
+  background-color: #FFF7D4;
+  border: 1px solid #C9C7B1;
+  border-radius: 8px;
+  z-index: 0;
+`;
 
-const RelatedNewsButton = styled.button`
-  position: relative;
-  background: none;
-  border: 2px solid #FFF7D4;
-  cursor: pointer;
-  color: #FFF7D4;
-  font-size: 20px;
-  font-weight: bold;
-  padding: 10px;
-  margin: 5px 20px;
-`
+const CopyButtonOverlayRectangle = styled(ButtonOverlayRectangle)`
+  right: 122px;
+`;
+
+const NewsButtonOverlayRectangle = styled(ButtonOverlayRectangle)`
+  right: 5px;
+`;
 
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  max-width: 300px; /* 버튼이 최대한 어떤 곳에서든 넘치지 않게 설정 */
+  max-width: 300px;
+  position: relative;
 `;
 
 const now = new Date();
@@ -114,8 +123,10 @@ export default function CongratModal() {
       </SuccessContent>
 
       <ButtonContainer>
-        <ResultCopyButton>결과 복사</ResultCopyButton>
-        <RelatedNewsButton>관련 뉴스</RelatedNewsButton>
+        <CongratContentButton>결과 복사</CongratContentButton>
+        <CopyButtonOverlayRectangle />
+        <CongratContentButton>관련 뉴스</CongratContentButton>
+        <NewsButtonOverlayRectangle />
       </ButtonContainer>
 
     </ModalContainer>
