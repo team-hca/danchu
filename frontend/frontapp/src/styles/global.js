@@ -10,7 +10,7 @@ const GlobalVariableStyle = createGlobalStyle`
   --mobile-h5: 16px;
   --mobile-h6: 12px;
   --mobile-p: 12px;
-  --mobile-text: 14px;
+  --mobile-text: 17px;
   --mobile-label: 11px;
 
   // color
