@@ -64,27 +64,35 @@ const CongratContentButton = styled.button`
   font-size: 20px;
   font-weight: bold;
   padding: 10px;
-  margin: 5px 10px;
+  margin: 5px 20px;
   border-radius: 10px;
   z-index: 1;
+
+  width: 6.5em;
+  height: 2.5em;
 `
+
 const ButtonOverlayRectangle = styled.div`
   position: absolute;
   bottom: 1px;
-  width: 95px;
-  height: 40px;
+  // width: 95px;
+  // height: 40px;
   background-color: #FFF7D4;
   border: 1px solid #C9C7B1;
-  border-radius: 8px;
+  border-radius: 10px;
   z-index: 0;
+
+  font-size: 20px;
+  width: 5.4em;
+  height: 2.4em;
 `;
 
 const CopyButtonOverlayRectangle = styled(ButtonOverlayRectangle)`
-  right: 122px;
+  right: 165px;
 `;
 
 const NewsButtonOverlayRectangle = styled(ButtonOverlayRectangle)`
-  right: 5px;
+  right: 15px;
 `;
 
 const ButtonContainer = styled.div`
