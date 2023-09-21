@@ -30,7 +30,7 @@ function News() {
   useEffect(() => {
     axios
       .get(
-        `/api/api/v1/news/link?word1=${words.word1}&word2=${words.word2}&word3=${words.word3}`
+        `/api/v1/news/link?word1=${words.word1}&word2=${words.word2}&word3=${words.word3}`
       )
       .then((response) => {
         setNewsData(response.data);
@@ -40,7 +40,7 @@ function News() {
         console.error("데이터를 가져오지 못함!!!! error : ", error.message);
         setLoading(false); // 에러 발생 시 로딩 상태 false로 설정
       });
-  }, []);
+  });
 
   if (loading) {
     return (
