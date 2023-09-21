@@ -4,6 +4,11 @@ import styled from "styled-components";
 const ModalContainer = styled.div`
   background-color: #253846;
   margin: 40px 0px 40px 0px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; // 화면 전체 높이
 `
 
 const SuccessContent = styled.div`
@@ -90,7 +95,7 @@ export default function CongratModal() {
     <ModalContainer>
       <CongratTitle>
         축하합니다! <br />
-        오늘의 단추를 풀었습니다!
+        오늘의 단추를 맞혔습니다!
       </CongratTitle>
       <SuccessContent>
         <DanchuDate>{danchuDate}</DanchuDate>
