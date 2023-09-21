@@ -1,9 +1,12 @@
 import styled from "styled-components";
 import Text from "./Text";
+import SubmitButton from "./SubmitButton";
 
 const TextContainer = styled.div`
-  margin: 40px 0px 40px 0px;
-  // margin: 40px 0px 40px 0px;
+  margin: 40px 40px 40px 40px;
+  
+  display:flex;
+  justify-content: space-between;
 `;
 
 const TableContainer = styled.div`
@@ -81,13 +84,22 @@ const TdRank = styled.th`
   min-width: 280px;
 `;
 
+const onSubmit = () => {
+  if(!localStorage.getItem('startTime')) {
+    localStorage.setItem('startTime', Date.now());
+  }
+  // localStorage.setItem();
+}
+
 
 
 export default function GuessContainer() {
+
   return (
     <>
       <TextContainer>
         <Text></Text>
+        <SubmitButton onClick={onSubmit}>단추</SubmitButton>
       </TextContainer>
       <TableContainer>
         <Table>

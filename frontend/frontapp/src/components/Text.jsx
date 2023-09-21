@@ -5,7 +5,7 @@ const TextStyled = styled.input`
   color: ${(props) => props.color};
   weight: 300;
   word-break: break-all;
-  width: 88%;
+  width: 70%;
   height: 50px;
   border-radius: 18px;
 `;
