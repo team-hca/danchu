@@ -22,11 +22,9 @@ subfolderPath = os.path.join(dir, subfolderName)
 # 현재 날짜를 가져오기
 today = datetime.now()
 
-# 이미 학습된 모델 가져오기
-#modelName = 'ft'+str(today.strftime('%y%m%d'))+'.model'
-#model = FastText.load(modelName)
+# 학습된 모델 가져오기
 model = FastText.load('ft230920_3.model')
-#model = models.fasttext.load_facebook_model('cc.ko.300.bin.gz')
+
 
 mecab = MeCab()
 
@@ -59,14 +57,12 @@ def doTextCleaning(inputFile,outputFile):
     with open(os.path.join(subfolderPath,'stopwords.txt'), 'r', encoding='utf-8') as f:
       listFile = f.readlines()
       stopwords = [listFile[i].strip() for i in range(len(listFile))]
-      #print(stopwords)
 
     tokenTxtFile = open(outputFile, "w", encoding="utf-8")
     list = []
 
     with open(inputFile, 'r', encoding="utf-8") as f:
       docs = f.readlines()
-      #num = 0
     
       for doc in tqdm(docs, desc="진행 중"):
         temp = doc.strip().split(',')
@@ -88,11 +84,6 @@ def doTextCleaning(inputFile,outputFile):
           list.append(result)
         #프린트. . 메모리를 많이 잡아먹어서 메모리 뻑날수도있음
         #로그사용
-        print(list)
-        #print(result)
-        #num += 1
-        #print()
-        #print(num)
 
     myJsonString = json.dumps(list, ensure_ascii=False)
     tokenTxtFile.write(myJsonString)
@@ -178,9 +169,7 @@ def doTextCleaningNNP(inputFile,outputFile):
         #단어
         # 고유명사 제거
         for c in temp:
-          #print(c)
           c = re.sub("[^ㄱ-ㅎㅏ-ㅣ가-힣 ]","",c)
-          #print(c)
           flag = True
           if flag and c :
             for li in mecab.pos(c): 
@@ -192,10 +181,8 @@ def doTextCleaningNNP(inputFile,outputFile):
           if flag:
             result.append(c)
           flag = True
-          #print(result)
         if result: #빈 경우 제외
           list.append(result)
-        print(*list)
 
     myJsonString = json.dumps(list, ensure_ascii=False)
     tokenTxtFile.write(myJsonString)
@@ -223,93 +210,16 @@ def findWordSimilarityTop1000(answer):
   else:
     return wordSimilarityTop1000RespDto
   
-# def findWordSimilarityTop1000(answer):
-#   try:
-#     #총 단어의 개수 : 235698 인듯 -> 위키만 학습한 모델 기준
-#     #<class 'list'>
-#     similarWords=model.wv.most_similar(answer,topn=10000)
-#     #similarWords = model.similar_by_word(answer,1000)
-
-#     similarWordsToReturn =[]
-
-#     # 근데 이거 정답단어가 고유명사가 아닐 때만 해줘야하려나?? 
-
-#     # 일단 냅다 많이 뽑기
-#     # NNG : 일반명사, NNP: 고유명사, NNB : 의존명사, NR : 수사, NP : 대명사
-#     # for문 돌면서 뽑은 단어가 고유명사(NNP)인지 체크
-#     # 고유명사가 아니라면, 내가 반환할 리스트에 추가해주기
-#     # 고유명사라면 유사도 높은 것 더 뽑아서 채워넣기
-
-#     while len(similarWordsToReturn) < 1000:
-#       #print("in while")
-#       #print(similarWords[0])
-#       flag = True
-
-#       for similarWord, similarity in similarWords:
-#         #print("in for")
-#         #print(similarWord)
-#         #print(type(mecab.pos(similarWord)))
-#         if flag:
-
-#           # 만약, 단어 안에 정답단어가 들어있다면 넣지 않게 하기
-#           if answer in similarWord:
-#             continue
-      
-#           #print(mecab.pos(similarWord))
-#           #고유명사면
-        
-#           for li in mecab.pos(similarWord):
-#             #print(li[1])
-#             if 'NNP' == li[1]:
-#               flag = False
-#               break
-          
-#           #print(mecab.pos(similarWord))
-#           #고유명사아니면
-#         if flag:
-#           print(mecab.pos(similarWord))
-#           similarWordsToReturn.append((similarWord,similarity))
-#         flag = True
-#           #print(len(similarWordsToReturn))
-
-#         #반복문 다 돌아도 안되는거라면 
-#       break
-
-#     # 얘도 문제
-#     print(len(similarWordsToReturn))
-    
-#     #print("out while")
-#     similarWordsToJson = json.dumps(similarWordsToReturn, ensure_ascii=False)
-#     # print('list')
-#     # print(*similarWords)
-#     #print(similarWordsToJson)
-#     #print('jsonType' + type(similarWordsToJson))
-
-#     wordSimilarityTop1000RespDto = {'정답': answer, '유사도 높은 순 1000': similarWordsToJson}
-
-#     # for js in similarWordsToJson:
-#     #   print(js)
-
-#   except OSError as e:
-#     #throw 같은 것
-#     raise e
-#   else:
-#     return wordSimilarityTop1000RespDto
- 
- 
 #쓰여진 단어에 대해 유사도 등수 + 유사도 뽑아주기
 def findWordSimilarity(answer,inputWord):
   try:
     # 실수(float)입니다. 이 값은 -1에서 1 사이의 범위에 있으며, 두 단어나 단어 벡터가 유사할수록 값이 더 큽니다. 0은 두 단어나 단어 벡터가 관련이 없음을 나타냅니다.
     similarityBetweenWords = model.wv.similarity(answer, inputWord)
-    #similarityBetweenWords = model.similarity(answer,inputWord)
 
     print(similarityBetweenWords)
     # <class 'numpy.float32'>
-    #print(type(similartyBetweenWords))
     wordSimilarityRespDto = {'정답': answer,'입력값':inputWord,'유사도': similarityBetweenWords.astype(float), '순위':-1}
     similarWords=model.wv.most_similar(answer,topn=1000)
-    #similarWords = model.similar_by_word(answer,1000)
 
     # 1000개 안에 있을 경우에만 해주자
     for idx, (similarWord, similarity) in enumerate(similarWords):

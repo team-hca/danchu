@@ -6,32 +6,20 @@ import os
 from typing import Union
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
+from pymongo import MongoClient
+from datetime import datetime, timedelta
 
 dir = os.path.dirname(os.path.abspath(__file__))
 
-#필요한 것 빼고 주석걸고 돌리기
-
-# 하위 폴더 이름을 지정
-subfolderName = "text"
-
-# 하위 폴더의 경로를 생성
-subfolderPath = os.path.join(dir, subfolderName)
-
 app = FastAPI()
 #시간은 나중에 빼도 됨 지금은 확인용
-
-#model = gensim.models.FastText.load('fastText5.model')
-
-#여기에서 모델 한번 호출 -> fastText에서 임포트
 
 #인자에 파일명 추가
 @app.get("/api/v1/ai/mergeTextFiles")
 def mergeTextFiles():
 
-    #print(subfolderPath)
-
     try:
-        start = time.time()
+
     # 결과를 저장할 출력 파일
         outputFile = os.path.join(subfolderPath, 'merge_all_form_merged_file.txt')
 
@@ -47,9 +35,6 @@ def mergeTextFiles():
         return JSONResponse(content=e, status_code=400)
 
     else:
-        end = time.time()
-        print('걸린 시간:')
-        print(end - start)
         return JSONResponse(content=result, status_code = 200)
 
 
@@ -58,16 +43,12 @@ def mergeTextFiles():
 #wiki_merged_file.txt
 def doTextCleaning(inputFileName : str,):
     try:
-        start = time.time()
         outputFileName = inputFileName.replace('.txt','')+'_cleaning.txt'
         result = FastText.doTextCleaning(os.path.join(subfolderPath,inputFileName), os.path.join(subfolderPath,outputFileName))
     except OSError as e:
         return JSONResponse(content=e, status_code=400)
 
     else:
-        end = time.time()
-        print('걸린 시간:')
-        print(end - start)
         return JSONResponse(content=result, status_code = 200)
 
 #wiki_merged_file_cleaning.txt
@@ -75,43 +56,86 @@ def doTextCleaning(inputFileName : str,):
 def doModelLearning(inputFileName : str):
 
     try:
-        start = time.time()
         result = FastText.createModel(os.path.join(subfolderPath,inputFileName))
     except OSError as e:
         return JSONResponse(content=e, status_code=400)
 
     else:
-        end = time.time()
-        print('걸린 시간:')
-        print(end - start)
         return JSONResponse(content=result, status_code = 200)
 
 #'화재', '강남'
 @app.get("/api/v1/ai/wordSimilarity/{answer}/{word}")
 def findWordSimilarity(answer : str, word : str):
     try:
-        start = time.time()
         wordSimilarityRespDto = FastText.findWordSimilarity(answer, word)
     except OSError as e:
         return JSONResponse(content=e, status_code=400)
 
     else:
-        end = time.time()
-        print('걸린 시간:')
-        print(end - start)
         return JSONResponse(content=wordSimilarityRespDto, status_code = 200)
 
 #'화재'
 @app.get("/api/v1/ai/wordSimilarityTop1000/{answer}")
 def findWordSimilarityTop1000(answer : str):
     try:
-        start = time.time()
         wordSimilarityTop1000RespDto = FastText.findWordSimilarityTop1000(answer)
     except OSError as e:
         return JSONResponse(content=e, status_code=400)
 
     else:
-        end = time.time()
-        print('걸린 시간:')
-        print(end - start)
         return JSONResponse(content=wordSimilarityTop1000RespDto, status_code = 200)
+
+@app.get("/api/v1/ai/todaySimilarity")
+def findTodayWordsSimilarity():
+    try:
+        # MongoDB 서버에 연결
+        client = MongoClient("mongodb://hca:danchu1213!@j9a302.p.ssafy.io:27017/?authMechanism=DEFAULT")
+
+        # 데이터베이스 선택
+        db = client.danchu
+
+        # 컬렉션 선택
+        similarityCollectionInput = db.daily_words_similarity_top1000
+        quizCollectionOutput = db.daily_quiz.history
+
+        # 정답들 몽고db에서 꺼내오기
+
+        findData = quizCollectionOutput.find({"date": (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d")}, {'word1':1,'word2':1,"word3":1, '_id': 0})
+
+        answers = []
+
+        for docu in findData:
+            answers.append(docu['word1'])
+            answers.append(docu['word2'])
+            answers.append(docu['word3'])
+
+        # 모델로 정답들 탑 1000 뽑고 몽고db에 넣기
+
+        answerMostSimilarities = []
+        for i in range(len(answers)):
+            if answers[i] :
+                answerMostSimilarities.append(FastText.findWordSimilarityTop1000(answers[i]))
+            else : 
+                #단어가 3개가 아닐 경우 처리
+                answerMostSimilarities.append({'정답': ' ', '유사도 높은 순 1000': ' '})
+
+        #db에 넣기
+        similarityData = {
+            "date": (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d"), # 다음날 날짜
+            "word1": answers[0],
+            "word2" : answers[1],
+            "word3" : answers[2],
+            "word1_top1000" : answerMostSimilarities[0]['유사도 높은 순 1000'],
+            "word2_top1000" : answerMostSimilarities[1]['유사도 높은 순 1000'],
+            "word3_top1000" : answerMostSimilarities[2]['유사도 높은 순 1000'],
+            "created_at" : datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "modified_at" : datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        }
+
+        #MongoDB에 저장
+        similarityCollectionInput.history.insert_one(similarityData)
+    except OSError as e:
+        return JSONResponse(content=e, status_code=400)
+
+    else:
+        return JSONResponse(content="성공", status_code = 200)
