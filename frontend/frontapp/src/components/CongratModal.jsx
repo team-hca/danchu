@@ -44,6 +44,28 @@ const DanchuRank = styled.div`
   margin: 10px 0px 10px 0px;
 `
 
+const ResultCopyButton = styled.button`
+  position: relative;
+  background: none;
+  border: 2px solid #FFF7D4;
+  cursor: pointer;
+  color: #FFF7D4;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 10px;
+`
+
+const RelatedNewsButton = styled.button`
+  position: relative;
+  background: none;
+  border: 2px solid #FFF7D4;
+  cursor: pointer;
+  color: #FFF7D4;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 10px;
+`
+
 const now = new Date();
 const options = { timeZone: 'Asia/Seoul' };
 const krSeoulTime = now.toLocaleString('en-US', options);
@@ -76,6 +98,10 @@ export default function CongratModal() {
         <DanchuStreak>{danchuStreak}</DanchuStreak>
         <DanchuRank>{danchuRank}</DanchuRank>
       </SuccessContent>
+
+      <ResultCopyButton>결과 복사</ResultCopyButton>
+      <RelatedNewsButton>관련 뉴스</RelatedNewsButton>
+
     </ModalContainer>
   );
 }
