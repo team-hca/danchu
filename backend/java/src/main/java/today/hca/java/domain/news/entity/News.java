@@ -23,5 +23,6 @@ public class News {
     private String date_time;
     private String created_at;
     private String modified_at;
+    private String status;
 
 }
