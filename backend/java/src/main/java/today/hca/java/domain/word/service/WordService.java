@@ -78,7 +78,7 @@ public class WordService {
         //없다면 유사도 모델에서 반환값 받기
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI("http://j9a302.p.ssafy.io:8082/api/v1/ai/wordSimilarity/"+ answer +"/"+word))
+                .uri(new URI("http://j9a302.p.ssafy.io:8083/api/v1/ai/wordSimilarity/"+ answer +"/"+word))
                 .GET()
                 .build();
 
