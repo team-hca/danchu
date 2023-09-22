@@ -10,5 +10,5 @@ import lombok.*;
 public class DailyQuizResponseDto {
     private String sentence;
     private int count;
-    private int[] indexes;
+    private String[] indexes;
 }
