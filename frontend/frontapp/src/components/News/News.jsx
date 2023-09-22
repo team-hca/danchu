@@ -22,7 +22,7 @@ const LoadingMessage = styled.div`
   padding: 5px 0;
 `;
 
-function News() {
+export default function News() {
   const [newsData, setNewsData] = useState([]);
   const [loading, setLoading] = useState(true);
   const words = { word1: "과자", word2: "아이스크림", word3: null };
@@ -58,5 +58,3 @@ function News() {
     );
   }
 }
-
-export default News;
