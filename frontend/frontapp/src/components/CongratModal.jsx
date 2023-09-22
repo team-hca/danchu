@@ -5,7 +5,6 @@ import congratDanchu from '../icon/congrat-danchu.png';
 
 const ModalContainer = styled.div`
   background-color: #253846;
-  margin: 40px 0px 40px 0px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -14,7 +13,7 @@ const ModalContainer = styled.div`
 `
 
 const SuccessContent = styled.div`
-  margin: 30px 0px 30px 0px;
+  margin: 30px 0px;
 
   & > div {
     margin-bottom: 12px;
@@ -26,7 +25,7 @@ const CongratTitle = styled.span`
   font-weight: bold;
   font-size: 30px;
   line-height: 1.3;
-  margin: 50px 0px;
+  margin: 0px 0px 50px 0px;
 `
 
 const DanchuDate = styled.div`
