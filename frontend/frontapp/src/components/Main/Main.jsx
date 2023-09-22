@@ -9,13 +9,14 @@ const Container = styled.div`
   justify-content: center;
   align-items: stretch;
   width: 720px;
+  margin-bottom: 100px;
 `;
 
-export default function Main() {
+export default function Main(props) {
   return (
     <Container>
       <HeaderMessage />
-      <HeaderBox />
+      <HeaderBox sentence ={props.sentence} />
     </Container>
   );
 }

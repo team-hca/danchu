@@ -3,6 +3,7 @@ import Root from "./Root";
 import Quiz from "./routes/Quiz";
 import QuizResult from "./routes/QuizResult";
 import Congrat from "./components/CongratModal";
+import Error from "./routes/Error";
 
 const router = createBrowserRouter([
   {

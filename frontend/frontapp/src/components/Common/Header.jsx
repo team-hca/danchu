@@ -11,8 +11,8 @@ const Container = styled.div`
   flex-direction: row;
   align-items: center;
   position: relative;
-  margin-top: 100px;
-  margin-bottom: 250px;
+  margin-top: 0px;
+  margin-bottom: 200px;
 `;
 
 const Logo = styled.img`
@@ -33,6 +33,7 @@ const QuestionMark = styled.button`
   right: 10px;
   top: 50px;
   transform: translateY(-50%);
+  transform: translateX(320px);
   &:focus {
     outline: none;
   }

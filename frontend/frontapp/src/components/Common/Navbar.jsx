@@ -55,7 +55,7 @@ const MobileMenuIcon = styled.div`
   display: none;
 `;
 
-const Navbar = () => {
+export default function Navbar() {
   const [lastScrollTop, setLastScrollTop] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
 
@@ -89,6 +89,4 @@ const Navbar = () => {
       </MobileMenuIcon>
     </Container>
   );
-};
-
-export default Navbar;
+}
