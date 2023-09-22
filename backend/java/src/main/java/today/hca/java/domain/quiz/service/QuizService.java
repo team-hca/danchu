@@ -27,21 +27,30 @@ public class QuizService {
         }else {
             count = 1;
         }
-        int[] indexes;
+        String[] indexes;
         String temp = q.getQuiz();
         if(count == 1) {
             temp = temp.replace(q.getWord1(), "^1");
             int i = q.getQuiz().indexOf(q.getWord1());
-            indexes = new int[1];
-            indexes[0] = i;
+            indexes = new String[1];
+            indexes[0] = "^1";
         }else if(count == 2) {
             temp = temp.replace(q.getWord1(), "^1");
             temp = temp.replace(q.getWord2(), "^2");
             int i1 = q.getQuiz().indexOf(q.getWord1());
             int i2 = q.getQuiz().indexOf(q.getWord2());
-            indexes = new int[2];
-            indexes[0] = Math.min(i1, i2);
-            indexes[1] = Math.max(i1, i2);
+            indexes = new String[2];
+
+            if(i1 > i2) {
+                indexes[0] = "^2";
+                indexes[1] = "^1";
+            } else {
+                indexes[0] = "^1";
+                indexes[1] = "^2";
+            }
+            System.out.println(indexes[0]);
+            System.out.println(indexes[1]);
+
         }else{
             temp = temp.replace(q.getWord1(), "^1");
             temp = temp.replace(q.getWord2(), "^2");
@@ -49,16 +58,38 @@ public class QuizService {
             int i1 = q.getQuiz().indexOf(q.getWord1());
             int i2 = q.getQuiz().indexOf(q.getWord2());
             int i3 = q.getQuiz().indexOf(q.getWord3());
-            indexes = new int[3];
-            indexes[0] = Math.min(Math.min(i1, i2), i3);
-            indexes[2] = Math.max(Math.max(i1, i2), i3);
-            if(indexes[0] != i1 && indexes[2] != i1) {
-                indexes[1] = i1;
-            }else if(indexes[0] != i2 && indexes[2] != i2) {
-                indexes[1] = i2;
-            }else{
-                indexes[1] = i3;
-            }
+            indexes = new String[3];
+
+            int max = 0;
+            int min = 1000;
+            max = Math.max(Math.max(i1, i2), i3);
+            min = Math.min(Math.min(i1, i2), i3);
+
+
+            int mid = i1+i2+i3 - max - min;
+            if(max == i1) indexes[2] = "^1";
+            if(max == i2) indexes[2] = "^2";
+            if(max == i3) indexes[2] = "^3";
+
+            if(mid == i1) indexes[1] = "^1";
+            if(mid == i2) indexes[1] = "^2";
+            if(mid == i3) indexes[1] = "^3";
+
+            if(min == i1) indexes[0] = "^1";
+            if(min == i2) indexes[0] = "^2";
+            if(min == i3) indexes[0] = "^3";
+
+
+
+//            indexes[0] = Math.min(Math.min(i1, i2), i3);
+//            indexes[2] = Math.max(Math.max(i1, i2), i3);
+//            if(indexes[0] != i1 && indexes[2] != i1) {
+//                indexes[1] = i1;
+//            }else if(indexes[0] != i2 && indexes[2] != i2) {
+//                indexes[1] = i2;
+//            }else{
+//                indexes[1] = i3;
+//            }
 
         }
 
