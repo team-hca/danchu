@@ -57,6 +57,7 @@ const OverlayText = styled.div`
   }
 `;
 const ScrollableContent = styled.div`
+  width: 100%;
   border: none;
   border-radius: 6px;
   display: flex;
@@ -140,43 +141,43 @@ const LastItemContentText = styled(ContentText)`
   font-size: 25px; // 크기 변경
   text-align: center;
 `;
+// 개행 처리 함수
+function NewlineText({ text }) {
+  const newText = text.replace(/\n/g, "");
+  return <>{newText}</>;
+}
 
-export default function NewsBox() {
-  function generateDummyData(count) {
-    return Array.from({ length: count }, (_, index) => ({
-      title: `김병찬씨, 진짜 보여줘${index + 1}....`,
-      content: `동해물과 백두산이 마르고 닳도록 하느님이 보우하사 마르고 닳도록 하느님이 보우하사 마르고 닳도록 하느님이 보우하사 마르고 닳도록 하느님이 보우하사  
-무궁화 삼천리 화려강산
-대한사람 대한으로 길이 보전하세`,
-      url: `https://www.naver.com`,
-      date: `2023-09-19`,
-    }));
+export default function NewsBox({ newsData }) {
+  function formatContent(contentStr, maxLength = 140) {
+    if (!contentStr || typeof contentStr !== "string") {
+      return "Invalid Content";
+    }
+
+    if (contentStr.length > maxLength) {
+      return contentStr.slice(0, maxLength) + "...";
+    }
+
+    return contentStr;
   }
 
-  function NewlineText({ text }) {
-    const newText = text.split("\n").map((str, index, array) =>
-      index === array.length - 1 ? (
-        str
-      ) : (
-        <>
-          {str}
-          <br />
-        </>
-      )
-    );
+  // 날짜 포매팅 함수
+  function formatDate(dateStr) {
+    if (!dateStr || typeof dateStr !== "string") {
+      return "Invalid Date";
+    }
+    const [date, time] = dateStr.split(" ");
+    const [year, month, day] = date.split("-");
+    const [hour, minute] = time.split(":");
 
-    return <>{newText}</>;
+    const hourNumber = parseInt(hour, 10);
+    const amOrPm = hourNumber >= 12 ? "오후" : "오전";
+    const adjustedHour = hourNumber > 12 ? hourNumber - 12 : hourNumber;
+
+    return `${year}년 ${parseInt(month, 10)}월 ${parseInt(
+      day,
+      10
+    )}일 ${amOrPm} ${adjustedHour}시 ${minute}분`;
   }
-
-  const dummyData = generateDummyData(12);
-
-  // 마지막 항목 추가
-  dummyData.push({
-    title: "끝",
-    content: "더 이상의 뉴스가 없습니다.",
-    url: "#",
-    date: "",
-  });
 
   return (
     <Container>
@@ -184,8 +185,16 @@ export default function NewsBox() {
         <img src={newsBoxImagePath} alt="headerBoxImagePath" />
         <OverlayText>
           <ScrollableContent>
-            {dummyData.map((data, index) => {
-              const isLastItem = index === dummyData.length - 1;
+            {[
+              ...newsData,
+              {
+                title: "끝",
+                content: "더 이상의 뉴스가 없습니다.",
+                url: "#",
+                date: "",
+              },
+            ].map((data, index, arr) => {
+              const isLastItem = index === arr.length - 1;
 
               if (isLastItem) {
                 return (
@@ -194,24 +203,26 @@ export default function NewsBox() {
                     <LastItemContentText>
                       <NewlineText text={data.content} />
                     </LastItemContentText>
-                    {data.date && <DateText>{data.date}</DateText>}
+                    {data.date_time && <DateText>{data.date_time}</DateText>}
+                  </DummyItem>
+                );
+              } else {
+                return (
+                  <DummyItem key={data.title + index}>
+                    <ButtonWrapper
+                      onClick={() => window.open(data.url, "_blank")}
+                    >
+                      <TitleText>{data.title}</TitleText>
+                      <ContentText>
+                        <NewlineText text={formatContent(data.content)} />
+                      </ContentText>
+                    </ButtonWrapper>
+                    {data.date_time && (
+                      <DateText>{formatDate(data.date_time)}</DateText>
+                    )}
                   </DummyItem>
                 );
               }
-
-              return (
-                <DummyItem key={data.title + index}>
-                  <ButtonWrapper
-                    onClick={() => window.open(data.url, "_blank")}
-                  >
-                    <TitleText>{data.title}</TitleText>
-                    <ContentText>
-                      <NewlineText text={data.content} />
-                    </ContentText>
-                  </ButtonWrapper>
-                  {data.date && <DateText>{data.date}</DateText>}
-                </DummyItem>
-              );
             })}
           </ScrollableContent>
         </OverlayText>
