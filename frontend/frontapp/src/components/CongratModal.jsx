@@ -108,8 +108,14 @@ export default function CongratModal() {
   const successContentCopy = useRef(null);
 
   const handleCopyResult = () => {
-    const successContent = successContentCopy.current.innerText;
-    navigator.clipboard.writeText(successContent)
+    const copiedContent = `
+      ${year}년 ${month}월 ${date}일의 단추를 맞혔습니다!
+      ${danchuTrial}
+      ${danchuTime}
+      https://www.danchu.today/
+    `;
+
+    navigator.clipboard.writeText(copiedContent)
       .then(() => {
         alert('결과를 복사하였습니다!');
       })
