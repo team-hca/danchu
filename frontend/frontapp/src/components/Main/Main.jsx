@@ -11,11 +11,11 @@ const Container = styled.div`
   width: 720px;
 `;
 
-export default function Main() {
+export default function Main(props) {
   return (
     <Container>
       <HeaderMessage />
-      <HeaderBox />
+      <HeaderBox sentence ={props.sentence} />
     </Container>
   );
 }
