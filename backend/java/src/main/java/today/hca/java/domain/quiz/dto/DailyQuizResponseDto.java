@@ -8,7 +8,7 @@ import lombok.*;
 @Getter
 @ToString
 public class DailyQuizResponseDto {
-    private String[] sentence;
+    private String sentence;
     private int count;
     private int[] indexes;
 }
