@@ -91,6 +91,14 @@ const AnswerHighlight2 = styled.span`
   box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
 `;
 
+const AnswerHighlight3 = styled.span`
+  background-color: #253846;
+  color: white;
+  padding: 2px 20px;
+  border-radius: 5px;
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+`;
+
 const MainButton = styled.button`
   position: relative;
   background: none;
@@ -124,14 +132,18 @@ export default function MainBox(props) {
   const data = props.sentence;
   const sentence = data.sentence;
   const countWord = data.count;
+  console.log(data.indexes);
 
-  const word1 = "^1";
-  const word2 = "^2";
-  const word3 = "^3";
+  const word1 = data.indexes[0];
+  const word2 = data.indexes[1];
+  const word3 = data.indexes[2];
+  
+  console.log(word1);
+  console.log(word2);
+  console.log(word3);
 
   function StyledWord({sentence}) {
 
-    console.log(countWord);
     if (sentence.includes(word1)) {
       return sentence.split(word1).reduce((acc, part, idx) => {
         if (idx === 0) return [...acc, part];
@@ -158,7 +170,7 @@ export default function MainBox(props) {
         if (idx === 0) return [...acc, part];
         return [
           ...acc,
-          <AnswerHighlight2 key={idx}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</AnswerHighlight2>,
+          <AnswerHighlight3 key={idx}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</AnswerHighlight3>,
           part,
         ];
       }, []);
