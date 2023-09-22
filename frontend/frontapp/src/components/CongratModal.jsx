@@ -28,28 +28,7 @@ const CongratTitle = styled.span`
   margin: 0px 0px 50px 0px;
 `
 
-const DanchuDate = styled.div`
-  color: #FFF7D4;
-  font-weight: bold;
-  font-size: 20px;
-  margin: 10px 0px;
-`
-
-const DanchuTrial = styled.div`
-  color: #FFF7D4;
-  font-weight: bold;
-  font-size: 20px;
-  margin: 10px 0px;
-`
-
-const DanchuStreak = styled.div`
-  color: #FFF7D4;
-  font-weight: bold;
-  font-size: 20px;
-  margin: 10px 0px;
-`
-
-const DanchuRank = styled.div`
+const SuccessDetail = styled.div`
   color: #FFF7D4;
   font-weight: bold;
   font-size: 20px;
@@ -112,13 +91,18 @@ let month = parseInt(dateArray[0], 10).toString().padStart(2, '0');
 let date = parseInt(dateArray[1], 10).toString().padStart(2, '0');
 
 const trialCnt = 999999;
-const streakCnt = 12341234;
-const rankPercentage = 1;
+
+const tmpHour = 2;
+const tmpMin = 3;
+const tmpSec = 9;
+
+let timeHour = parseInt(tmpHour, 10).toString().padStart(2, '0');
+let timeMin = parseInt(tmpMin, 10).toString().padStart(2, '0');
+let timeSec = parseInt(tmpSec, 10).toString().padStart(2, '0');
 
 const danchuDate = year + "년 " + month + "일 " + date + "일 단추"
 const danchuTrial = "시도 횟수: " + trialCnt
-const danchuStreak = "연속으로 맞은 횟수: " + streakCnt
-const danchuRank = "유저랭킹: 상위 " + rankPercentage + "%"
+const danchuTime = "걸린 시간 : " + timeHour + "시간 " + timeMin + "분 " + timeSec + "초"
 
 export default function CongratModal() {
   const successContentCopy = useRef(null);
@@ -202,10 +186,9 @@ export default function CongratModal() {
       <img src={congratDanchu} alt="You've Got Danchue" style={{ width: '150px' }} />
 
       <SuccessContent ref={successContentCopy}>
-        <DanchuDate>{danchuDate}</DanchuDate>
-        <DanchuTrial>{danchuTrial}</DanchuTrial>
-        <DanchuStreak>{danchuStreak}</DanchuStreak>
-        <DanchuRank>{danchuRank}</DanchuRank>
+        <SuccessDetail>{danchuDate}</SuccessDetail>
+        <SuccessDetail>{danchuTrial}</SuccessDetail>
+        <SuccessDetail>{danchuTime}</SuccessDetail>
       </SuccessContent>
 
       <ButtonContainer>
