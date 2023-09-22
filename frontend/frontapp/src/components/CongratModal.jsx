@@ -1,5 +1,6 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import styled from "styled-components";
+import confetti from 'canvas-confetti';
 
 const ModalContainer = styled.div`
   background-color: #253846;
@@ -134,6 +135,63 @@ export default function CongratModal() {
       });
   }
 
+  // 폭죽 효과
+  const triggerFireworksConfetti = () => {
+    var duration = 4 * 1000;
+    var animationEnd = Date.now() + duration;
+    var defaults = { startVelocity: 10, spread: 500, ticks: 100, zIndex: 0 };
+    
+    function randomInRange(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+    
+    var interval = setInterval(function() {
+      var timeLeft = animationEnd - Date.now();
+    
+      if (timeLeft <= 0) {
+        return clearInterval(interval);
+      }
+    
+      var particleCount = 50 * (timeLeft / duration);
+      confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+      confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+      confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.3, 0.7), y: Math.random() - 0.1 } }));
+      confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.3, 0.7), y: Math.random() - 0.8 } }));
+    }, 250);
+  }
+
+  const triggerPrideConfetti = () => {
+    var end = Date.now() + (3 * 1000);
+
+    var colors = ['#1BE4B2', '#F26481', '#F3E502', '#ffffff'];
+    
+    (function frame() {
+      confetti({
+        particleCount: 4,
+        angle: 60,
+        spread: 250,
+        origin: { x: -0.1, y: 0.7 },
+        colors: colors
+      });
+      confetti({
+        particleCount: 4,
+        angle: 120,
+        spread: 250,
+        origin: { x: 1.1, y: 0.7 },
+        colors: colors
+      });
+    
+      if (Date.now() < end) {
+        requestAnimationFrame(frame);
+      }
+    }());
+  }
+
+  useEffect(() => {
+    triggerFireworksConfetti();
+    triggerPrideConfetti();
+  }, []);
+
   return (
     <ModalContainer>
       <CongratTitle>
@@ -157,4 +215,3 @@ export default function CongratModal() {
     </ModalContainer>
   );
 }
-
