@@ -7,6 +7,6 @@ const H3Styled = styled.h3`
   word-break: break-all;
 `;
 
-export default function H3({ children, color }) {
-  return <H3Styled color={color}>{children}</H3Styled>;
+export default function H3({ children, color, id }) {
+  return <H3Styled color={color} id={id}>{children}</H3Styled>;
 }
