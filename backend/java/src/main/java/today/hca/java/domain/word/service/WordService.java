@@ -41,6 +41,7 @@ public class WordService {
                     resultDto.setItAnswer(true);
                     resultDto.setSimilarity(100);
                     resultDto.setWord(guessWord);
+                    resultDto.setRank(0);
                     return resultDto;
                 }
             }
@@ -49,6 +50,7 @@ public class WordService {
                     resultDto.setItAnswer(true);
                     resultDto.setSimilarity(100);
                     resultDto.setWord(guessWord);
+                    resultDto.setRank(0);
                     return resultDto;
                 }
             }
@@ -57,6 +59,7 @@ public class WordService {
                     resultDto.setItAnswer(true);
                     resultDto.setSimilarity(100);
                     resultDto.setWord(guessWord);
+                    resultDto.setRank(0);
                     return resultDto;
                 }
             }
@@ -95,20 +98,13 @@ public class WordService {
         resultDto.setWord(inputValue);
         resultDto.setSimilarity(similarityValue);
         resultDto.setItAnswer(false);
+        resultDto.setRank(rankValue);
 
 
         return resultDto;
 
     }
 
-    public WordSimilarityResponseDto findList(String guessWord, List<String[]> list){
-        for(String[] w : list){
-            if(w[0].equals(guessWord)){
-                return new WordSimilarityResponseDto(false, Double.parseDouble(w[1]), w[0]);
-            }
-        }
-        return null;
-    };
 
     public static String getDate() {
         // diff 값 만큼 이전 날짜를 가져옴(0이면 오늘, 1이면 하루 전, 2면 이틀 전, 3이면 3일 전)

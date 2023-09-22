@@ -10,4 +10,5 @@ public class WordSimilarityResponseDto {
     private boolean isItAnswer;
     private double similarity;
     private String word;
+    private int rank;
 }
