@@ -9,9 +9,6 @@ import today.hca.java.domain.news.repository.NewsRepository;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -28,9 +25,9 @@ public class NewsService {
 
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
 
-        String date = previousTime.format(timeFormatter);
 
-        return date;
+
+        return previousTime.format(timeFormatter);
     }
 
     // todo -  수정중 2
@@ -64,10 +61,6 @@ public class NewsService {
             }
             return newsByWordList;
 
-        }
-
-        if(newsByWordList.size() == 0) {
-            System.out.println("service : 뉴스가 없습니다.");
         }
 
         return newsByWordList;
