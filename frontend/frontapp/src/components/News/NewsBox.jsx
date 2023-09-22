@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import newsBoxImagePath from "../../icon/news_box.png";
 
@@ -141,25 +141,13 @@ const LastItemContentText = styled(ContentText)`
   font-size: 25px; // 크기 변경
   text-align: center;
 `;
+// 개행 처리 함수
+function NewlineText({ text }) {
+  const newText = text.replace(/\n/g, "");
+  return <>{newText}</>;
+}
 
 export default function NewsBox({ newsData }) {
-  // 미정이한테 받아올 words 배열
-  const [words, setWords] = useState({ word1: "", word2: "", word3: "" });
-
-  // 초기 words 설정
-
-  useEffect(() => {
-    const s1 = "과자";
-    const s2 = "아이스크림";
-    setWords({ word1: s1, word2: s2, word3: null });
-  }, []);
-
-  // 개행 처리 함수
-  function NewlineText({ text }) {
-    const newText = text.replace(/\n/g, "");
-    return <>{newText}</>;
-  }
-
   function formatContent(contentStr, maxLength = 140) {
     if (!contentStr || typeof contentStr !== "string") {
       return "Invalid Content";

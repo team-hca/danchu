@@ -22,11 +22,9 @@ const LoadingMessage = styled.div`
   padding: 5px 0;
 `;
 
-export default function News() {
+export default function News({ words }) {
   const [newsData, setNewsData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const words = { word1: "과자", word2: "아이스크림", word3: null };
-
   useEffect(() => {
     axios
       .get(
@@ -35,12 +33,13 @@ export default function News() {
       .then((response) => {
         setNewsData(response.data);
         setLoading(false); // 데이터 로드 후 로딩 상태 false로 설정
+        // console.log(response.data);
       })
       .catch((error) => {
         console.error("데이터를 가져오지 못함!!!! error : ", error.message);
         setLoading(false); // 에러 발생 시 로딩 상태 false로 설정
       });
-  });
+  }, []);
 
   if (loading) {
     return (
