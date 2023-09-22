@@ -30,22 +30,22 @@ public class QuizService {
         int[] indexes;
         String temp = q.getQuiz();
         if(count == 1) {
-            temp = temp.replace(q.getWord1(), "^");
+            temp = temp.replace(q.getWord1(), "^1");
             int i = q.getQuiz().indexOf(q.getWord1());
             indexes = new int[1];
             indexes[0] = i;
         }else if(count == 2) {
-            temp = temp.replace(q.getWord1(), "^");
-            temp = temp.replace(q.getWord2(), "^");
+            temp = temp.replace(q.getWord1(), "^1");
+            temp = temp.replace(q.getWord2(), "^2");
             int i1 = q.getQuiz().indexOf(q.getWord1());
             int i2 = q.getQuiz().indexOf(q.getWord2());
             indexes = new int[2];
             indexes[0] = Math.min(i1, i2);
             indexes[1] = Math.max(i1, i2);
         }else{
-            temp = temp.replace(q.getWord1(), "^");
-            temp = temp.replace(q.getWord2(), "^");
-            temp = temp.replace(q.getWord3(), "^");
+            temp = temp.replace(q.getWord1(), "^1");
+            temp = temp.replace(q.getWord2(), "^2");
+            temp = temp.replace(q.getWord3(), "^3");
             int i1 = q.getQuiz().indexOf(q.getWord1());
             int i2 = q.getQuiz().indexOf(q.getWord2());
             int i3 = q.getQuiz().indexOf(q.getWord3());
