@@ -29,9 +29,12 @@ const RedText = styled.span`
 `;
 
 export default function MainMessage() {
-  const YEAR = "2023";
-  const MONTH = "09";
-  const DAY = "17";
+
+  const today = new Date();
+
+  const YEAR = today.getFullYear();
+  const MONTH = today.getMonth()+1;
+  const DAY = today.getDate();
 
   return (
     <Container>
