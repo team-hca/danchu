@@ -10,7 +10,7 @@ export const Tab = styled.button`
   border: none;
   outline: none;
   cursor: pointer;
-  width: 33.33333333333333333333333333333333333333333333333333333333333333333333333333333333333%;
+  width: ${props => 100/props.count}%;
   position: relative;
   border-radius: 18px 18px 0px 0px;
   // box-shadow: 5px 5px 5px;
@@ -24,7 +24,7 @@ export const Tab = styled.button`
   transition: background-color 0.5s ease-in-out;
 
   :hover {
-    background-color: white;
+    color: white;
   }
 `;
 
