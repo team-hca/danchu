@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import styled from "styled-components";
 import confetti from 'canvas-confetti';
+import congratDanchu from '../icon/congrat-danchu.png';
 
 const ModalContainer = styled.div`
   background-color: #253846;
@@ -13,7 +14,7 @@ const ModalContainer = styled.div`
 `
 
 const SuccessContent = styled.div`
-  margin: 50px 0px;
+  margin: 30px 0px 30px 0px;
 
   & > div {
     margin-bottom: 12px;
@@ -198,6 +199,9 @@ export default function CongratModal() {
         축하합니다! <br />
         오늘의 단추를 맞혔습니다!
       </CongratTitle>
+
+      <img src={congratDanchu} alt="You've Got Danchue" style={{ width: '150px' }} />
+
       <SuccessContent ref={successContentCopy}>
         <DanchuDate>{danchuDate}</DanchuDate>
         <DanchuTrial>{danchuTrial}</DanchuTrial>
