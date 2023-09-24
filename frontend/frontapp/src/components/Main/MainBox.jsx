@@ -1,5 +1,5 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import mainBoxImagePath from "../../icon/main_box.png";
 import moveToMainPath from "../../icon/move_to_main.png";
@@ -128,6 +128,12 @@ export default function MainBox(props) {
     navigate("/quiz"); // /quiz로 이동
   };
 
+  const location = useLocation();
+
+  useEffect(() => {
+    console.log(location.pathname);
+  },[]);
+
   const data = props.sentence;
   const sentence = data.sentence;
   const countWord = data.count;
@@ -197,10 +203,10 @@ export default function MainBox(props) {
           </ScrollableContent>
         </OverlayText>
       </BoxImage>
-
+      {location.pathname==="/quiz"?null:
       <MainButton onClick={handleButtonClick}>
         <img src={moveToMainPath} alt="moveToMain"></img>
-      </MainButton>
+      </MainButton>}
     </Container>
   );
 }
