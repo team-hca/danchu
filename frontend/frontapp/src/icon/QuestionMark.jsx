@@ -3,37 +3,73 @@ import Modal from "react-modal";
 
 // CSS 스타일을 JavaScript 객체로 정의
 const modalStyle = {
-    /* 모달창 크기 */
-    width: 50,
-    height: 50,
-
-    /* 최상단 위치 */
-    zIndex: 999, // 속성 이름도 올바르게 작성
-
-    /* 중앙 배치 */
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-
-    /* 모달창 디자인 */
-    backgroundColor: 'gray',
-    border: '1px solid black',
-    borderRadius: 8,
+    content: {
+        width: '60%',
+        height: '70%',
+        zIndex: 999,
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        backgroundColor: '#f5f5f5',
+        border: '1px solid #ddd',
+        borderRadius: '12px',
+        padding: '20px',
+        boxShadow: '0px 0px 15px rgba(0, 0, 0, 0.2)',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems:  'center',
+        justifyContent: 'center',
+        fontFamily: 'Do Hyeon, sans-serif',
+    }
 };
 
-const closeModalButtonStyle = {
-    position: 'absolute',
-    right: 10,
-    top: 10,
+const modalTextStyle = {
+    textAlign: 'center',
+    marginTop: '20px',
+    marginLeft: '20px',
+    marginRight: '20px',
+    fontSize: '23px',
+    color: '#FF6B6B',       
 };
+const modalHeaderStyle = {
+    fontSize: '40px',
+    marginBottom: '20px',
+    color: '#FF6B6B',        
+    borderBottom: '2px dotted #FF6B6B',    
+    paddingBottom: '10px'
+};
+const buttonStyle ={
+    buttonLink: {
+        color: 'var(--primary)',
+        textDecoration: 'none',
+        border: '1px solid #ff6b6b',
+        padding: '10px 15px',
+        borderRadius: '5px',
+        fontWeight: 'bold',
+        fontSize:'25px',
+        transition: 'background-color 0.3s, color 0.3s',
+        marginTop: '50px',
+    },
+    buttonLinkHover: {
+        backgroundColor: '#ff6b6b',
+        color: 'white',
+    },
+
+}
+const bottomButtonStyle = {
+    marginTop: '20px'
+};
+
+
 
 const ModalComponent = ({ isOpen, openModalHandler }) => {
-
+    const [hover, setHover] = useState(false);
     return (
         <Modal isOpen={isOpen} contentLabel="questionMarkModal" style={modalStyle}>
-            <div >
-                <h2>게임 방식</h2>
+            
+            <div style={modalTextStyle}>
+                <h2 style={modalHeaderStyle}>게임 방식</h2>
                 <br></br>
                 <p>단추 버튼을 누르면 입력한 단어와 정답 단어가 얼마나 유사한지 유사도 점수로 알려줍니다.</p>
                 <br></br>
@@ -43,10 +79,15 @@ const ModalComponent = ({ isOpen, openModalHandler }) => {
                 <br></br>
                 <p>숫자가 쓰여진 탭을 누르면 다른 정답 단어를 추측할 수 있습니다.</p>
                 <br></br>
-                <button onClick={openModalHandler} style={closeModalButtonStyle}>
-                    x
-                </button>
             </div>
+            <a href="/quiz"
+                style={hover ? {...buttonStyle.buttonLink, ...buttonStyle.buttonLinkHover} : buttonStyle.buttonLink}
+                onMouseEnter={() => setHover(true)}
+                onMouseLeave={() => setHover(false)}
+                >
+                닫기
+                </a>
+
         </Modal>
     );
 };
