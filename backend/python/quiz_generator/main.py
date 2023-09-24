@@ -1,5 +1,5 @@
 import pytz
-from textrank.utils import preprocess_titles, get_titles_by_topkeyword,  word_count
+from textrank.utils import preprocess_titles, get_titles_by_topkeyword,  word_count, check_nnp
 from textrank.summarizer import KeysentenceSummarizer
 from datetime import datetime, timedelta
 import logging
@@ -89,6 +89,11 @@ while True :
             # text rank로 제목 선택
             keysents = summarizer.summarize(titles_filtered, topk=1)
             for _, _, title in keysents: quiz = title
+        
+        # 6. 정답이 NNP인지 확인
+        is_word1_nnp = check_nnp(quiz_answers[0])
+        is_word2_nnp = check_nnp(quiz_answers[1])
+        is_word3_nnp = check_nnp(quiz_answers[2])
 
         # 7. 퀴즈와 정답을 mongo db에 저장
         quiz_today = {
@@ -97,6 +102,9 @@ while True :
             "word1": quiz_answers[0],
             "word2" : quiz_answers[1],
             "word3" : quiz_answers[2],
+            "word1_type" : is_word1_nnp,
+            "word2_type" : is_word2_nnp,
+            "word3_type" : is_word3_nnp,
             "created_at" : datetime.now(korea_tz).strftime("%Y-%m-%d %H:%M:%S"),
             "modified_at" : datetime.now(korea_tz).strftime("%Y-%m-%d %H:%M:%S")
         }

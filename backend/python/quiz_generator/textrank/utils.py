@@ -122,3 +122,15 @@ def get_titles_by_topkeyword(topkeyword: str) :
 
     logging.info("기사 제목 조회 완료")
     return titles
+
+# NNP인지 확인
+def check_nnp(word) :
+    logging.info("정답의 고유명사 여부를 확인합니다.")
+    mecab = MeCab()
+
+    pos_list = mecab.pos(word)
+    for pos_tuple in pos_list :
+        if pos_tuple[1] == 'NNP' :
+            return True
+    
+    return False
