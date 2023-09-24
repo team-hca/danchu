@@ -23,8 +23,8 @@ subfolderPath = os.path.join(dir, subfolderName)
 today = datetime.now()
 
 # 학습된 모델 가져오기
-model = FastText.load('ft230920_3.model')
-
+modelNotNnp = FastText.load('ft230920_3.model')
+modelInNnp = FastText.load('ft230916_2.model')
 
 mecab = MeCab()
 
@@ -51,7 +51,7 @@ def mergeTextFiles(inputFile, outputFile):
   # 숫자 걸러져서 '년, 월, 일, 개, 명, 만명, 세'만 남아버림. . . (6매, 290마력, 2계단, 188cm,20kg,3개동..)
   # ->보이는 것만이라도 불용어 처리
 
-# 불용어 처리 -> 리스트에 담음
+# 불용어,고유명사 처리 -> 리스트에 담음
 def doTextCleaning(inputFile,outputFile):
   try:
     with open(os.path.join(subfolderPath,'stopwords.txt'), 'r', encoding='utf-8') as f:
@@ -68,12 +68,17 @@ def doTextCleaning(inputFile,outputFile):
         temp = doc.strip().split(',')
         result = []
       #'ㄱ-ㅎㅏ-ㅣ가-힣 ' 이외의 문자들 모두 제거. 바른에서 전처리하고 있음 근데 아직 다 안된 데이터가 있어서..전처리를 넣어둠
-        for c in temp:
+        for c in temp: # c: 문장당 명사 하나하나, temp : 한 문장에 있는 명사들
           c = re.sub("[^ㄱ-ㅎㅏ-ㅣ가-힣 ]","",c)
           flag = True
-          if flag and c and c not in stopwords: #빈 경우, 불용어인 경우 제외
-            for li in mecab.pos(c):
-              if 'NNP' == li[1]:
+
+          if c and c in stopwords: #불용어 라면
+            flag = False
+
+          if c and c not in stopwords: #빈 경우, 불용어인 경우 제외
+            #왜..불용어들이 안빠졌지 flag가 true라서...ㅠㅠㅠㅠ 아놔
+            for li in mecab.pos(c): #li : (c에서 잘린 친구들, 어떤 유형의 단어인지)
+              if 'NNP' == li[1]: #중에 고유명사가 포함되어 있다면
                 flag = False
                 break
 
@@ -151,54 +156,18 @@ def doModelLearning(inputFile):
     raise e
   else:
     print('학습 완료')
-  
-# 고유명사 처리 -> 리스트에 담음
-def doTextCleaningNNP(inputFile,outputFile):
-  try:
-    tokenTxtFile = open(outputFile, "w", encoding="utf-8")
-    list = []
-
-    with open(inputFile, 'r', encoding="utf-8") as f:
-      docs = f.readlines()
-
-      #문장
-      for doc in docs:
-        temp = doc.strip().split(',')
-        result = []
-
-        #단어
-        # 고유명사 제거
-        for c in temp:
-          c = re.sub("[^ㄱ-ㅎㅏ-ㅣ가-힣 ]","",c)
-          flag = True
-          if flag and c :
-            for li in mecab.pos(c): 
-              # print(li)
-              if 'NNP' == li[1]:
-                flag = False
-                break
-
-          if flag:
-            result.append(c)
-          flag = True
-        if result: #빈 경우 제외
-          list.append(result)
-
-    myJsonString = json.dumps(list, ensure_ascii=False)
-    tokenTxtFile.write(myJsonString)
-  except OSError as e:
-    #throw 같은 것
-    raise e
-  else:
-    return '전처리 완료' 
 
 #정답 단어의 유사도 1000위까지 뽑기
-#만개 디비에 넣어둘까?
-def findWordSimilarityTop1000(answer):
+def findWordSimilarityTop1000(answer, answerType):
   try:
-    #총 단어의 개수 : 235698 인듯 -> 위키만 학습한 모델 기준
     #<class 'list'>
-    similarWords=model.wv.most_similar(answer,topn=1000) 
+    if answerType: #고유명사면
+      #print("NNP")
+      similarWords=modelInNnp.wv.most_similar(answer,topn=1000) 
+
+    else: #고유명사아니면
+      #print("NotNNp")
+      similarWords=modelNotNnp.wv.most_similar(answer,topn=1000) 
 
     similarWordsToJson = json.dumps(similarWords, ensure_ascii=False)
 
@@ -211,15 +180,24 @@ def findWordSimilarityTop1000(answer):
     return wordSimilarityTop1000RespDto
   
 #쓰여진 단어에 대해 유사도 등수 + 유사도 뽑아주기
-def findWordSimilarity(answer,inputWord):
+def findWordSimilarity(answer,inputWord, answerType):
   try:
     # 실수(float)입니다. 이 값은 -1에서 1 사이의 범위에 있으며, 두 단어나 단어 벡터가 유사할수록 값이 더 큽니다. 0은 두 단어나 단어 벡터가 관련이 없음을 나타냅니다.
-    similarityBetweenWords = model.wv.similarity(answer, inputWord)
+    if answerType: #고유명사라면
+      similarityBetweenWords = modelInNnp.wv.similarity(answer, inputWord)
+    
+    else: #고유명사가 아니라면
+      similarityBetweenWords = modelNotNnp.wv.similarity(answer, inputWord)
 
     print(similarityBetweenWords)
     # <class 'numpy.float32'>
     wordSimilarityRespDto = {'정답': answer,'입력값':inputWord,'유사도': similarityBetweenWords.astype(float), '순위':-1}
-    similarWords=model.wv.most_similar(answer,topn=1000)
+
+    if answerType: #고유명사면
+      similarWords=modelInNnp.wv.most_similar(answer,topn=1000) 
+
+    else: #고유명사아니면
+      similarWords=modelNotNnp.wv.most_similar(answer,topn=1000) 
 
     # 1000개 안에 있을 경우에만 해주자
     for idx, (similarWord, similarity) in enumerate(similarWords):
