@@ -122,11 +122,75 @@ const MainButton = styled.button`
 `;
 
 export default function AnswerBox(quizSentence) {
+  console.log("AnswerBox에서 찍은 quizSentence : ", quizSentence);
   const navigate = useNavigate();
 
   const handleButtonClick = () => {
     navigate("/quiz"); // /quiz로 이동
   };
+
+  const data = quizSentence.sentence;
+  const sentence = data.sentence;
+  const countWord = data.count;
+  console.log("@@@@DATA :@@@@ ", data);
+
+  const word1 = data.indexes[0];
+  const word2 = data.indexes[1];
+  const word3 = data.indexes[2];
+
+  console.log(word1);
+  console.log(word2);
+  console.log(word3);
+
+  function StyledWord({ sentence }) {
+    if (sentence.includes(word1)) {
+      return sentence.split(word1).reduce((acc, part, idx) => {
+        if (idx === 0) return [...acc, part];
+        return [
+          ...acc,
+          <AnswerHighlight1 key={idx}>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          </AnswerHighlight1>,
+          part,
+        ];
+      }, []);
+    }
+    if (sentence.includes(word2) && countWord >= 2) {
+      return sentence.split(word2).reduce((acc, part, idx) => {
+        if (idx === 0) return [...acc, part];
+        return [
+          ...acc,
+          <AnswerHighlight2 key={idx}>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          </AnswerHighlight2>,
+          part,
+        ];
+      }, []);
+    }
+    if (sentence.includes(word3) && countWord >= 3) {
+      return sentence.split(word3).reduce((acc, part, idx) => {
+        if (idx === 0) return [...acc, part];
+        return [
+          ...acc,
+          <AnswerHighlight3 key={idx}>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          </AnswerHighlight3>,
+          part,
+        ];
+      }, []);
+    }
+
+    return sentence;
+  }
+
+  const words = sentence.split(" ");
+
+  const splitWords = words.flatMap((sentence, idx) => {
+    if (idx > 0 && idx % 5 == 0) {
+      return [<br key={idx} />, <br />];
+    }
+    return [<StyledWord key={idx} sentence={sentence} />, " "];
+  });
 
   return (
     <Container>
@@ -134,7 +198,7 @@ export default function AnswerBox(quizSentence) {
         <img src={mainBoxImagePath} alt="headerBoxImagePath"></img>
         <OverlayText>
           <ScrollableContent>
-            {/* <span>{splitWords}</span> */}
+            <span>{splitWords}</span>
           </ScrollableContent>
         </OverlayText>
       </BoxImage>
