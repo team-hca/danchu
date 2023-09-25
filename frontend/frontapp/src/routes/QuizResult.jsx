@@ -40,7 +40,7 @@ export default function QuizResult() {
     console.log("찍는다~");
     axios
       .get(
-        `/api/v1/quiz/today?date=${today.getFullYear()}-${(today.getMonth() + 1)
+        `api/v1/quiz/today?date=${today.getFullYear()}-${(today.getMonth() + 1)
           .toString()
           .padStart(2, "0")}-${today.getDate().toString().padStart(2, "0")}`
       )
@@ -62,7 +62,7 @@ export default function QuizResult() {
       {/* <Navbar /> */}
       <Container>
         <Header />
-        <Answer quizSentence={quizSentence} />
+        {quizSentence && <Answer quizSentence={quizSentence} />}
 
         <News words={words} />
       </Container>

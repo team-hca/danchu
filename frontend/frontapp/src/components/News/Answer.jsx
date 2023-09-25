@@ -17,7 +17,7 @@ export default function Answer(quizSentence) {
   return (
     <Container>
       <AnswerMessage />
-      <AnswerBox quizSentence={quizSentence} />
+      <AnswerBox sentence={quizSentence.quizSentence} />
     </Container>
   );
 }
