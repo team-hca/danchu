@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import HeaderBox from "./MainBox";
-import HeaderMessage from "./MainMessage";
+import MainBox from "./MainBox";
+import MainMessage from "./MainMessage";
 
 const Container = styled.div`
   display: flex;
@@ -15,8 +15,8 @@ const Container = styled.div`
 export default function Main(props) {
   return (
     <Container>
-      <HeaderMessage />
-      <HeaderBox sentence = {props.sentence} active = {props.active} />
+      <MainMessage />
+      <MainBox sentence = {props.sentence} active = {props.active} />
     </Container>
   );
 }
