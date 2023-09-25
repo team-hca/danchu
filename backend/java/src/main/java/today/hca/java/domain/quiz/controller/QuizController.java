@@ -9,7 +9,7 @@ import today.hca.java.domain.quiz.entity.Quiz;
 import today.hca.java.domain.quiz.service.QuizService;
 
 @RestController
-@RequestMapping("/api/v1/quiz")
+@RequestMapping("/v1/quiz")
 @RequiredArgsConstructor
 @CrossOrigin
 public class QuizController {

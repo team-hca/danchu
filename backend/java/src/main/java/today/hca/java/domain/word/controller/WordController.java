@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 @RestController
-@RequestMapping("/api/v1/word")
+@RequestMapping("/v1/word")
 @RequiredArgsConstructor
 public class WordController {
 

@@ -12,7 +12,7 @@ import today.hca.java.domain.news.service.NewsService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/news")
+@RequestMapping("/v1/news")
 @RequiredArgsConstructor
 public class NewsController {
     private final NewsService newsService;
