@@ -1,0 +1,20 @@
+import React from "react";
+import styled from "styled-components";
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  width: 720px;
+  margin-bottom: 100px;
+`;
+
+export default function Answer({ data }) {
+  return (
+    <Container>
+      {/* <AnswerMessage /> */}
+      {/* <AnswerBox sentence={data} /> */}
+    </Container>
+  );
+}
