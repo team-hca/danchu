@@ -9,7 +9,6 @@ import axios from "axios";
 import H3 from "../components/H3";
 import SubmitButton from "../components/SubmitButton";
 import Main from "../components/Main/Main";
-import Main from "../components/Main/Main";
 
 const onClickGiveUp = (message = null, onConfirm, onCancel) => {
   if (!onConfirm || typeof onConfirm !== "function") {
@@ -207,9 +206,6 @@ const TdRank = styled.th`
   width: 100px;
   max-width: 100px;
   min-width: 100px;
-  width: 100px;
-  max-width: 100px;
-  min-width: 100px;
 `;
 
 const InputStyle = styled.input`
@@ -227,17 +223,10 @@ const RecentTr = styled.tr`
   border-bottom: 1px solid var(--gray-300);
 `;
 
-const RecentTr = styled.tr`
-  border-bottom: 1px solid var(--gray-300);
-`;
-
 export default function Quiz() {
   const [active, setActive] = useState(0);
   const [quizSentence, setQuizSentence] = useState();
   const [quizCount, setQuizCount] = useState();
-  const [guess, setGuess] = useState();
-  const [guessOne, setGuessOne] = useState();
-  const [guessTwo, setGuessTwo] = useState();
   const [guess, setGuess] = useState();
   const [guessOne, setGuessOne] = useState();
   const [guessTwo, setGuessTwo] = useState();
@@ -445,17 +434,9 @@ export default function Quiz() {
     } else {
       localStorage.setItem("startTime", Date.now());
     }
-    }
   };
 
   const onSubmit = () => {
-    if (inputValue!==""&&(inputValue && inputValue.trim() === "" && !inputValue)) {
-    } else {
-      recordStartTime();
-      saveLocalStorage();
-      return;
-    }
-  };
     if (inputValue!==""&&(inputValue && inputValue.trim() === "" && !inputValue)) {
     } else {
       recordStartTime();
@@ -471,7 +452,7 @@ export default function Quiz() {
         recordStartTime();
         saveLocalStorage();
       }
-     
+
     }
   };
   const handleOnKeyPressOne = (e) => {
@@ -505,15 +486,12 @@ export default function Quiz() {
     axios
       .get(
         `/api/v1/quiz/today?date=${today.getFullYear()}-${(
-        `/api/v1/quiz/today?date=${today.getFullYear()}-${(
           today.getMonth() + 1
         )
           .toString()
           .padStart(2, "0")}-${today.getDate().toString().padStart(2, "0")}`
-          .padStart(2, "0")}-${today.getDate().toString().padStart(2, "0")}`
       )
       .then((response) => {
-        const sentence = response.data;
         const sentence = response.data;
         console.log(sentence);
         setQuizSentence(sentence);
@@ -557,20 +535,17 @@ export default function Quiz() {
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
     console.log("zero: " + inputValue);
-    console.log("zero: " + inputValue);
   };
 
 
   const handleInputChangeOne = (event) => {
     setInputValueOne(event.target.value);
     console.log("one: " + inputValueOne);
-    console.log("one: " + inputValueOne);
   };
 
 
   const handleInputChangeTwo = (event) => {
     setInputValueTwo(event.target.value);
-    console.log("two: " + inputValueTwo);
     console.log("two: " + inputValueTwo);
   };
 
@@ -612,8 +587,6 @@ export default function Quiz() {
             </QuizSentenceAnswerContainer>
           </QuizSentenceContainer>
         </QuizContainer>
-         */}
-         <Main sentence={quizSentence}/>
          */}
          <Main sentence={quizSentence}/>
         <TabContainer>
@@ -658,8 +631,6 @@ export default function Quiz() {
                 type="text"
                 onKeyDown={handleOnKeyPress}
                 value={inputInitialize}
-                onKeyDown={handleOnKeyPress}
-                value={inputInitialize}
               ></InputStyle>
               <SubmitButton onClick={onSubmit}>단추</SubmitButton>
             </TextContainer>
@@ -679,20 +650,23 @@ export default function Quiz() {
                     <RecentTr>
                       {/* <TdNumber>{JSON.parse(localStorage.getItem("guess"))}</TdNumber> */}
                       <TdNumber>
-                        {JSON.parse(localStorage.getItem("guess"))[0] &&
+                        {JSON.parse(localStorage.getItem("guess"))[0].length>0 &&
                         JSON.parse(localStorage.getItem("guess"))[0].some(
                           (g) => g.word === recentGuess
                         ).count
-                          ? JSON.parse(localStorage.getItem("guess"))[0] &&
+                          ? JSON.parse(localStorage.getItem("guess"))[0].length>0 &&
                             JSON.parse(localStorage.getItem("guess"))[0].find(
                               (item, index, arr) => {
+                                
+                                setRecentGuess(inputValue);
                                 return item.word === recentGuess;
                               }
                             ).count
                           : localStorage.getItem("guess") &&
-                            JSON.parse(localStorage.getItem("guess"))[1] &&
+                            JSON.parse(localStorage.getItem("guess"))[1].length>0 &&
                             JSON.parse(localStorage.getItem("guess"))[1].find(
                               (item, index, arr) => {
+                                setRecentGuess(inputValue);
                                 console.log("item.word: " + item.word);
                                 console.log("recentGuess: " + recentGuess);
                                 return item.word === recentGuess;
