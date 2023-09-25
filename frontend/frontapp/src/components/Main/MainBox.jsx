@@ -75,7 +75,7 @@ const ScrollableContent = styled.div`
 `;
 
 const AnswerHighlight1 = styled.span`
-  background-color: #ef3c5f;
+  background-color: ${(props) => (props.active ? "var(--primary)" : "var(--secondary)")};
   color: white;
   padding: 2px 20px;
   border-radius: 5px;
@@ -83,7 +83,7 @@ const AnswerHighlight1 = styled.span`
 `;
 
 const AnswerHighlight2 = styled.span`
-  background-color: #253846;
+  background-color: ${(props) => (props.active ? "var(--primary)" : "var(--secondary)")};
   color: white;
   padding: 2px 20px;
   border-radius: 5px;
@@ -91,7 +91,7 @@ const AnswerHighlight2 = styled.span`
 `;
 
 const AnswerHighlight3 = styled.span`
-  background-color: #253846;
+  background-color: ${(props) => (props.active ? "var(--primary)" : "var(--secondary)")};
   color: white;
   padding: 2px 20px;
   border-radius: 5px;
@@ -137,15 +137,12 @@ export default function MainBox(props) {
   const data = props.sentence;
   const sentence = data.sentence;
   const countWord = data.count;
-  console.log(data.indexes);
 
   const word1 = data.indexes[0];
   const word2 = data.indexes[1];
   const word3 = data.indexes[2];
   
-  console.log(word1);
-  console.log(word2);
-  console.log(word3);
+  const {active} = props;
 
   function StyledWord({sentence}) {
 
@@ -154,7 +151,7 @@ export default function MainBox(props) {
         if (idx === 0) return [...acc, part];
         return [
           ...acc,
-          <AnswerHighlight1 key={idx}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</AnswerHighlight1>,
+          <AnswerHighlight1 active={active === 0} key={idx}>&nbsp;&nbsp;1&nbsp;&nbsp;</AnswerHighlight1>,
           part,
         ];
       }, []);
@@ -165,7 +162,7 @@ export default function MainBox(props) {
         if (idx === 0) return [...acc, part];
         return [
           ...acc,
-          <AnswerHighlight2 key={idx}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</AnswerHighlight2>,
+          <AnswerHighlight2 active={active === 1} key={idx}>&nbsp;&nbsp;2&nbsp;&nbsp;</AnswerHighlight2>,
           part,
         ];
       }, []);
@@ -175,7 +172,7 @@ export default function MainBox(props) {
         if (idx === 0) return [...acc, part];
         return [
           ...acc,
-          <AnswerHighlight3 key={idx}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</AnswerHighlight3>,
+          <AnswerHighlight3 active={active === 2} key={idx}>&nbsp;&nbsp;3&nbsp;&nbsp;</AnswerHighlight3>,
           part,
         ];
       }, []);
@@ -190,7 +187,7 @@ export default function MainBox(props) {
     if (idx > 0 && idx%5 == 0) {
       return [<br key={idx} />, <br/>];
     }
-    return [<StyledWord key={idx} sentence={sentence} />,' '];
+    return [<StyledWord key={idx} sentence={sentence} active = {active.toString()} />,' '];
   });
 
   return (

@@ -588,7 +588,7 @@ export default function Quiz() {
           </QuizSentenceContainer>
         </QuizContainer>
          */}
-         <Main sentence={quizSentence}/>
+         <Main sentence={quizSentence} active = {active}/>
         <TabContainer>
           <Tabs>
             <Tab
