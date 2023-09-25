@@ -131,8 +131,8 @@ export default function AnswerBox(quizSentence) {
 
   const data = quizSentence.sentence;
   const sentence = data.sentence;
+  console.log("sentence : ", sentence);
   const countWord = data.count;
-  console.log("@@@@DATA :@@@@ ", data);
 
   const word1 = data.indexes[0];
   const word2 = data.indexes[1];
@@ -187,7 +187,7 @@ export default function AnswerBox(quizSentence) {
 
   const splitWords = words.flatMap((sentence, idx) => {
     if (idx > 0 && idx % 5 == 0) {
-      return [<br key={idx} />, <br />];
+      return [<br key={`br1-${idx}`} />, <br key={`br2-${idx}`} />];
     }
     return [<StyledWord key={idx} sentence={sentence} />, " "];
   });
