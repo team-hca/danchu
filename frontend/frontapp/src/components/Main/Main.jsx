@@ -16,7 +16,7 @@ export default function Main(props) {
   return (
     <Container>
       <HeaderMessage />
-      <HeaderBox sentence ={props.sentence} />
+      <HeaderBox sentence = {props.sentence} active = {props.active} />
     </Container>
   );
 }
