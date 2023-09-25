@@ -8,6 +8,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.5.0",
+    "canvas-confetti": "^1.6.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.16.0",
@@ -17,9 +18,9 @@
     "styled-components": "^6.0.7",
     "web-vitals": "^2.1.4"
   },
-  "proxy" : "https://www.danchu.today/api",
+  "proxy": "https://www.danchu.today/api",
   "scripts": {
-    "start": "react-scripts start",
+    "start": "DANGEROUSLY_DISABLE_HOST_CHECK=true react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

@@ -8,6 +8,7 @@ import { Tabs, Tab, Content } from "../components/Tabs";
 import axios from "axios";
 import H3 from "../components/H3";
 import SubmitButton from "../components/SubmitButton";
+import Main from "../components/Main/Main";
 
 const onClickGiveUp = (message = null, onConfirm, onCancel) => {
   if (!onConfirm || typeof onConfirm !== "function") {
@@ -202,9 +203,9 @@ const TdPercent = styled.th`
 
 const TdRank = styled.th`
   padding: 15px;
-  width: 280px;
-  max-width: 280px;
-  min-width: 280px;
+  width: 100px;
+  max-width: 100px;
+  min-width: 100px;
 `;
 
 const InputStyle = styled.input`
@@ -218,81 +219,148 @@ const InputStyle = styled.input`
   padding-left: 20px;
 `;
 
+const RecentTr = styled.tr`
+  border-bottom: 1px solid var(--gray-300);
+`;
+
 export default function Quiz() {
   const [active, setActive] = useState(0);
   const [quizSentence, setQuizSentence] = useState();
   const [quizCount, setQuizCount] = useState();
-  const [guesses, setGuesses] = useState();
+  const [guess, setGuess] = useState();
+  const [guessOne, setGuessOne] = useState();
+  const [guessTwo, setGuessTwo] = useState();
   const [inputValue, setInputValue] = useState();
   const [inputValueOne, setInputValueOne] = useState();
   const [inputValueTwo, setInputValueTwo] = useState();
+  const [recentGuess, setRecentGuess] = useState();
+  const [recentGuessOne, setRecentGuessOne] = useState();
+  const [recentGuessTwo, setRecentGuessTwo] = useState();
+  const [recentCount, setRecentCount] = useState();
+  const [recentCountOne, setRecentCountOne] = useState();
+  const [recentCountTwo, setRecentCountTwo] = useState();
+  const [inputInitialize, setInputInitialize] = useState();
+
   let today = new Date();
 
   const saveLocalStorage = () => {
-    if (
-      inputValue &&
-      !JSON.parse(localStorage.getItem("guess")).includes(inputValue)
-    ) {
-      if (localStorage.getItem("guess")) {
-        console.log(
-          "localStorage.guesses: " + JSON.parse(localStorage.getItem("guess"))
-        );
-        let arr = JSON.parse(localStorage.getItem("guess"));
-        arr.push(inputValue);
-        localStorage.setItem("guess", JSON.stringify(arr));
-        setGuesses(JSON.parse(localStorage.getItem("guess")));
-      } else {
-        var array = [];
+    let arr = localStorage.getItem("guess")
+      ? JSON.parse(localStorage.getItem("guess"))
+      : [[], []];
+    let obj = new Object();
+    obj.word = inputValue;
+    axios
+      .get(`/api/v1/word/guess?quizNum=${active + 1}&guessWord=${obj.word}`)
+      .then((response) => {
+        console.log(JSON.stringify(response.data));
+        obj.similarity = response.data.similarity;
+        obj.rank = response.data.rank;
 
-        localStorage.setItem("guess", JSON.stringify(array));
-      }
+        obj.count = localStorage.getItem('guess')?JSON.parse(localStorage.getItem('guess'))[0].length+JSON.parse(localStorage.getItem('guess'))[1].length+1:1;
+        if (obj.rank === -1) {
+          if (!localStorage.getItem("guess")) {
+            // guess가 처음일 때
+            arr[1].push(obj);
+            setRecentGuess(obj.word);
+            localStorage.setItem("guess", JSON.stringify(arr));
+            setGuess(JSON.parse(localStorage.getItem("guess")));
+          } else if (localStorage.getItem("guess").includes(inputValue)) {
+            // guess가 있는데 이미 추측한 게 있을 때
+            setRecentGuess(obj.word);
+          } else {
+            // guess가 있고 처음 추측할 때
+            arr[1].push(obj);
+            setRecentGuess(obj.word);
+            localStorage.setItem("guess", JSON.stringify(arr));
+            setGuess(JSON.parse(localStorage.getItem("guess")));
+          }
+        } else {
+          if (!localStorage.getItem("guess")) {
+            // guess가 처음일 때
+            arr[0].push(obj);
+            setRecentGuess(obj.word);
+            localStorage.setItem("guess", JSON.stringify(arr));
+            setGuess(JSON.parse(localStorage.getItem("guess")));
+          } else if (localStorage.getItem("guess").includes(inputValue)) {
+            // guess가 있는데 이미 추측한 게 있을 때
+            setRecentGuess(obj.word);
+          } else {
+            // guess가 있고 처음 추측할 때
+            arr[0].push(obj);
+            setRecentGuess(obj.word);
+            localStorage.setItem("guess", JSON.stringify(arr));
+            setGuess(JSON.parse(localStorage.getItem("guess")));
+          }
+        }
+        console.log(JSON.stringify(obj));
+      })
+      .catch((error) => {
+        console.error("today quiz similarity request failed: " + error);
+      });
+  };
+  const saveLocalStorageOne = () => {
+    let arr = localStorage.getItem("guessOne")
+      ? JSON.parse(localStorage.getItem("guessOne"))
+      : [];
+    let obj = new Object();
+    obj.word = inputValueOne;
+    if (!localStorage.getItem("guessOne")) {
+      // guess가 처음일 때
+      arr.push(obj);
+      setRecentGuessOne(obj.word);
+      localStorage.setItem("guessOne", JSON.stringify(arr));
+      setGuess(JSON.parse(localStorage.getItem("guessOne")));
+    } else if (localStorage.getItem("guessOne").includes(inputValueOne)) {
+      // guess가 있는데 이미 추측한 게 있을 때
+      setRecentGuessOne(obj.word);
+    } else {
+      // guess가 있고 처음 추측할 때
+      arr.push(obj);
+      setRecentGuessOne(obj.word);
+      localStorage.setItem("guessOne", JSON.stringify(arr));
+      setGuessOne(JSON.parse(localStorage.getItem("guessOne")));
+    }
+  };
+  const saveLocalStorageTwo = () => {
+    let arr = localStorage.getItem("guessTwo")
+      ? JSON.parse(localStorage.getItem("guessTwo"))
+      : [];
+    let obj = new Object();
+    obj.word = inputValueTwo;
+    if (!localStorage.getItem("guessTwo")) {
+      // guess가 처음일 때
+      arr.push(obj);
+      setRecentGuessTwo(obj.word);
+      localStorage.setItem("guessTwo", JSON.stringify(arr));
+      setGuessTwo(JSON.parse(localStorage.getItem("guessTwo")));
+    } else if (localStorage.getItem("guessTwo").includes(inputValueTwo)) {
+      // guess가 있는데 이미 추측한 게 있을 때
+      setRecentGuessTwo(obj.word);
+    } else {
+      // guess가 있고 처음 추측할 때
+      arr.push(obj);
+      setRecentGuessTwo(obj.word);
+      localStorage.setItem("guessTwo", JSON.stringify(arr));
+      setGuessTwo(JSON.parse(localStorage.getItem("guessTwo")));
     }
   };
 
   const onSubmitOne = () => {
-    recordStartTime();
-
-    if (
-      inputValueOne &&
-      !JSON.parse(localStorage.getItem("guessOne")).includes(inputValueOne)
-    ) {
-      if (localStorage.getItem("guessOne")) {
-        console.log(
-          "localStorage.guessOne: " + JSON.parse(localStorage.getItem("guessOne"))
-        );
-        let arr = JSON.parse(localStorage.getItem("guessOne"));
-        arr.push(inputValueOne);
-        localStorage.setItem("guessOne", JSON.stringify(arr));
-        setGuesses(JSON.parse(localStorage.getItem("guessOne")));
-      } else {
-        var array = [];
-
-        localStorage.setItem("guessOne", JSON.stringify(array));
-      }
-    };
-  }
+    if (inputValueOne.trim() === "" && !inputValueOne) {
+      setInputValueOne("");
+    } else {
+      recordStartTime();
+      saveLocalStorageOne();
+    }
+  };
 
   const onSubmitTwo = () => {
-    recordStartTime();
-
-    if (
-      inputValueTwo &&
-      !JSON.parse(localStorage.getItem("guessTwo")).includes(inputValueTwo)
-    ) {
-      if (localStorage.getItem("guessTwo")) {
-        console.log(
-          "localStorage.guessTwo: " + JSON.parse(localStorage.getItem("guessTwo"))
-        );
-        let arr = JSON.parse(localStorage.getItem("guessTwo"));
-        arr.push(inputValueTwo);
-        localStorage.setItem("guessTwo", JSON.stringify(arr));
-        setGuesses(JSON.parse(localStorage.getItem("guessTwo")));
-      } else {
-        var array = [];
-
-        localStorage.setItem("guessTwo", JSON.stringify(array));
-      }
-    };
+    if (inputValueTwo.trim() === "" && !inputValueTwo) {
+      setInputValueTwo("");
+    } else {
+      recordStartTime();
+      saveLocalStorageTwo();
+    }
   };
 
   const recordStartTime = () => {
@@ -300,14 +368,28 @@ export default function Quiz() {
       console.log(localStorage.getItem("startTime"));
     } else {
       localStorage.setItem("startTime", Date.now());
-    };
+    }
   };
 
   const onSubmit = () => {
-    recordStartTime();
+    if (inputValue!==""&&(inputValue && inputValue.trim() === "" && !inputValue)) {
+    } else {
+      recordStartTime();
+      saveLocalStorage();
+      return;
+    }
+  };
 
-    saveLocalStorage();
-
+  const handleOnKeyPress = (e) => {
+    if (e.key === "Enter") {
+      if (inputValue.trim() === "" && !inputValue) {
+      } else {
+        recordStartTime();
+        saveLocalStorage();
+      }
+      console.log("wkdsksgksi");
+      // setInputInitialize("");
+    }
   };
 
   const handleClick = (e) => {
@@ -319,20 +401,14 @@ export default function Quiz() {
   const handleQuiz = () => {
     axios
       .get(
-        `http://localhost:8080/api/v1/quiz/today?date=${today.getFullYear()}-${(
+        `/api/v1/quiz/today?date=${today.getFullYear()}-${(
           today.getMonth() + 1
         )
           .toString()
-          .padStart(2, "0")}-21`
+          .padStart(2, "0")}-${today.getDate().toString().padStart(2, "0")}`
       )
       .then((response) => {
-        // console.log(JSON.stringify(response.data));
-        // console.log(JSON.stringify(response.data).sentence[0]);
-        // console.log(JSON.stringify(response.data.sentence));
-        // console.log("sentence: "+response.data.sentence);
-        // console.log("sentence[0]: "+response.data.sentence[1]);
-
-        const sentence = response.data.sentence;
+        const sentence = response.data;
         console.log(sentence);
         setQuizSentence(sentence);
         console.log("quizSentence: " + quizSentence);
@@ -356,28 +432,38 @@ export default function Quiz() {
   };
 
   useEffect(() => {
-    console.log("today: " + today);
-    console.log("today.getMonth" + today.getMonth());
+    // console.log("today: " + today);
+    // console.log("today.getMonth" + today.getMonth());
     handleQuiz();
     if (localStorage.getItem("guess")) {
-      setGuesses(localStorage.getItem("guess"));
-      console.log("guess: " + guesses);
+      setGuess(localStorage.getItem("guess"));
+      setRecentCount(JSON.parse(localStorage.getItem("guess")).length);
+      console.log("recentCount: " + recentCount);
+      console.log("guess: " + guess);
+    }
+    if (localStorage.getItem("guessOne")) {
+      setGuessOne(localStorage.getItem("guessOne"));
+      console.log("guessOne: " + guessOne);
+    }
+    if (localStorage.getItem("guessTwo")) {
+      setGuessTwo(localStorage.getItem("guessTwo"));
+      console.log("guessTwo: " + guessTwo);
     }
   }, []);
 
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
-    console.log(inputValue);
+    console.log("zero: " + inputValue);
   };
-  
+
   const handleInputChangeOne = (event) => {
     setInputValueOne(event.target.value);
-    console.log(inputValueOne);
+    console.log("one: " + inputValueOne);
   };
-  
+
   const handleInputChangeTwo = (event) => {
     setInputValueTwo(event.target.value);
-    console.log(inputValueTwo);
+    console.log("two: " + inputValueTwo);
   };
 
   return quizSentence ? (
@@ -394,8 +480,7 @@ export default function Quiz() {
           <H6Styled color="var(--primary)">&nbsp;단추</H6Styled>
           <H6Styled color="var(--secondary)">를 끼워보세요!</H6Styled>
         </DateDanchuContentContainer>
-        <QuizContainer>
-          {/* 퀴즈 몇 줄인지 받아서 일정 길이 이상이면 나눠서 보내기 */}
+        {/* <QuizContainer>
 
           <QuizSentenceContainer>
             <QuizSentenceAnswerContainer>
@@ -419,6 +504,8 @@ export default function Quiz() {
             </QuizSentenceAnswerContainer>
           </QuizSentenceContainer>
         </QuizContainer>
+         */}
+         <Main sentence={quizSentence}/>
         <TabContainer>
           <Tabs>
             <Tab
@@ -459,6 +546,8 @@ export default function Quiz() {
                 onChange={handleInputChange}
                 required
                 type="text"
+                onKeyDown={handleOnKeyPress}
+                value={inputInitialize}
               ></InputStyle>
               <SubmitButton onClick={onSubmit}>단추</SubmitButton>
             </TextContainer>
@@ -473,17 +562,113 @@ export default function Quiz() {
                 </tr>
                 {/* </Thead> */}
                 {/* <tbody> */}
-                {localStorage.getItem("guess") &&
-                  JSON.parse(localStorage.getItem("guess")).map(
-                    (guess, idx) => (
-                      <tr>
-                        <TdNumber>{idx}</TdNumber>
-                        <TdGuess>{guess}</TdGuess>
-                        <TdPercent>7.0</TdPercent>
-                        <TdRank>1000</TdRank>
-                      </tr>
-                    
-                  ))}
+                {recentGuess ? (
+                  <>
+                    <RecentTr>
+                      {/* <TdNumber>{JSON.parse(localStorage.getItem("guess"))}</TdNumber> */}
+                      <TdNumber>
+                        {JSON.parse(localStorage.getItem("guess"))[0] &&
+                        JSON.parse(localStorage.getItem("guess"))[0].some(
+                          (g) => g.word === recentGuess
+                        ).count
+                          ? JSON.parse(localStorage.getItem("guess"))[0] &&
+                            JSON.parse(localStorage.getItem("guess"))[0].find(
+                              (item, index, arr) => {
+                                return item.word === recentGuess;
+                              }
+                            ).count
+                          : localStorage.getItem("guess") &&
+                            JSON.parse(localStorage.getItem("guess"))[1] &&
+                            JSON.parse(localStorage.getItem("guess"))[1].find(
+                              (item, index, arr) => {
+                                console.log("item.word: " + item.word);
+                                console.log("recentGuess: " + recentGuess);
+                                return item.word === recentGuess;
+                              }
+                            ).count}
+                      </TdNumber>
+                      <TdGuess>{recentGuess}</TdGuess>
+                      <TdPercent>
+                        {localStorage.getItem("guess") &&
+                        JSON.parse(localStorage.getItem("guess"))[0] &&
+                        JSON.parse(localStorage.getItem("guess"))[0].some(
+                          (g) => g.word === recentGuess
+                        ).similarity
+                          ? localStorage.getItem("guess") &&
+                            JSON.parse(localStorage.getItem("guess"))[0] &&
+                            JSON.parse(localStorage.getItem("guess"))[0]
+                              .find((item, index, arr) => {
+                                return item.word === recentGuess;
+                              })
+                              .similarity.toFixed(2)
+                          : localStorage.getItem("guess") &&
+                            JSON.parse(localStorage.getItem("guess"))[1] &&
+                            JSON.parse(localStorage.getItem("guess"))[1]
+                              .find((item, index, arr) => {
+                                return item.word === recentGuess;
+                              })
+                              .similarity.toFixed(2)}
+                      </TdPercent>
+                      <TdRank>
+                        {JSON.parse(localStorage.getItem("guess"))[0].length >
+                          0 &&
+                        JSON.parse(localStorage.getItem("guess"))[0].some(
+                          (g) => g.word === recentGuess
+                        )
+                          ? JSON.parse(localStorage.getItem("guess"))[0]
+                              .length > 0 &&
+                            JSON.parse(localStorage.getItem("guess"))[0].find(
+                              (item, index, arr) => {
+                                return item.word === recentGuess;
+                              }
+                            ).rank
+                          : 
+                          JSON.parse(localStorage.getItem("guess"))[1]
+                              .length > 0 &&
+                            JSON.parse(localStorage.getItem("guess"))[1].find(
+                              (item, index, arr) => {
+                                return item.word === recentGuess;
+                              }
+                            ).rank
+                            }
+                      </TdRank>
+                    </RecentTr>
+                  </>
+                ) : null}
+                {localStorage.getItem("guess") != null &&
+                  JSON.parse(localStorage.getItem("guess"))[0] &&
+                  JSON.parse(localStorage.getItem("guess"))[0].map(
+                    (guess, idx) =>
+                      guess.word === recentGuess ? null : (
+                        <tr>
+                          <TdNumber>{guess.count}</TdNumber>
+                          <TdGuess>{guess.word}</TdGuess>
+                          <TdPercent>
+                            {guess.similarity
+                              ? guess.similarity.toFixed(2)
+                              : guess.similarity}
+                          </TdPercent>
+                          <TdRank>{guess.rank}</TdRank>
+                        </tr>
+                      )
+                  )}
+                {localStorage.getItem("guess") != null &&
+                  JSON.parse(localStorage.getItem("guess"))[1] &&
+                  JSON.parse(localStorage.getItem("guess"))[1].map(
+                    (guess, idx) =>
+                      guess.word === recentGuess ? null : (
+                        <tr>
+                          <TdNumber>{guess.count}</TdNumber>
+                          <TdGuess>{guess.word}</TdGuess>
+                          <TdPercent>
+                            {guess.similarity
+                              ? guess.similarity.toFixed(2)
+                              : guess.similarity}
+                          </TdPercent>
+                          <TdRank>{guess.rank}</TdRank>
+                        </tr>
+                      )
+                  )}
                 <tr>
                   <TdNumber>이름</TdNumber>
                   <TdGuess>이메일</TdGuess>
@@ -524,12 +709,12 @@ export default function Quiz() {
                     (guess, idx) => (
                       <tr>
                         <TdNumber>{idx}</TdNumber>
-                        <TdGuess>{guess}</TdGuess>
+                        <TdGuess>{guess.word}</TdGuess>
                         <TdPercent>7.0</TdPercent>
                         <TdRank>1000</TdRank>
                       </tr>
-                    
-                  ))}
+                    )
+                  )}
                 {/* </Thead> */}
                 {/* <tbody> */}
                 <tr>
@@ -556,17 +741,17 @@ export default function Quiz() {
               <Table>
                 {/* <Thead> */}
                 <tr>
-                {localStorage.getItem("guessTwo") &&
-                  JSON.parse(localStorage.getItem("guessTwo")).map(
-                    (guess, idx) => (
-                      <tr>
-                        <TdNumber>{idx}</TdNumber>
-                        <TdGuess>{guess}</TdGuess>
-                        <TdPercent>7.0</TdPercent>
-                        <TdRank>1000</TdRank>
-                      </tr>
-                    
-                  ))}
+                  {localStorage.getItem("guessTwo") &&
+                    JSON.parse(localStorage.getItem("guessTwo")).map(
+                      (guess, idx) => (
+                        <tr>
+                          <TdNumber>{idx}</TdNumber>
+                          <TdGuess>{guess.word}</TdGuess>
+                          <TdPercent>7.0</TdPercent>
+                          <TdRank>1000</TdRank>
+                        </tr>
+                      )
+                    )}
                 </tr>
                 <tr>
                   <ThNumber>#</ThNumber>

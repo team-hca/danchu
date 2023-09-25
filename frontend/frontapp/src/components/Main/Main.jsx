@@ -12,11 +12,11 @@ const Container = styled.div`
   margin-bottom: 100px;
 `;
 
-export default function Main() {
+export default function Main(props) {
   return (
     <Container>
       <HeaderMessage />
-      <HeaderBox />
+      <HeaderBox sentence ={props.sentence} />
     </Container>
   );
 }
