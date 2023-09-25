@@ -18,7 +18,7 @@
     "styled-components": "^6.0.7",
     "web-vitals": "^2.1.4"
   },
-  "proxy": "https://www.danchu.today/api",
+  "proxy": "https://www.danchu.today",
   "scripts": {
     "start": "DANGEROUSLY_DISABLE_HOST_CHECK=true react-scripts start",
     "build": "react-scripts build",
