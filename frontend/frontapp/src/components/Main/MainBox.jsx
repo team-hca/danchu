@@ -75,7 +75,7 @@ const ScrollableContent = styled.div`
 `;
 
 const AnswerHighlight1 = styled.span`
-  background-color: ${(props) => (props.active ? "#ef3c5f" : "#253846")};
+  background-color: ${(props) => (props.active ? "var(--primary)" : "var(--secondary)")};
   color: white;
   padding: 2px 20px;
   border-radius: 5px;
@@ -83,7 +83,7 @@ const AnswerHighlight1 = styled.span`
 `;
 
 const AnswerHighlight2 = styled.span`
-  background-color: ${(props) => (props.active ? "#ef3c5f" : "#253846")};
+  background-color: ${(props) => (props.active ? "var(--primary)" : "var(--secondary)")};
   color: white;
   padding: 2px 20px;
   border-radius: 5px;
@@ -91,7 +91,7 @@ const AnswerHighlight2 = styled.span`
 `;
 
 const AnswerHighlight3 = styled.span`
-  background-color: ${(props) => (props.active ? "#ef3c5f" : "#253846")};
+  background-color: ${(props) => (props.active ? "var(--primary)" : "var(--secondary)")};
   color: white;
   padding: 2px 20px;
   border-radius: 5px;
