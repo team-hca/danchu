@@ -1,4 +1,8 @@
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import mainBoxImagePath from "../../icon/main_box.png";
+import moveToMainPath from "../../icon/move_to_main.png";
 
 const Container = styled.div`
   flex: 1;
@@ -117,6 +121,26 @@ const MainButton = styled.button`
   }
 `;
 
-export default function AnswerBox({ sentence }) {
-  console.log(sentence);
+export default function AnswerBox(quizSentence) {
+  const navigate = useNavigate();
+
+  const handleButtonClick = () => {
+    navigate("/quiz"); // /quiz로 이동
+  };
+
+  return (
+    <Container>
+      <BoxImage>
+        <img src={mainBoxImagePath} alt="headerBoxImagePath"></img>
+        <OverlayText>
+          <ScrollableContent>
+            {/* <span>{splitWords}</span> */}
+          </ScrollableContent>
+        </OverlayText>
+      </BoxImage>
+      <MainButton onClick={handleButtonClick}>
+        <img src={moveToMainPath} alt="moveToMain"></img>
+      </MainButton>
+    </Container>
+  );
 }
