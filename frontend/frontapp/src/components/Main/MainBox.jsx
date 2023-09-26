@@ -32,8 +32,8 @@ const ScrollableContent = styled.div`
   padding: 10px;
 `;
 
-const SenteceBox = styled.div`
-  border: none;
+const SentenceBox = styled.div`
+  border: 1px solid var(--gray-1000);
   border-radius: 5px;
   width: 100%;
   background-color: Ghostwhite;
@@ -41,10 +41,11 @@ const SenteceBox = styled.div`
   line-height: 60px;
   box-shadow: 10px 10px 7px rgba(0, 0, 0.5, 0.5);
   text-align: center;
-  `
+`;
 
 const AnswerHighlight1 = styled.span`
-  background-color: ${(props) => (props.active ? "var(--primary)" : "var(--secondary)")};
+  background-color: ${(props) =>
+    props.active ? "var(--primary)" : "var(--secondary)"};
   color: white;
   padding: 2px 20px;
   border-radius: 5px;
@@ -52,7 +53,8 @@ const AnswerHighlight1 = styled.span`
 `;
 
 const AnswerHighlight2 = styled.span`
-  background-color: ${(props) => (props.active ? "var(--primary)" : "var(--secondary)")};
+  background-color: ${(props) =>
+    props.active ? "var(--primary)" : "var(--secondary)"};
   color: white;
   padding: 2px 20px;
   border-radius: 5px;
@@ -60,7 +62,8 @@ const AnswerHighlight2 = styled.span`
 `;
 
 const AnswerHighlight3 = styled.span`
-  background-color: ${(props) => (props.active ? "var(--primary)" : "var(--secondary)")};
+  background-color: ${(props) =>
+    props.active ? "var(--primary)" : "var(--secondary)"};
   color: white;
   padding: 2px 20px;
   border-radius: 5px;
@@ -92,7 +95,7 @@ const MainButton = styled.button`
 
 export default function MainBox(props) {
   const navigate = useNavigate();
-  
+
   const handleButtonClick = () => {
     navigate("/quiz"); // /quiz로 이동
   };
@@ -101,7 +104,7 @@ export default function MainBox(props) {
 
   useEffect(() => {
     console.log(location.pathname);
-  },[]);
+  }, []);
 
   const data = props.sentence;
   const sentence = data.sentence;
@@ -110,28 +113,30 @@ export default function MainBox(props) {
   const word1 = data.indexes[0];
   const word2 = data.indexes[1];
   const word3 = data.indexes[2];
-  
-  const {active} = props;
 
-  function StyledWord({sentence}) {
+  const { active } = props;
 
+  function StyledWord({ sentence }) {
     if (sentence.includes(word1)) {
       return sentence.split(word1).reduce((acc, part, idx) => {
         if (idx === 0) return [...acc, part];
         return [
           ...acc,
-          <AnswerHighlight1 active={active === 0} key={idx}>&nbsp;&nbsp;1&nbsp;&nbsp;</AnswerHighlight1>,
+          <AnswerHighlight1 active={active === 0} key={idx}>
+            &nbsp;&nbsp;1&nbsp;&nbsp;
+          </AnswerHighlight1>,
           part,
         ];
       }, []);
-    
     }
     if (sentence.includes(word2) && countWord >= 2) {
       return sentence.split(word2).reduce((acc, part, idx) => {
         if (idx === 0) return [...acc, part];
         return [
           ...acc,
-          <AnswerHighlight2 active={active === 1} key={idx}>&nbsp;&nbsp;2&nbsp;&nbsp;</AnswerHighlight2>,
+          <AnswerHighlight2 active={active === 1} key={idx}>
+            &nbsp;&nbsp;2&nbsp;&nbsp;
+          </AnswerHighlight2>,
           part,
         ];
       }, []);
@@ -141,7 +146,9 @@ export default function MainBox(props) {
         if (idx === 0) return [...acc, part];
         return [
           ...acc,
-          <AnswerHighlight3 active={active === 2} key={idx}>&nbsp;&nbsp;3&nbsp;&nbsp;</AnswerHighlight3>,
+          <AnswerHighlight3 active={active === 2} key={idx}>
+            &nbsp;&nbsp;3&nbsp;&nbsp;
+          </AnswerHighlight3>,
           part,
         ];
       }, []);
@@ -153,20 +160,24 @@ export default function MainBox(props) {
   const words = sentence.split(" ");
 
   const splitWords = words.flatMap((sentence, idx) => {
-    return [<StyledWord key={idx} sentence={sentence} active = {active.toString()} />,' '];
+    return [
+      <StyledWord key={idx} sentence={sentence} active={active.toString()} />,
+      " ",
+    ];
   });
 
   return (
     <Container>
-        <SenteceBox>
-          <ScrollableContent>
-            <span>{splitWords}</span>
-          </ScrollableContent>
-          </SenteceBox>
-      {location.pathname==="/quiz"?null:
-      <MainButton onClick={handleButtonClick}>
-        <img src={moveToMainPath} alt="moveToMain"></img>
-      </MainButton>}
+      <SentenceBox>
+        <ScrollableContent>
+          <span>{splitWords}</span>
+        </ScrollableContent>
+      </SentenceBox>
+      {location.pathname === "/quiz" ? null : (
+        <MainButton onClick={handleButtonClick}>
+          <img src={moveToMainPath} alt="moveToMain"></img>
+        </MainButton>
+      )}
     </Container>
   );
 }
