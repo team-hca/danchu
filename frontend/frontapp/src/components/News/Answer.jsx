@@ -13,8 +13,6 @@ const Container = styled.div`
 `;
 
 export default function Answer({ quizSentence, words }) {
-  console.log("Answer에서 찍는 quizSentence : ", quizSentence);
-  console.log("Answer에서 찍는 words : ", words);
   return (
     <Container>
       <AnswerMessage />
