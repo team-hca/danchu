@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import newsBoxImagePath from "../../icon/news_box.png";
 
 const Container = styled.div`
   flex: 1;
@@ -15,14 +14,17 @@ const Container = styled.div`
   margin-top: 20px;
 `;
 
-const BoxImage = styled.div`
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  // overflow: hidden;
-  position: relative;
-  width: 1080px;
-  height: 320px;
+const NewsInfoBox = styled.div`
+  border: 1px solid var(--gray-1000);
+  border-radius: 5px;
+  width: 100%;
+  height: 860px;
+  background-color: var(--box);
+  word-break: keep-all;
+  line-height: 60px;
+  box-shadow: 10px 10px 7px rgba(0, 0, 0.5, 0.5);
+  text-align: center;
+  margin-bottom: 15px;
 `;
 
 const OverlayText = styled.div`
@@ -57,6 +59,8 @@ const OverlayText = styled.div`
   }
 `;
 const ScrollableContent = styled.div`
+  background-color: var(--box);
+  border: 1px solid var(--gray-1000);
   width: 100%;
   border: none;
   border-radius: 6px;
@@ -181,8 +185,7 @@ export default function NewsBox({ newsData }) {
 
   return (
     <Container>
-      <BoxImage>
-        <img src={newsBoxImagePath} alt="headerBoxImagePath" />
+      <NewsInfoBox>
         <OverlayText>
           <ScrollableContent>
             {[
@@ -226,7 +229,7 @@ export default function NewsBox({ newsData }) {
             })}
           </ScrollableContent>
         </OverlayText>
-      </BoxImage>
+      </NewsInfoBox>
     </Container>
   );
 }
