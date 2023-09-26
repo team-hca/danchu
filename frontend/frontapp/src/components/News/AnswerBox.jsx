@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import moveToMainPath from "../../icon/move_to_main.png";
 
@@ -36,38 +36,41 @@ const SentenceBox = styled.div`
   border: 1px solid var(--gray-1000);
   border-radius: 5px;
   width: 100%;
-  background-color: Ghostwhite;
+  background-color: var(--box);
   word-break: keep-all;
   line-height: 60px;
   box-shadow: 10px 10px 7px rgba(0, 0, 0.5, 0.5);
   text-align: center;
+  margin-bottom: 15px;
 `;
 
 const AnswerHighlight1 = styled.span`
-  background-color: ${(props) =>
-    props.active ? "var(--primary)" : "var(--secondary)"};
+  background-color: var(--primary);
+
   color: white;
   padding: 2px 20px;
   border-radius: 5px;
   box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+  font-size: 25px;
 `;
 
 const AnswerHighlight2 = styled.span`
-  background-color: ${(props) =>
-    props.active ? "var(--primary)" : "var(--secondary)"};
+  background-color: var(--primary);
   color: white;
   padding: 2px 20px;
   border-radius: 5px;
   box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+  font-size: 25px;
 `;
 
 const AnswerHighlight3 = styled.span`
-  background-color: ${(props) =>
-    props.active ? "var(--primary)" : "var(--secondary)"};
+  background-color: var(--primary);
+
   color: white;
   padding: 2px 20px;
   border-radius: 5px;
   box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+  font-size: 25px;
 `;
 
 const MainButton = styled.button`
@@ -75,12 +78,13 @@ const MainButton = styled.button`
   background: none;
   border: none;
   cursor: pointer;
-  margin-left: 450px;
+  margin-left: 500px;
   &:focus {
     outline: none;
   }
 
   img {
+    width: 80%;
     transition: transform 0.1s;
   }
 
@@ -93,61 +97,50 @@ const MainButton = styled.button`
   }
 `;
 
-export default function MainBox(props) {
+export default function AnswerBox({ quizSentence, words }) {
   const navigate = useNavigate();
 
   const handleButtonClick = () => {
     navigate("/quiz"); // /quiz로 이동
   };
 
-  const location = useLocation();
-
-  useEffect(() => {
-    console.log(location.pathname);
-  }, []);
-
-  const data = props.sentence;
-  const sentence = data.sentence;
-  const countWord = data.count;
-
-  const word1 = data.indexes[0];
-  const word2 = data.indexes[1];
-  const word3 = data.indexes[2];
-
-  const { active } = props;
+  const sentence = quizSentence.sentence;
+  const countWord = quizSentence.count;
+  const indexes = quizSentence.indexes;
+  const wordHighlights = [null, words.word1, words.word2, words.word3];
 
   function StyledWord({ sentence }) {
-    if (sentence.includes(word1)) {
-      return sentence.split(word1).reduce((acc, part, idx) => {
+    if (sentence.includes(indexes[0])) {
+      return sentence.split(indexes[0]).reduce((acc, part, idx) => {
         if (idx === 0) return [...acc, part];
         return [
           ...acc,
-          <AnswerHighlight1 active={active === 0} key={idx}>
-            &nbsp;&nbsp;1&nbsp;&nbsp;
+          <AnswerHighlight1 key={idx}>
+            &nbsp;{wordHighlights[1]}&nbsp;
           </AnswerHighlight1>,
           part,
         ];
       }, []);
     }
-    if (sentence.includes(word2) && countWord >= 2) {
-      return sentence.split(word2).reduce((acc, part, idx) => {
+    if (sentence.includes(indexes[1]) && countWord >= 2) {
+      return sentence.split(indexes[1]).reduce((acc, part, idx) => {
         if (idx === 0) return [...acc, part];
         return [
           ...acc,
-          <AnswerHighlight2 active={active === 1} key={idx}>
-            &nbsp;&nbsp;2&nbsp;&nbsp;
+          <AnswerHighlight2 key={idx}>
+            &nbsp;{wordHighlights[2]}&nbsp;
           </AnswerHighlight2>,
           part,
         ];
       }, []);
     }
-    if (sentence.includes(word3) && countWord >= 3) {
-      return sentence.split(word3).reduce((acc, part, idx) => {
+    if (sentence.includes(indexes[2]) && countWord >= 3) {
+      return sentence.split(indexes[2]).reduce((acc, part, idx) => {
         if (idx === 0) return [...acc, part];
         return [
           ...acc,
-          <AnswerHighlight3 active={active === 2} key={idx}>
-            &nbsp;&nbsp;3&nbsp;&nbsp;
+          <AnswerHighlight3 key={idx}>
+            &nbsp;{wordHighlights[3]}&nbsp;
           </AnswerHighlight3>,
           part,
         ];
@@ -157,13 +150,10 @@ export default function MainBox(props) {
     return sentence;
   }
 
-  const words = sentence.split(" ");
+  const splitedWords = sentence.split(" ");
 
-  const splitWords = words.flatMap((sentence, idx) => {
-    return [
-      <StyledWord key={idx} sentence={sentence} active={active.toString()} />,
-      " ",
-    ];
+  const splitWords = splitedWords.flatMap((sentence, idx) => {
+    return [<StyledWord key={idx} sentence={sentence} />, " "];
   });
 
   return (
@@ -173,11 +163,9 @@ export default function MainBox(props) {
           <span>{splitWords}</span>
         </ScrollableContent>
       </SentenceBox>
-      {location.pathname === "/quiz" ? null : (
-        <MainButton onClick={handleButtonClick}>
-          <img src={moveToMainPath} alt="moveToMain"></img>
-        </MainButton>
-      )}
+      <MainButton onClick={handleButtonClick}>
+        <img src={moveToMainPath} alt="moveToMain"></img>
+      </MainButton>
     </Container>
   );
 }

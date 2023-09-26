@@ -1,8 +1,9 @@
-import React from "react";
+import axios from "axios";
+import { React, useEffect, useState } from "react";
 import styled from "styled-components";
 import Footer from "../components/Common/Footer";
 import Header from "../components/Common/Header";
-import Main from "../components/Main/Main";
+import Answer from "../components/News/Answer";
 import News from "../components/News/News";
 
 const Container = styled.div`
@@ -13,28 +14,36 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
 `;
-
-// 로컬스토리지에 word배열 저장하는 함수 - 테스트 데이터
-function saveWordsToLocalStorage(data) {
-  const formattedData = {
-    word1: data.word1 || null,
-    word2: data.word2 || null,
-    word3: data.word3 || null,
-  };
-  localStorage.setItem("words", JSON.stringify(formattedData));
-}
+let today = new Date();
 
 function getWordsFromLocalStorage() {
-  const savedData = localStorage.getItem("words");
-  return savedData
-    ? JSON.parse(savedData)
-    : { words: { word1: null, word2: null, word3: null } };
+  const guess = JSON.parse(localStorage.getItem("guess"));
+  const guessOne = JSON.parse(localStorage.getItem("guessOne"));
+  const guessTwo = JSON.parse(localStorage.getItem("guessTwo"));
+
+  return {
+    word1: guess && guess[0] && guess[0][0] ? guess[0][0].word : null,
+    word2:
+      guessOne && guessOne[0] && guessOne[0][0] ? guessOne[0][0].word : null,
+    word3:
+      guessTwo && guessTwo[0] && guessTwo[0][0] ? guessTwo[0][0].word : null,
+  };
 }
 
 export default function QuizResult() {
-  // 로컬에 저장 테스트
-  const wordsArray = { word1: "과자", word2: "아이스크림", word3: null };
-  saveWordsToLocalStorage(wordsArray);
+  // QuizResult props로 sentence 받는 걸로 수정해야 함
+  const [quizSentence, setQuizSentence] = useState();
+  useEffect(() => {
+    axios
+      .get(
+        `api/v1/quiz/today?date=${today.getFullYear()}-${(today.getMonth() + 1)
+          .toString()
+          .padStart(2, "0")}-${today.getDate().toString().padStart(2, "0")}`
+      )
+      .then((response) => {
+        setQuizSentence(response.data);
+      });
+  }, []);
 
   // 로컬에서 words 가져오기
   const words = getWordsFromLocalStorage();
@@ -44,7 +53,9 @@ export default function QuizResult() {
       {/* <Navbar /> */}
       <Container>
         <Header />
-        <Main words={words} />
+        {quizSentence !== undefined && words !== undefined && (
+          <Answer quizSentence={quizSentence} words={words} />
+        )}
         <News words={words} />
       </Container>
       <Footer />

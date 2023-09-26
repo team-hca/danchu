@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import H1 from "../components/H1";
-import H2 from "../components/H2";
-import Button from "../components/Button";
-import QuestionMark from "../icon/QuestionMark";
-import { Tabs, Tab, Content } from "../components/Tabs";
 import axios from "axios";
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import Button from "../components/Button";
+import H1 from "../components/H1";
 import H3 from "../components/H3";
-import SubmitButton from "../components/SubmitButton";
 import Main from "../components/Main/Main";
+import SubmitButton from "../components/SubmitButton";
+import { Content, Tab, Tabs } from "../components/Tabs";
+import QuestionMark from "../icon/QuestionMark";
 import sortGuess from "../util/sortGuess";
 
 const onClickGiveUp = (message = null, onConfirm, onCancel) => {
@@ -523,6 +522,7 @@ export default function Quiz() {
         const sentence = response.data;
         console.log(sentence);
         setQuizSentence(sentence);
+        console.log("sentence : ", sentence);
         console.log("quizSentence: " + quizSentence);
         setQuizCount(response.data.count);
         console.log("quizcount: " + quizCount);
@@ -657,7 +657,9 @@ export default function Quiz() {
                               (item, index, arr) => {
                                 // setRecentGuess(inputValue);
                                 console.log("guess-item.word: " + item.word);
-                                console.log("guess-recentGuess: " + recentGuess);
+                                console.log(
+                                  "guess-recentGuess: " + recentGuess
+                                );
                                 return item.word === recentGuess;
                               }
                             ).count
@@ -781,18 +783,21 @@ export default function Quiz() {
                   <>
                     <RecentTr>
                       <TdNumber>
-                        {JSON.parse(localStorage.getItem("guessOne"))[0].length > 0 &&
+                        {JSON.parse(localStorage.getItem("guessOne"))[0]
+                          .length > 0 &&
                         JSON.parse(localStorage.getItem("guessOne"))[0].some(
                           (g) => g.word === recentGuessOne
                         )
-                          ? JSON.parse(localStorage.getItem("guessOne"))[0].length > 0 &&
+                          ? JSON.parse(localStorage.getItem("guessOne"))[0]
+                              .length > 0 &&
                             JSON.parse(
                               localStorage.getItem("guessOne")
                             )[0].find((item, index, arr) => {
                               return item.word === recentGuessOne;
                             }).count
                           : localStorage.getItem("guessOne") &&
-                            JSON.parse(localStorage.getItem("guessOne"))[1].length > 0 &&
+                            JSON.parse(localStorage.getItem("guessOne"))[1]
+                              .length > 0 &&
                             JSON.parse(
                               localStorage.getItem("guessOne")
                             )[1].find((item, index, arr) => {
@@ -915,11 +920,13 @@ export default function Quiz() {
                     <RecentTr>
                       {/* <TdNumber>{JSON.parse(localStorage.getItem("guess"))}</TdNumber> */}
                       <TdNumber>
-                        {JSON.parse(localStorage.getItem("guessTwo"))[0].length > 0 &&
+                        {JSON.parse(localStorage.getItem("guessTwo"))[0]
+                          .length > 0 &&
                         JSON.parse(localStorage.getItem("guessTwo"))[0].some(
                           (g) => g.word === recentGuessTwo
                         )
-                          ? JSON.parse(localStorage.getItem("guessTwo"))[0].length > 0 &&
+                          ? JSON.parse(localStorage.getItem("guessTwo"))[0]
+                              .length > 0 &&
                             JSON.parse(
                               localStorage.getItem("guessTwo")
                             )[0].find((item, index, arr) => {
