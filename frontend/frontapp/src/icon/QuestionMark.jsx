@@ -59,7 +59,13 @@ const buttonStyle ={
 }
 const bottomButtonStyle = {
     marginTop: '20px'
-};
+}
+
+const highLightWord = {
+    fontSize:'28',
+    color:'black',
+    fontWeight: 'bold',
+}
 
 
 
@@ -71,11 +77,11 @@ const ModalComponent = ({ isOpen, openModalHandler }) => {
             <div style={modalTextStyle}>
                 <h2 style={modalHeaderStyle}>게임 방식</h2>
                 <br></br>
-                <p>단추 버튼을 누르면 입력한 단어와 정답 단어가 얼마나 유사한지 유사도 점수로 알려줍니다.</p>
+                <p>단추 버튼을 누르면 <span style={highLightWord}>입력한 단어</span>와 <span style={highLightWord}>정답 단어</span>가 얼마나 유사한지 유사도 점수로 알려줍니다.</p>
                 <br></br>
-                <p>만약, 정답 단어와 가장 비슷한 1,000개의 단어 안에 추측한 단어가 있을 때, 단어의 유사도 순위를 함께 제공합니다.</p>
+                <p>만약, 정답 단어와 가장 비슷한 <span style={highLightWord}>1,000개의 단어</span> 안에 <span style={highLightWord}>추측한 단어</span>가 있을 때, 단어의 <span style={highLightWord}>유사도 순위</span>를 함께 제공합니다.</p>
                 <br></br>
-                <p>포기하기 버튼을 누르면 오늘의 모든 문제를 포기하고, 더 이상 오늘의 단추를 끼울 수 없습니다.</p>
+                <p>포기하기 버튼을 누르면 <span style={highLightWord}>오늘의 모든 문제</span>를 포기하고, 더 이상 오늘의 단추를 끼울 수 없습니다.</p>
                 <br></br>
                 <p>숫자가 쓰여진 탭을 누르면 다른 정답 단어를 추측할 수 있습니다.</p>
                 <br></br>
