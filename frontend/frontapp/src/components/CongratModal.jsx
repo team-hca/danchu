@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import styled from "styled-components";
 import confetti from 'canvas-confetti';
+import Error from "../routes/Error";
 import congratDanchu from '../icon/congrat_danchu.png';
 import giveupDanchu from '../icon/giveup_danchu.png';
 
@@ -80,6 +81,10 @@ const ButtonContainer = styled.div`
   max-width: 300px;
   position: relative;
 `;
+
+const ErrorComponent = () => {
+  return <Error />;
+}
 
 export default function CongratModal() {
   const successContentCopy = useRef(null);
@@ -242,7 +247,7 @@ https://www.danchu.today/`;
   const danchuTime = "걸린 시간 : " + timeHour + "시간 " + timeMin + "분 " + timeSec + "초";
   const winState = parseInt(localStorage.getItem('winState'));
   
-  return (
+  return winState !== -1 ? (
     <ModalContainer>
       {winState === 1 ? (
         <CongratTitle>
@@ -274,5 +279,7 @@ https://www.danchu.today/`;
         <NewsButtonOverlayRectangle />
       </ButtonContainer>
     </ModalContainer>
+  ) : (
+    <ErrorComponent />
   );
 }
