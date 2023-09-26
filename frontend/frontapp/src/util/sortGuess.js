@@ -12,10 +12,15 @@ const sortGuess = (key) => {
     return sectionArray.sort((a, b) => b.similarity - a.similarity);
   };
 
-  const sortedData = {
-    guessTop1000: sortBySimilarity(data.guessTop1000),
-    guessOthers: sortBySimilarity(data.guessOthers),
-  };
+  // const sortedData = {
+  //   guessTop1000: sortBySimilarity(data.guessTop1000),
+  //   guessOthers: sortBySimilarity(data.guessOthers),
+  // };
+  let sortedData = [];
+  let top1000 = sortBySimilarity(data[0]);
+  let others = sortBySimilarity(data[1]);
+  sortedData.push(top1000);
+  sortedData.push(others);
 
   // 정렬된 데이터를 다시 localStorage에 저장
   localStorage.setItem(key, JSON.stringify(sortedData));
