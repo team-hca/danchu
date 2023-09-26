@@ -33,10 +33,12 @@ const ScrollableContent = styled.div`
 `;
 
 const SentenceBox = styled.div`
-  border: none;
+  border: 1px solid var(--gray-1000);
   border-radius: 5px;
   width: 100%;
-  background-color: skyblue;
+  background-color: var(--box);
+  word-break: keep-all;
+  line-height: 60px;
   box-shadow: 10px 10px 7px rgba(0, 0, 0.5, 0.5);
   text-align: center;
   margin-bottom: 15px;
@@ -150,14 +152,7 @@ export default function AnswerBox({ quizSentence, words }) {
 
   const splitedWords = sentence.split(" ");
 
-  let cnt = 0;
-
   const splitWords = splitedWords.flatMap((sentence, idx) => {
-    cnt += sentence.length;
-    if (idx > 1 && (cnt >= 14 || idx % 4 === 0)) {
-      cnt = 0;
-      return [<StyledWord key={idx} sentence={sentence} />, <br />, <br />];
-    }
     return [<StyledWord key={idx} sentence={sentence} />, " "];
   });
 
