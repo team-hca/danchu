@@ -29,6 +29,7 @@ const GlobalVariableStyle = createGlobalStyle`
   --gray-900: #111827;
   --gray-1000: #030712;
   --white: white;
+  --box: #f8f8ff;
 
 }
 #root {
