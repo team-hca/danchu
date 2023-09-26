@@ -9,6 +9,7 @@ import axios from "axios";
 import H3 from "../components/H3";
 import SubmitButton from "../components/SubmitButton";
 import Main from "../components/Main/Main";
+import sortGuess from "../util/sortGuess";
 
 const onClickGiveUp = (message = null, onConfirm, onCancel) => {
   if (!onConfirm || typeof onConfirm !== "function") {
@@ -251,13 +252,21 @@ export default function Quiz() {
     let obj = new Object();
     obj.word = inputValue;
     axios
-      .get(`/api/v1/word/guess?quizNum=${indexes[0].substring(1,2)}&guessWord=${obj.word}`)
+      .get(
+        `/api/v1/word/guess?quizNum=${indexes[0].substring(1, 2)}&guessWord=${
+          obj.word
+        }`
+      )
       .then((response) => {
         console.log(JSON.stringify(response.data));
         obj.similarity = response.data.similarity;
         obj.rank = response.data.rank;
 
-        obj.count = localStorage.getItem('guess')?JSON.parse(localStorage.getItem('guess'))[0].length+JSON.parse(localStorage.getItem('guess'))[1].length+1:1;
+        obj.count = localStorage.getItem("guess")
+          ? JSON.parse(localStorage.getItem("guess"))[0].length +
+            JSON.parse(localStorage.getItem("guess"))[1].length +
+            1
+          : 1;
         if (obj.rank === -1) {
           if (!localStorage.getItem("guess")) {
             // guess가 처음일 때
@@ -306,13 +315,21 @@ export default function Quiz() {
     let obj = new Object();
     obj.word = inputValueOne;
     axios
-      .get(`/api/v1/word/guess?quizNum=${indexes[1].substring(1,2)}&guessWord=${obj.word}`)
+      .get(
+        `/api/v1/word/guess?quizNum=${indexes[1].substring(1, 2)}&guessWord=${
+          obj.word
+        }`
+      )
       .then((response) => {
         console.log(JSON.stringify(response.data));
         obj.similarity = response.data.similarity;
         obj.rank = response.data.rank;
 
-        obj.count = localStorage.getItem('guessOne')?JSON.parse(localStorage.getItem('guessOne'))[0].length+JSON.parse(localStorage.getItem('guessOne'))[1].length+1:1;
+        obj.count = localStorage.getItem("guessOne")
+          ? JSON.parse(localStorage.getItem("guessOne"))[0].length +
+            JSON.parse(localStorage.getItem("guessOne"))[1].length +
+            1
+          : 1;
         if (obj.rank === -1) {
           if (!localStorage.getItem("guessOne")) {
             // guess가 처음일 때
@@ -322,11 +339,11 @@ export default function Quiz() {
             setGuessOne(JSON.parse(localStorage.getItem("guessOne")));
           } else if (localStorage.getItem("guessOne").includes(inputValueOne)) {
             // guess가 있는데 이미 추측한 게 있을 때
-            setRecentGuess(obj.word);
+            setRecentGuessOne(obj.word);
           } else {
             // guess가 있고 처음 추측할 때
             arr[1].push(obj);
-            setRecentGuess(obj.word);
+            setRecentGuessOne(obj.word);
             localStorage.setItem("guessOne", JSON.stringify(arr));
             setGuessOne(JSON.parse(localStorage.getItem("guessOne")));
           }
@@ -361,13 +378,21 @@ export default function Quiz() {
     let obj = new Object();
     obj.word = inputValueTwo;
     axios
-      .get(`/api/v1/word/guess?quizNum=${indexes[2].substring(1,2)}&guessWord=${obj.word}`)
+      .get(
+        `/api/v1/word/guess?quizNum=${indexes[2].substring(1, 2)}&guessWord=${
+          obj.word
+        }`
+      )
       .then((response) => {
         console.log(JSON.stringify(response.data));
         obj.similarity = response.data.similarity;
         obj.rank = response.data.rank;
 
-        obj.count = localStorage.getItem('guessTwo')?JSON.parse(localStorage.getItem('guessTwo'))[0].length+JSON.parse(localStorage.getItem('guessTwo'))[1].length+1:1;
+        obj.count = localStorage.getItem("guessTwo")
+          ? JSON.parse(localStorage.getItem("guessTwo"))[0].length +
+            JSON.parse(localStorage.getItem("guessTwo"))[1].length +
+            1
+          : 1;
         if (obj.rank === -1) {
           if (!localStorage.getItem("guessTwo")) {
             // guess가 처음일 때
@@ -415,6 +440,7 @@ export default function Quiz() {
       // setInputValueOne("");
     } else {
       recordStartTime();
+      sortGuess("guessOne");
       saveLocalStorageOne();
     }
   };
@@ -424,6 +450,7 @@ export default function Quiz() {
       // setInputValueTwo("");
     } else {
       recordStartTime();
+      sortGuess("guessTwo");
       saveLocalStorageTwo();
     }
   };
@@ -437,44 +464,47 @@ export default function Quiz() {
   };
 
   const onSubmit = () => {
-    if (inputValue!==""&&(inputValue && inputValue.trim() === "" && !inputValue)) {
+    if (
+      inputValue !== "" &&
+      inputValue &&
+      inputValue.trim() === "" &&
+      !inputValue
+    ) {
     } else {
       recordStartTime();
+      sortGuess("guess");
       saveLocalStorage();
       return;
     }
   };
 
-  const handleOnKeyPress = (e) => {
-    if (e.key === "Enter") {
-      if (inputValue.trim() === "" && !inputValue) {
-      } else {
-        recordStartTime();
-        saveLocalStorage();
-      }
-
-    }
-  };
-  const handleOnKeyPressOne = (e) => {
-    if (e.key === "Enter") {
-      if (inputValueOne.trim() === "" && !inputValueOne) {
-      } else {
-        recordStartTime();
-        saveLocalStorageOne();
-      }
-     
-    }
-  };
-  const handleOnKeyPressTwo = (e) => {
-    if (e.key === "Enter") {
-      if (inputValueTwo.trim() === "" && !inputValueTwo) {
-      } else {
-        recordStartTime();
-        saveLocalStorageTwo();
-      }
-     
-    }
-  };
+  // const handleOnKeyPress = (e) => {
+  //   if (e.key === "Enter") {
+  //     if (inputValue.trim() === "" && !inputValue) {
+  //     } else {
+  //       recordStartTime();
+  //       saveLocalStorage();
+  //     }
+  //   }
+  // };
+  // const handleOnKeyPressOne = (e) => {
+  //   if (e.key === "Enter") {
+  //     if (inputValueOne.trim() === "" && !inputValueOne) {
+  //     } else {
+  //       recordStartTime();
+  //       saveLocalStorageOne();
+  //     }
+  //   }
+  // };
+  // const handleOnKeyPressTwo = (e) => {
+  //   if (e.key === "Enter") {
+  //     if (inputValueTwo.trim() === "" && !inputValueTwo) {
+  //     } else {
+  //       recordStartTime();
+  //       saveLocalStorageTwo();
+  //     }
+  //   }
+  // };
 
   const handleClick = (e) => {
     const index = parseInt(e.target.id, 0);
@@ -485,9 +515,7 @@ export default function Quiz() {
   const handleQuiz = () => {
     axios
       .get(
-        `/api/v1/quiz/today?date=${today.getFullYear()}-${(
-          today.getMonth() + 1
-        )
+        `/api/v1/quiz/today?date=${today.getFullYear()}-${(today.getMonth() + 1)
           .toString()
           .padStart(2, "0")}-${today.getDate().toString().padStart(2, "0")}`
       )
@@ -537,12 +565,10 @@ export default function Quiz() {
     console.log("zero: " + inputValue);
   };
 
-
   const handleInputChangeOne = (event) => {
     setInputValueOne(event.target.value);
     console.log("one: " + inputValueOne);
   };
-
 
   const handleInputChangeTwo = (event) => {
     setInputValueTwo(event.target.value);
@@ -558,37 +584,7 @@ export default function Quiz() {
         <LogoContainer>
           <H1 color="var(--secondary)">DANCHU</H1>
         </LogoContainer>
-        {/* <DateDanchuContentContainer>
-          <H6Styled color="var(--secondary)">2023년 09월 14일의 </H6Styled>
-          <H6Styled color="var(--primary)">&nbsp;단추</H6Styled>
-          <H6Styled color="var(--secondary)">를 끼워보세요!</H6Styled>
-        </DateDanchuContentContainer> */}
-        {/* <QuizContainer>
-
-          <QuizSentenceContainer>
-            <QuizSentenceAnswerContainer>
-              {quizSentence &&
-                quizSentence.split("^").map((item, idx) => (
-                  <>
-                    <H1>{item}</H1>
-                    {idx < quizSentence.split("^").length - 1 ? (
-                      active === idx ? (
-                        <Answer color="var(--primary)">
-                          <H2>{idx + 1}</H2>
-                        </Answer>
-                      ) : (
-                        <Answer color="var(--secondary)">
-                          <H2>{idx + 1}</H2>
-                        </Answer>
-                      )
-                    ) : null}
-                  </>
-                ))}
-            </QuizSentenceAnswerContainer>
-          </QuizSentenceContainer>
-        </QuizContainer>
-         */}
-         <Main sentence={quizSentence} active = {active}/>
+        <Main sentence={quizSentence} active={active} />
         <TabContainer>
           <Tabs>
             <Tab
@@ -629,7 +625,7 @@ export default function Quiz() {
                 onChange={handleInputChange}
                 required
                 type="text"
-                onKeyDown={handleOnKeyPress}
+                // onKeyDown={handleOnKeyPress}
                 value={inputInitialize}
               ></InputStyle>
               <SubmitButton onClick={onSubmit}>단추</SubmitButton>
@@ -650,23 +646,27 @@ export default function Quiz() {
                     <RecentTr>
                       {/* <TdNumber>{JSON.parse(localStorage.getItem("guess"))}</TdNumber> */}
                       <TdNumber>
-                        {JSON.parse(localStorage.getItem("guess"))[0].length>0 &&
+                        {JSON.parse(localStorage.getItem("guess"))[0].length >
+                          0 &&
                         JSON.parse(localStorage.getItem("guess"))[0].some(
                           (g) => g.word === recentGuess
-                        ).count
-                          ? JSON.parse(localStorage.getItem("guess"))[0].length>0 &&
+                        )
+                          ? JSON.parse(localStorage.getItem("guess"))[0]
+                              .length > 0 &&
                             JSON.parse(localStorage.getItem("guess"))[0].find(
                               (item, index, arr) => {
-                                
-                                setRecentGuess(inputValue);
+                                // setRecentGuess(inputValue);
+                                console.log("guess-item.word: " + item.word);
+                                console.log("guess-recentGuess: " + recentGuess);
                                 return item.word === recentGuess;
                               }
                             ).count
                           : localStorage.getItem("guess") &&
-                            JSON.parse(localStorage.getItem("guess"))[1].length>0 &&
+                            JSON.parse(localStorage.getItem("guess"))[1]
+                              .length > 0 &&
                             JSON.parse(localStorage.getItem("guess"))[1].find(
                               (item, index, arr) => {
-                                setRecentGuess(inputValue);
+                                // setRecentGuess(inputValue);
                                 console.log("item.word: " + item.word);
                                 console.log("recentGuess: " + recentGuess);
                                 return item.word === recentGuess;
@@ -679,7 +679,7 @@ export default function Quiz() {
                         JSON.parse(localStorage.getItem("guess"))[0] &&
                         JSON.parse(localStorage.getItem("guess"))[0].some(
                           (g) => g.word === recentGuess
-                        ).similarity
+                        )
                           ? localStorage.getItem("guess") &&
                             JSON.parse(localStorage.getItem("guess"))[0] &&
                             JSON.parse(localStorage.getItem("guess"))[0]
@@ -708,15 +708,13 @@ export default function Quiz() {
                                 return item.word === recentGuess;
                               }
                             ).rank
-                          : 
-                          JSON.parse(localStorage.getItem("guess"))[1]
+                          : JSON.parse(localStorage.getItem("guess"))[1]
                               .length > 0 &&
                             JSON.parse(localStorage.getItem("guess"))[1].find(
                               (item, index, arr) => {
                                 return item.word === recentGuess;
                               }
-                            ).rank
-                            }
+                            ).rank}
                       </TdRank>
                     </RecentTr>
                   </>
@@ -764,7 +762,7 @@ export default function Quiz() {
               <InputStyle
                 placeholder="단어를 추측해보세요"
                 onChange={handleInputChangeOne}
-                onKeyDown={handleOnKeyPressOne}
+                // onKeyDown={handleOnKeyPressOne}
                 required
                 type="text"
               ></InputStyle>
@@ -783,25 +781,25 @@ export default function Quiz() {
                   <>
                     <RecentTr>
                       <TdNumber>
-                        {JSON.parse(localStorage.getItem("guessOne"))[0] &&
+                        {JSON.parse(localStorage.getItem("guessOne"))[0].length > 0 &&
                         JSON.parse(localStorage.getItem("guessOne"))[0].some(
                           (g) => g.word === recentGuessOne
-                        ).count
-                          ? JSON.parse(localStorage.getItem("guessOne"))[0] &&
-                            JSON.parse(localStorage.getItem("guessOne"))[0].find(
-                              (item, index, arr) => {
-                                return item.word === recentGuessOne;
-                              }
-                            ).count
+                        )
+                          ? JSON.parse(localStorage.getItem("guessOne"))[0].length > 0 &&
+                            JSON.parse(
+                              localStorage.getItem("guessOne")
+                            )[0].find((item, index, arr) => {
+                              return item.word === recentGuessOne;
+                            }).count
                           : localStorage.getItem("guessOne") &&
-                            JSON.parse(localStorage.getItem("guessOne"))[1] &&
-                            JSON.parse(localStorage.getItem("guessOne"))[1].find(
-                              (item, index, arr) => {
-                                console.log("item.word: " + item.word);
-                                console.log("recentGuessOne: " + recentGuessOne);
-                                return item.word === recentGuessOne;
-                              }
-                            ).count}
+                            JSON.parse(localStorage.getItem("guessOne"))[1].length > 0 &&
+                            JSON.parse(
+                              localStorage.getItem("guessOne")
+                            )[1].find((item, index, arr) => {
+                              console.log("item.word: " + item.word);
+                              console.log("recentGuessOne: " + recentGuessOne);
+                              return item.word === recentGuessOne;
+                            }).count}
                       </TdNumber>
                       <TdGuess>{recentGuessOne}</TdGuess>
                       <TdPercent>
@@ -809,7 +807,7 @@ export default function Quiz() {
                         JSON.parse(localStorage.getItem("guessOne"))[0] &&
                         JSON.parse(localStorage.getItem("guessOne"))[0].some(
                           (g) => g.word === recentGuessOne
-                        ).similarity
+                        )
                           ? localStorage.getItem("guessOne") &&
                             JSON.parse(localStorage.getItem("guessOne"))[0] &&
                             JSON.parse(localStorage.getItem("guessOne"))[0]
@@ -826,27 +824,25 @@ export default function Quiz() {
                               .similarity.toFixed(2)}
                       </TdPercent>
                       <TdRank>
-                        {JSON.parse(localStorage.getItem("guessOne"))[0].length >
-                          0 &&
+                        {JSON.parse(localStorage.getItem("guessOne"))[0]
+                          .length > 0 &&
                         JSON.parse(localStorage.getItem("guessOne"))[0].some(
                           (g) => g.word === recentGuessOne
                         )
                           ? JSON.parse(localStorage.getItem("guessOne"))[0]
                               .length > 0 &&
-                            JSON.parse(localStorage.getItem("guessOne"))[0].find(
-                              (item, index, arr) => {
-                                return item.word === recentGuessOne;
-                              }
-                            ).rank
-                          : 
-                          JSON.parse(localStorage.getItem("guessOne"))[1]
+                            JSON.parse(
+                              localStorage.getItem("guessOne")
+                            )[0].find((item, index, arr) => {
+                              return item.word === recentGuessOne;
+                            }).rank
+                          : JSON.parse(localStorage.getItem("guessOne"))[1]
                               .length > 0 &&
-                            JSON.parse(localStorage.getItem("guessOne"))[1].find(
-                              (item, index, arr) => {
-                                return item.word === recentGuessOne;
-                              }
-                            ).rank
-                            }
+                            JSON.parse(
+                              localStorage.getItem("guessOne")
+                            )[1].find((item, index, arr) => {
+                              return item.word === recentGuessOne;
+                            }).rank}
                       </TdRank>
                     </RecentTr>
                   </>
@@ -887,7 +883,7 @@ export default function Quiz() {
                   )}
                 {/* </Thead> */}
                 {/* <tbody> */}
-                
+
                 {/* </tbody> */}
               </Table>
             </TableContainer>
@@ -897,7 +893,7 @@ export default function Quiz() {
               <InputStyle
                 placeholder="단어를 추측해보세요"
                 onChange={handleInputChangeTwo}
-                onKeyDown={handleOnKeyPressTwo}
+                // onKeyDown={handleOnKeyPressTwo}
                 required
                 type="text"
               ></InputStyle>
@@ -919,25 +915,25 @@ export default function Quiz() {
                     <RecentTr>
                       {/* <TdNumber>{JSON.parse(localStorage.getItem("guess"))}</TdNumber> */}
                       <TdNumber>
-                        {JSON.parse(localStorage.getItem("guessTwo"))[0] &&
+                        {JSON.parse(localStorage.getItem("guessTwo"))[0].length > 0 &&
                         JSON.parse(localStorage.getItem("guessTwo"))[0].some(
                           (g) => g.word === recentGuessTwo
-                        ).count
-                          ? JSON.parse(localStorage.getItem("guessTwo"))[0] &&
-                            JSON.parse(localStorage.getItem("guessTwo"))[0].find(
-                              (item, index, arr) => {
-                                return item.word === recentGuessTwo;
-                              }
-                            ).count
+                        )
+                          ? JSON.parse(localStorage.getItem("guessTwo"))[0].length > 0 &&
+                            JSON.parse(
+                              localStorage.getItem("guessTwo")
+                            )[0].find((item, index, arr) => {
+                              return item.word === recentGuessTwo;
+                            }).count
                           : localStorage.getItem("guessTwo") &&
                             JSON.parse(localStorage.getItem("guessTwo"))[1] &&
-                            JSON.parse(localStorage.getItem("guessTwo"))[1].find(
-                              (item, index, arr) => {
-                                console.log("item.word: " + item.word);
-                                console.log("recentGuessTwo: " + recentGuessTwo);
-                                return item.word === recentGuessTwo;
-                              }
-                            ).count}
+                            JSON.parse(
+                              localStorage.getItem("guessTwo")
+                            )[1].find((item, index, arr) => {
+                              console.log("item.word: " + item.word);
+                              console.log("recentGuessTwo: " + recentGuessTwo);
+                              return item.word === recentGuessTwo;
+                            }).count}
                       </TdNumber>
                       <TdGuess>{recentGuessTwo}</TdGuess>
                       <TdPercent>
@@ -945,7 +941,7 @@ export default function Quiz() {
                         JSON.parse(localStorage.getItem("guessTwo"))[0] &&
                         JSON.parse(localStorage.getItem("guessTwo"))[0].some(
                           (g) => g.word === recentGuessTwo
-                        ).similarity
+                        )
                           ? localStorage.getItem("guessTwo") &&
                             JSON.parse(localStorage.getItem("guessTwo"))[0] &&
                             JSON.parse(localStorage.getItem("guessTwo"))[0]
@@ -962,27 +958,25 @@ export default function Quiz() {
                               .similarity.toFixed(2)}
                       </TdPercent>
                       <TdRank>
-                        {JSON.parse(localStorage.getItem("guessTwo"))[0].length >
-                          0 &&
+                        {JSON.parse(localStorage.getItem("guessTwo"))[0]
+                          .length > 0 &&
                         JSON.parse(localStorage.getItem("guessTwo"))[0].some(
                           (g) => g.word === recentGuessTwo
                         )
                           ? JSON.parse(localStorage.getItem("guessTwo"))[0]
                               .length > 0 &&
-                            JSON.parse(localStorage.getItem("guessTwo"))[0].find(
-                              (item, index, arr) => {
-                                return item.word === recentGuessTwo;
-                              }
-                            ).rank
-                          : 
-                          JSON.parse(localStorage.getItem("guessTwo"))[1]
+                            JSON.parse(
+                              localStorage.getItem("guessTwo")
+                            )[0].find((item, index, arr) => {
+                              return item.word === recentGuessTwo;
+                            }).rank
+                          : JSON.parse(localStorage.getItem("guessTwo"))[1]
                               .length > 0 &&
-                            JSON.parse(localStorage.getItem("guessTwo"))[1].find(
-                              (item, index, arr) => {
-                                return item.word === recentGuessTwo;
-                              }
-                            ).rank
-                            }
+                            JSON.parse(
+                              localStorage.getItem("guessTwo")
+                            )[1].find((item, index, arr) => {
+                              return item.word === recentGuessTwo;
+                            }).rank}
                       </TdRank>
                     </RecentTr>
                   </>
