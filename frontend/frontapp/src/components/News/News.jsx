@@ -28,7 +28,7 @@ export default function News({ words }) {
   useEffect(() => {
     axios
       .get(
-        `/v1/news/link?word1=${words.word1}&word2=${words.word2}&word3=${words.word3}`
+        `api/v1/news/link?word1=${words.word1}&word2=${words.word2}&word3=${words.word3}`
       )
       .then((response) => {
         setNewsData(response.data);

@@ -34,7 +34,6 @@ export default function QuizResult() {
   // QuizResult props로 sentence 받는 걸로 수정해야 함
   const [quizSentence, setQuizSentence] = useState();
   useEffect(() => {
-    console.log("찍는다~");
     axios
       .get(
         `api/v1/quiz/today?date=${today.getFullYear()}-${(today.getMonth() + 1)
@@ -48,9 +47,7 @@ export default function QuizResult() {
 
   // 로컬에서 words 가져오기
   const words = getWordsFromLocalStorage();
-  console.log("QuizResult에서 찍는 quizSentence : ", quizSentence);
 
-  console.log("QuizResult에서 찍는 words : ", words);
   return (
     <>
       {/* <Navbar /> */}
