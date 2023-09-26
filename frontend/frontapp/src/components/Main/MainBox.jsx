@@ -72,7 +72,18 @@ const ScrollableContent = styled.div`
   text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
   font-weight: bold;
   font-size: 30px;
+  margin: 30px;
+  padding: 10px;
 `;
+
+const SenteceBox = styled.div`
+  border: none;
+  border-radius: 5px;
+  width: 100%;
+  background-color: skyblue;
+  box-shadow: 10px 10px 7px rgba(0, 0, 0.5, 0.5);
+  text-align: center;
+  `
 
 const AnswerHighlight1 = styled.span`
   background-color: ${(props) => (props.active ? "var(--primary)" : "var(--secondary)")};
@@ -183,23 +194,32 @@ export default function MainBox(props) {
 
   const words = sentence.split(" ");
   
+  let cnt = 0;
+  
   const splitWords = words.flatMap((sentence, idx) => {
-    if (idx > 0 && idx%5 == 0) {
-      return [<br key={idx} />, <br/>];
+    cnt += sentence.length;
+    if (idx > 1 && (cnt >= 14 || idx % 4 === 0)) {
+      cnt = 0;
+      return [<StyledWord key={idx} sentence={sentence} active = {active.toString()} />, <br/>, <br/>];
     }
     return [<StyledWord key={idx} sentence={sentence} active = {active.toString()} />,' '];
   });
 
   return (
     <Container>
-      <BoxImage>
+      {/* <BoxImage>
         <img src={mainBoxImagePath} alt="headerBoxImagePath"></img>
         <OverlayText>
           <ScrollableContent>
             <span>{splitWords}</span>
           </ScrollableContent>
         </OverlayText>
-      </BoxImage>
+      </BoxImage> */}
+        <SenteceBox>
+          <ScrollableContent>
+            <span>{splitWords}</span>
+          </ScrollableContent>
+          </SenteceBox>
       {location.pathname==="/quiz"?null:
       <MainButton onClick={handleButtonClick}>
         <img src={moveToMainPath} alt="moveToMain"></img>
