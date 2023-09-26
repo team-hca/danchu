@@ -74,6 +74,17 @@ const ScrollableContent = styled.div`
   font-size: 30px;
 `;
 
+const DummyItem = styled.div`
+  padding: 20px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  height: auto;
+  display: inline;
+`;
+
 const AnswerHighlight1 = styled.span`
   background-color: #ef3c5f;
   color: white;
@@ -121,76 +132,60 @@ const MainButton = styled.button`
   }
 `;
 
-export default function AnswerBox(quizSentence) {
+export default function AnswerBox({ quizSentence, words }) {
   console.log("AnswerBox에서 찍은 quizSentence : ", quizSentence);
+  console.log("AnswerBox에서 찍은 words : ", words);
   const navigate = useNavigate();
 
   const handleButtonClick = () => {
     navigate("/quiz"); // /quiz로 이동
   };
 
-  const data = quizSentence.sentence;
-  const sentence = data.sentence;
+  const sentence = quizSentence.sentence;
+  const countWord = quizSentence.count;
+  const indexes = quizSentence.indexes;
+  const wordHighlights = [null, words.word1, words.word2, words.word3];
+
   console.log("sentence : ", sentence);
-  const countWord = data.count;
+  console.log("countWord : ", countWord);
+  console.log("indexes : ", indexes);
+  console.log("words : ", words);
 
-  const word1 = data.indexes[0];
-  const word2 = data.indexes[1];
-  const word3 = data.indexes[2];
+  // ^1, ^2, ^3을 AnswerHighlight로 감싸주는 함수
+  function wrapWithHighlight(text) {
+    const parts = text.split(/(\^\d)/); // '^숫자' 패턴으로 문자열 분리
 
-  console.log(word1);
-  console.log(word2);
-  console.log(word3);
+    return parts.map((part, idx) => {
+      if (part.startsWith("^")) {
+        let i = parseInt(part[1]);
 
-  function StyledWord({ sentence }) {
-    if (sentence.includes(word1)) {
-      return sentence.split(word1).reduce((acc, part, idx) => {
-        if (idx === 0) return [...acc, part];
-        return [
-          ...acc,
-          <AnswerHighlight1 key={idx}>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          </AnswerHighlight1>,
-          part,
-        ];
-      }, []);
-    }
-    if (sentence.includes(word2) && countWord >= 2) {
-      return sentence.split(word2).reduce((acc, part, idx) => {
-        if (idx === 0) return [...acc, part];
-        return [
-          ...acc,
-          <AnswerHighlight2 key={idx}>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          </AnswerHighlight2>,
-          part,
-        ];
-      }, []);
-    }
-    if (sentence.includes(word3) && countWord >= 3) {
-      return sentence.split(word3).reduce((acc, part, idx) => {
-        if (idx === 0) return [...acc, part];
-        return [
-          ...acc,
-          <AnswerHighlight3 key={idx}>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          </AnswerHighlight3>,
-          part,
-        ];
-      }, []);
-    }
-
-    return sentence;
+        switch (i) {
+          case 1:
+            return (
+              <AnswerHighlight1 key={`highlight-${idx}`}>
+                {wordHighlights[i]}
+              </AnswerHighlight1>
+            );
+          case 2:
+            return (
+              <AnswerHighlight2 key={`highlight-${idx}`}>
+                {wordHighlights[i]}
+              </AnswerHighlight2>
+            );
+          case 3:
+            return (
+              <AnswerHighlight3 key={`highlight-${idx}`}>
+                {wordHighlights[i]}
+              </AnswerHighlight3>
+            );
+          default:
+            return part;
+        }
+      } else {
+        return part;
+      }
+    });
   }
-
-  const words = sentence.split(" ");
-
-  const splitWords = words.flatMap((sentence, idx) => {
-    if (idx > 0 && idx % 5 == 0) {
-      return [<br key={`br1-${idx}`} />, <br key={`br2-${idx}`} />];
-    }
-    return [<StyledWord key={idx} sentence={sentence} />, " "];
-  });
 
   return (
     <Container>
@@ -198,7 +193,9 @@ export default function AnswerBox(quizSentence) {
         <img src={mainBoxImagePath} alt="headerBoxImagePath"></img>
         <OverlayText>
           <ScrollableContent>
-            <span>{splitWords}</span>
+            <DummyItem>
+              {sentence ? wrapWithHighlight(sentence) : "Loading..."}
+            </DummyItem>
           </ScrollableContent>
         </OverlayText>
       </BoxImage>

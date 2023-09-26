@@ -12,12 +12,13 @@ const Container = styled.div`
   margin-bottom: 100px;
 `;
 
-export default function Answer(quizSentence) {
-  console.log("QuizResult에서 받은 quizSentence : ", quizSentence);
+export default function Answer({ quizSentence, words }) {
+  console.log("Answer에서 찍는 quizSentence : ", quizSentence);
+  console.log("Answer에서 찍는 words : ", words);
   return (
     <Container>
       <AnswerMessage />
-      <AnswerBox sentence={quizSentence.quizSentence} />
+      <AnswerBox quizSentence={quizSentence} words={words} />
     </Container>
   );
 }
