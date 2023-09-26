@@ -30,7 +30,7 @@ const QuestionMark = styled.button`
   cursor: pointer;
   width: 50px;
   position: absolute;
-  right: 10px;
+  right: 350px;
   top: 50px;
   transform: translateY(-50%);
   transform: translateX(320px);
