@@ -1,7 +1,8 @@
 import React, { useRef, useEffect, useState } from 'react';
 import styled from "styled-components";
 import confetti from 'canvas-confetti';
-import congratDanchu from '../icon/congrat-danchu.png';
+import congratDanchu from '../icon/congrat_danchu.png';
+import giveupDanchu from '../icon/giveup_danchu.png';
 
 const ModalContainer = styled.div`
   background-color: #253846;
@@ -100,12 +101,20 @@ export default function CongratModal() {
   const danchuDate = year + "년 " + month + "일 " + date + "일 단추";
 
   const handleCopyResult = () => {
-    const copiedContent = `
-      ${year}년 ${month}월 ${date}일의 단추를 맞혔습니다!
-      ${danchuTrial}
-      ${danchuTime}
-      https://www.danchu.today/
-    `;
+    let copiedContent;
+    const winState = parseInt(localStorage.getItem('winState'));
+
+    if (winState === 1) {
+      copiedContent = `${year}년 ${month}월 ${date}일의 단추를 맞혔습니다!
+${danchuTrial}
+${danchuTime}
+https://www.danchu.today/`;
+    } else if (winState === 0) {
+      copiedContent = `${year}년 ${month}월 ${date}일의 단추를 포기하셨습니다.
+${danchuTrial}
+${danchuTime}
+https://www.danchu.today/`;
+    }
 
     navigator.clipboard.writeText(copiedContent)
       .then(() => {
@@ -222,35 +231,48 @@ export default function CongratModal() {
 
     setTotalGuessCnt(totalGuessCnt);
   
-    triggerFireworksConfetti();
-    triggerPrideConfetti();
+    if (parseInt(localStorage.getItem('winState')) === 1) {
+      triggerFireworksConfetti();
+      triggerPrideConfetti();
+    }
+    
   }, []);
 
   const danchuTrial = "시도 횟수: " + totalGuessCnt;
   const danchuTime = "걸린 시간 : " + timeHour + "시간 " + timeMin + "분 " + timeSec + "초";
-
+  const winState = parseInt(localStorage.getItem('winState'));
+  
   return (
     <ModalContainer>
-      <CongratTitle>
-        축하합니다! <br />
-        오늘의 단추를 맞혔습니다!
-      </CongratTitle>
+      {winState === 1 ? (
+        <CongratTitle>
+          축하합니다! <br />
+          오늘의 단추를 맞혔습니다!
+        </CongratTitle>
+      ) : winState === 0 ? (
+        <CongratTitle>
+          오늘의 단추를 포기하셨습니다.
+        </CongratTitle>
+      ) : null}
 
-      <img src={congratDanchu} alt="You've Got Danchu" style={{ width: '150px' }} />
-
+      {winState === 1 ? (
+        <img src={congratDanchu} alt="Congrat Danchu" style={{ width: '150px' }} />
+      ) : winState === 0 ? (
+        <img src={giveupDanchu} alt="Giveup Danchu" style={{ width: '200px' }} />
+      ) : null}
+  
       <SuccessContent ref={successContentCopy}>
         <SuccessDetail>{danchuDate}</SuccessDetail>
         <SuccessDetail>{danchuTrial}</SuccessDetail>
         <SuccessDetail>{danchuTime}</SuccessDetail>
       </SuccessContent>
-
+  
       <ButtonContainer>
         <CongratContentButton onClick={handleCopyResult}>결과 복사</CongratContentButton>
         <CopyButtonOverlayRectangle />
         <CongratContentButton>관련 뉴스</CongratContentButton>
         <NewsButtonOverlayRectangle />
       </ButtonContainer>
-
     </ModalContainer>
   );
 }
