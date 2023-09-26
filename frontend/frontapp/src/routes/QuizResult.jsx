@@ -16,21 +16,18 @@ const Container = styled.div`
 `;
 let today = new Date();
 
-// 로컬스토리지에 word배열 저장하는 함수 - 테스트 데이터
-function saveWordsToLocalStorage(data) {
-  const formattedData = {
-    word1: data.word1,
-    word2: data.word2 || null,
-    word3: data.word3 || null,
-  };
-  localStorage.setItem("words", JSON.stringify(formattedData));
-}
-
 function getWordsFromLocalStorage() {
-  const savedData = localStorage.getItem("words");
-  return savedData
-    ? JSON.parse(savedData)
-    : { word1: null, word2: null, word3: null };
+  const guess = JSON.parse(localStorage.getItem("guess"));
+  const guessOne = JSON.parse(localStorage.getItem("guessOne"));
+  const guessTwo = JSON.parse(localStorage.getItem("guessTwo"));
+
+  return {
+    word1: guess && guess[0] && guess[0][0] ? guess[0][0].word : null,
+    word2:
+      guessOne && guessOne[0] && guessOne[0][0] ? guessOne[0][0].word : null,
+    word3:
+      guessTwo && guessTwo[0] && guessTwo[0][0] ? guessTwo[0][0].word : null,
+  };
 }
 
 export default function QuizResult() {
@@ -46,24 +43,22 @@ export default function QuizResult() {
       )
       .then((response) => {
         setQuizSentence(response.data);
-        console.log("QuizReulst에서 찍는 response.data : ", response.data);
       });
   }, []);
 
-  // 로컬에 저장 테스트
-  const wordsArray = { word1: "과자", word2: "아이스크림", word3: null };
-  saveWordsToLocalStorage(wordsArray);
-
   // 로컬에서 words 가져오기
   const words = getWordsFromLocalStorage();
+  console.log("QuizResult에서 찍는 quizSentence : ", quizSentence);
 
+  console.log("QuizResult에서 찍는 words : ", words);
   return (
     <>
       {/* <Navbar /> */}
       <Container>
         <Header />
-        {quizSentence && <Answer quizSentence={quizSentence} />}
-
+        {quizSentence !== undefined && words !== undefined && (
+          <Answer quizSentence={quizSentence} words={words} />
+        )}
         <News words={words} />
       </Container>
       <Footer />
