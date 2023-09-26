@@ -23,13 +23,25 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 @Service
 @RequiredArgsConstructor
 public class WordService {
     private final QuizAnswerRepository quizAnswerRepository;
     private final WordSimilarityRepository wordSimilarityRepository;
-    public WordSimilarityResponseDto wordGuess(String quizNum, String guessWord) throws URISyntaxException, IOException, InterruptedException {
+    public WordSimilarityResponseDto wordGuess(String quizNum, String guessWord) throws URISyntaxException, IOException, InterruptedException, IllegalArgumentException {
+
+        String pattern = "^[가-힣]*$"; // 한글만 등장하는지
+
+        boolean result = Pattern.matches(pattern, guessWord);
+        //System.out.println(result);
+
+        if (!result) {
+            throw new IllegalArgumentException("올바르지 않은 입력입니다.");
+        }
+
         WordSimilarityResponseDto resultDto = new WordSimilarityResponseDto();
         //입력 단어가 정답인지 확인
         //오늘의 날짜를 변수 값으로 넣어야함!

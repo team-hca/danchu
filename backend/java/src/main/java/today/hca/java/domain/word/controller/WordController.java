@@ -22,11 +22,15 @@ public class WordController {
 
     @GetMapping("/guess")
     public ResponseEntity<?> wordGuess(@RequestParam String quizNum, @RequestParam String guessWord) throws URISyntaxException, IOException, InterruptedException {
+        try{
         System.out.println("datae: ");
         WordSimilarityResponseDto wordSimilarityResponseDto=wordService.wordGuess(quizNum,guessWord);
         System.out.println("결과값: " + wordSimilarityResponseDto.toString());
 
         return new ResponseEntity(wordSimilarityResponseDto, HttpStatus.OK);
+        } catch (IllegalArgumentException e){
+            return new ResponseEntity("입력값은 한글만 가능합니다!", HttpStatus.BAD_REQUEST);
+        }
     }
 
 }
