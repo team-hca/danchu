@@ -1,7 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import danchuPath from "../../icon/danchu.png";
-import questionMarkPath from "../../icon/question_mark_circle_icon.png";
+// import questionMarkPath from "../../icon/question_mark_circle_icon.png";
+import QuestionMarkModal from "../../icon/QuestionMark";
 
 const Container = styled.div`
   flex: 1;
@@ -56,7 +57,7 @@ export default function Header() {
     <Container>
       <Logo src={danchuPath} alt="Logo"></Logo>
       <QuestionMark>
-        <img src={questionMarkPath} alt="QuestionMark"></img>
+        <QuestionMarkModal />
       </QuestionMark>
     </Container>
   );
