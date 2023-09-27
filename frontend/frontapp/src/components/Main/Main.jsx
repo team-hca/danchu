@@ -12,11 +12,13 @@ const Container = styled.div`
   margin-bottom: 100px;
 `;
 
-export default function Main(props) {
+export default function Main({ quizInfo, active, words }) {
+  console.log("quizInfo : ", quizInfo);
+  console.log("active : ", active);
   return (
     <Container>
       <MainMessage />
-      <MainBox sentence = {props.sentence} active = {props.active} />
+      <MainBox quizInfo={quizInfo} active={active} words={words} />
     </Container>
   );
 }
