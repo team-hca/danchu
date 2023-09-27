@@ -64,7 +64,7 @@ export default function QuizResult() {
           {quizInfo !== undefined && words !== undefined && (
             <Main quizInfo={quizInfo} words={words} />
           )}
-          <News words={words} />)
+          <News words={words} />
         </Container>
       )}
       <Footer />
