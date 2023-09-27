@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
+import { useNavigate } from "react-router";
 import styled from "styled-components";
 import confetti from 'canvas-confetti';
 import Error from "../routes/Error";
@@ -52,6 +53,11 @@ const CongratContentButton = styled.button`
 
   width: 6.5em;
   height: 2.5em;
+
+  &:hover {
+    background: #FFF7D4;
+    color: #253846;
+  }
 `
 
 const ButtonOverlayRectangle = styled.div`
@@ -65,6 +71,7 @@ const ButtonOverlayRectangle = styled.div`
   font-size: 20px;
   width: 5.4em;
   height: 2.4em;
+
 `;
 
 const CopyButtonOverlayRectangle = styled(ButtonOverlayRectangle)`
@@ -92,6 +99,7 @@ export default function CongratModal() {
   const [timeMin, setTimeMin] = useState('');
   const [timeSec, setTimeSec] = useState('');
   const [totalGuessCnt, setTotalGuessCnt] = useState('');
+  const navigate = useNavigate();
 
   const now = new Date();
   const options = { timeZone: 'Asia/Seoul' };
@@ -129,6 +137,10 @@ https://www.danchu.today/`;
         console.error('복사 실패:', e);
         alert('결과를 복사하지 못했습니다.');
       });
+  }
+
+  const handleNewsClick = () => {
+    navigate("/result");
   }
 
   const triggerFireworksConfetti = () => {
@@ -249,6 +261,9 @@ https://www.danchu.today/`;
   
   return (winState === 1 || winState === 0) ? (
     <ModalContainer>
+
+      {/* <QuizResult quizSentence={quizSentence} /> quizSentence를 QuizResult 컴포넌트로 전달 */}
+      
       {winState === 1 ? (
         <CongratTitle>
           축하합니다! <br />
@@ -275,7 +290,7 @@ https://www.danchu.today/`;
       <ButtonContainer>
         <CongratContentButton onClick={handleCopyResult}>결과 복사</CongratContentButton>
         <CopyButtonOverlayRectangle />
-        <CongratContentButton>관련 뉴스</CongratContentButton>
+        <CongratContentButton onClick={handleNewsClick}>관련 뉴스</CongratContentButton>
         <NewsButtonOverlayRectangle />
       </ButtonContainer>
     </ModalContainer>
