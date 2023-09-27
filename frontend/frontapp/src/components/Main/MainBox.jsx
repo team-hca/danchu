@@ -43,25 +43,7 @@ const SentenceBox = styled.div`
   text-align: center;
 `;
 
-const AnswerHighlight1 = styled.span`
-  background-color: ${(props) =>
-    props.active ? "var(--primary)" : "var(--secondary)"};
-  color: white;
-  padding: 2px 20px;
-  border-radius: 5px;
-  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
-`;
-
-const AnswerHighlight2 = styled.span`
-  background-color: ${(props) =>
-    props.active ? "var(--primary)" : "var(--secondary)"};
-  color: white;
-  padding: 2px 20px;
-  border-radius: 5px;
-  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
-`;
-
-const AnswerHighlight3 = styled.span`
+const AnswerHighlight = styled.span`
   background-color: ${(props) =>
     props.active ? "var(--primary)" : "var(--secondary)"};
   color: white;
@@ -95,6 +77,7 @@ const MainButton = styled.button`
 
 export default function MainBox(props) {
   const navigate = useNavigate();
+  const { quizInfo, active, words } = props;
 
   const handleButtonClick = () => {
     navigate("/quiz"); // /quiz로 이동
@@ -106,71 +89,52 @@ export default function MainBox(props) {
     console.log(location.pathname);
   }, []);
 
-  const data = props.sentence;
-  const sentence = data.sentence;
-  const countWord = data.count;
+  const sentence = quizInfo.sentence;
+  const countWord = quizInfo.count;
+  const indexes = quizInfo.indexes;
+  const spaces = active !== undefined ? "\u00A0\u00A0\u00A0" : "\u00A0";
 
-  const word1 = data.indexes[0];
-  const word2 = data.indexes[1];
-  const word3 = data.indexes[2];
-
-  const { active } = props;
+  let wordHighlights = [];
+  if (words !== undefined) {
+    wordHighlights = [null, words.word1, words.word2, words.word3];
+  }
 
   function StyledWord({ sentence }) {
-    if (sentence.includes(word1)) {
-      return sentence.split(word1).reduce((acc, part, idx) => {
-        if (idx === 0) return [...acc, part];
-        return [
-          ...acc,
-          <AnswerHighlight1 active={active === 0} key={idx}>
-            &nbsp;&nbsp;1&nbsp;&nbsp;
-          </AnswerHighlight1>,
-          part,
-        ];
-      }, []);
-    }
-    if (sentence.includes(word2) && countWord >= 2) {
-      return sentence.split(word2).reduce((acc, part, idx) => {
-        if (idx === 0) return [...acc, part];
-        return [
-          ...acc,
-          <AnswerHighlight2 active={active === 1} key={idx}>
-            &nbsp;&nbsp;2&nbsp;&nbsp;
-          </AnswerHighlight2>,
-          part,
-        ];
-      }, []);
-    }
-    if (sentence.includes(word3) && countWord >= 3) {
-      return sentence.split(word3).reduce((acc, part, idx) => {
-        if (idx === 0) return [...acc, part];
-        return [
-          ...acc,
-          <AnswerHighlight3 active={active === 2} key={idx}>
-            &nbsp;&nbsp;3&nbsp;&nbsp;
-          </AnswerHighlight3>,
-          part,
-        ];
-      }, []);
-    }
+    for (let i = 0; i < 3; i++) {
+      if (sentence.includes(indexes[i]) && i < countWord) {
+        return sentence.split(indexes[i]).reduce((acc, part, idx) => {
+          if (idx === 0) return [...acc, part];
+          let content =
+            active !== undefined
+              ? active === i
+                ? `${i + 1}`
+                : null
+              : wordHighlights[i + 1];
 
+          return [
+            ...acc,
+            <AnswerHighlight key={idx} active={active === i}>
+              {spaces}
+              {content}
+              {spaces}
+            </AnswerHighlight>,
+            part,
+          ];
+        }, []);
+      }
+    }
     return sentence;
   }
 
-  const words = sentence.split(" ");
-
-  const splitWords = words.flatMap((sentence, idx) => {
-    return [
-      <StyledWord key={idx} sentence={sentence} active={active.toString()} />,
-      " ",
-    ];
+  const splitedWords = sentence.split(/(\s+)/).flatMap((sentencePart, idx) => {
+    return [<StyledWord key={idx} sentence={sentencePart} />];
   });
 
   return (
     <Container>
       <SentenceBox>
         <ScrollableContent>
-          <span>{splitWords}</span>
+          <span>{splitedWords}</span>
         </ScrollableContent>
       </SentenceBox>
       {location.pathname === "/quiz" ? null : (

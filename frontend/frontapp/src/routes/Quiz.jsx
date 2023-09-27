@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import H1 from "../components/H1";
-import H2 from "../components/H2";
-import Button from "../components/Button";
-import QuestionMark from "../icon/QuestionMark";
-import { Tabs, Tab, Content } from "../components/Tabs";
 import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
+import styled from "styled-components";
+import Button from "../components/Button";
+import Header from "../components/Common/Header";
 import H3 from "../components/H3";
-import SubmitButton from "../components/SubmitButton";
 import Main from "../components/Main/Main";
+import SubmitButton from "../components/SubmitButton";
+import { Content, Tab, Tabs } from "../components/Tabs";
 import sortGuess from "../util/sortGuess";
 import { useNavigate } from "react-router";
 
@@ -808,14 +807,9 @@ export default function Quiz() {
 
   return quizSentence ? (
     <Container>
-      <QuestionMarkContainer>
-        <QuestionMark />
-      </QuestionMarkContainer>
+      <Header />
       <CenterContainer>
-        <LogoContainer>
-          <H1 color="var(--secondary)">DANCHU</H1>
-        </LogoContainer>
-        <Main sentence={quizSentence} active={active} />
+        <Main quizInfo={quizSentence} active={active} />
         <TabContainer>
           <Tabs>
             <Tab
