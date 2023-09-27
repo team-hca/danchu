@@ -3,7 +3,7 @@ import { React, useEffect, useState } from "react";
 import styled from "styled-components";
 import Footer from "../components/Common/Footer";
 import Header from "../components/Common/Header";
-import Answer from "../components/News/Answer";
+import Main from "../components/Main/Main";
 import News from "../components/News/News";
 import Error from "./Error";
 
@@ -38,7 +38,7 @@ const ErrorComponent = () => {
 
 export default function QuizResult() {
   // QuizResult props로 sentence 받는 걸로 수정해야 함
-  const [quizSentence, setQuizSentence] = useState();
+  const [quizInfo, setQuizInfo] = useState();
   useEffect(() => {
     axios
       .get(
@@ -47,7 +47,7 @@ export default function QuizResult() {
           .padStart(2, "0")}-${today.getDate().toString().padStart(2, "0")}`
       )
       .then((response) => {
-        setQuizSentence(response.data);
+        setQuizInfo(response.data);
       });
   }, []);
 
@@ -61,8 +61,8 @@ export default function QuizResult() {
       ) : (
         <Container>
           <Header />
-          {quizSentence !== undefined && words !== undefined && (
-            <Answer quizSentence={quizSentence} words={words} />
+          {quizInfo !== undefined && words !== undefined && (
+            <Main quizInfo={quizInfo} words={words} />
           )}
           <News words={words} />)
         </Container>
