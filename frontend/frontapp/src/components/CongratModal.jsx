@@ -4,6 +4,7 @@ import confetti from 'canvas-confetti';
 import Error from "../routes/Error";
 import congratDanchu from '../icon/congrat_danchu.png';
 import giveupDanchu from '../icon/giveup_danchu.png';
+// import QuizResult from '../routes/QuizResult';
 
 const ModalContainer = styled.div`
   background-color: #253846;
@@ -86,6 +87,7 @@ const ErrorComponent = () => {
   return <Error />;
 }
 
+// export default function CongratModal({ quizSentence }) {
 export default function CongratModal() {
   const successContentCopy = useRef(null);
   const [timeHour, setTimeHour] = useState('');
@@ -129,6 +131,10 @@ https://www.danchu.today/`;
         console.error('복사 실패:', e);
         alert('결과를 복사하지 못했습니다.');
       });
+  }
+
+  const handleNewsClick = () => {
+    window.location.href = '/result';
   }
 
   const triggerFireworksConfetti = () => {
@@ -249,6 +255,9 @@ https://www.danchu.today/`;
   
   return (winState === 1 || winState === 0) ? (
     <ModalContainer>
+
+      {/* <QuizResult quizSentence={quizSentence} /> quizSentence를 QuizResult 컴포넌트로 전달 */}
+      
       {winState === 1 ? (
         <CongratTitle>
           축하합니다! <br />
@@ -275,7 +284,7 @@ https://www.danchu.today/`;
       <ButtonContainer>
         <CongratContentButton onClick={handleCopyResult}>결과 복사</CongratContentButton>
         <CopyButtonOverlayRectangle />
-        <CongratContentButton>관련 뉴스</CongratContentButton>
+        <CongratContentButton onClick={handleNewsClick}>관련 뉴스</CongratContentButton>
         <NewsButtonOverlayRectangle />
       </ButtonContainer>
     </ModalContainer>
