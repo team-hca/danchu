@@ -53,6 +53,11 @@ const CongratContentButton = styled.button`
 
   width: 6.5em;
   height: 2.5em;
+
+  &:hover {
+    background: #FFF7D4;
+    color: #253846;
+  }
 `
 
 const ButtonOverlayRectangle = styled.div`
@@ -66,6 +71,7 @@ const ButtonOverlayRectangle = styled.div`
   font-size: 20px;
   width: 5.4em;
   height: 2.4em;
+
 `;
 
 const CopyButtonOverlayRectangle = styled(ButtonOverlayRectangle)`
@@ -93,6 +99,7 @@ export default function CongratModal() {
   const [timeMin, setTimeMin] = useState('');
   const [timeSec, setTimeSec] = useState('');
   const [totalGuessCnt, setTotalGuessCnt] = useState('');
+  const [hover, setHover] = useState(false);
   const navigate = useNavigate();
 
   const now = new Date();
