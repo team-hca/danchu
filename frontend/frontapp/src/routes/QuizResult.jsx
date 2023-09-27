@@ -5,6 +5,7 @@ import Footer from "../components/Common/Footer";
 import Header from "../components/Common/Header";
 import Answer from "../components/News/Answer";
 import News from "../components/News/News";
+import Error from "./Error";
 
 const Container = styled.div`
   width: auto;
@@ -29,6 +30,11 @@ function getWordsFromLocalStorage() {
       guessTwo && guessTwo[0] && guessTwo[0][0] ? guessTwo[0][0].word : null,
   };
 }
+const winState = JSON.parse(localStorage.getItem("winState"));
+
+const ErrorComponent = () => {
+  return <Error />;
+};
 
 export default function QuizResult() {
   // QuizResult props로 sentence 받는 걸로 수정해야 함
@@ -45,19 +51,22 @@ export default function QuizResult() {
       });
   }, []);
 
-  // 로컬에서 words 가져오기
+  // 로컬에서 정답 가져오기
   const words = getWordsFromLocalStorage();
 
   return (
     <>
-      {/* <Navbar /> */}
-      <Container>
-        <Header />
-        {quizSentence !== undefined && words !== undefined && (
-          <Answer quizSentence={quizSentence} words={words} />
-        )}
-        <News words={words} />
-      </Container>
+      {winState === -1 ? (
+        <ErrorComponent />
+      ) : (
+        <Container>
+          <Header />
+          {quizSentence !== undefined && words !== undefined && (
+            <Answer quizSentence={quizSentence} words={words} />
+          )}
+          <News words={words} />)
+        </Container>
+      )}
       <Footer />
     </>
   );
