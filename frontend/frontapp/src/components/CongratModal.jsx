@@ -99,7 +99,6 @@ export default function CongratModal() {
   const [timeMin, setTimeMin] = useState('');
   const [timeSec, setTimeSec] = useState('');
   const [totalGuessCnt, setTotalGuessCnt] = useState('');
-  const [hover, setHover] = useState(false);
   const navigate = useNavigate();
 
   const now = new Date();
