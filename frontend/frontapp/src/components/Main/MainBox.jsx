@@ -107,7 +107,8 @@ export default function MainBox(props) {
           if (idx === 0) return [...acc, part];
           let content =
             active !== undefined
-              ? localStorage.getItem(guesses[i]) !== null
+              ? localStorage.getItem(guesses[i]) !== null &&
+                JSON.parse(localStorage.getItem(guesses[i]))[0] !== null
                 ? JSON.parse(localStorage.getItem(guesses[i]))[0][0]
                     .similarity === 100
                   ? JSON.parse(localStorage.getItem(guesses[i]))[0][0].word
