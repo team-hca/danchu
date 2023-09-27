@@ -1,4 +1,5 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
+
 export const Tabs = styled.div`
   overflow: hidden;
   font-family: Open Sans;
@@ -26,6 +27,13 @@ export const Tab = styled.button`
   :hover {
     color: white;
   }
+
+  ${props =>
+    props.count === 1 &&
+    css`
+      display:none;
+    `}
+
 `;
 
 export const Content = styled.div`
