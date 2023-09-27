@@ -1,10 +1,10 @@
 import React, { useRef, useEffect, useState } from 'react';
+import { useNavigate } from "react-router";
 import styled from "styled-components";
 import confetti from 'canvas-confetti';
 import Error from "../routes/Error";
 import congratDanchu from '../icon/congrat_danchu.png';
 import giveupDanchu from '../icon/giveup_danchu.png';
-// import QuizResult from '../routes/QuizResult';
 
 const ModalContainer = styled.div`
   background-color: #253846;
@@ -87,13 +87,13 @@ const ErrorComponent = () => {
   return <Error />;
 }
 
-// export default function CongratModal({ quizSentence }) {
 export default function CongratModal() {
   const successContentCopy = useRef(null);
   const [timeHour, setTimeHour] = useState('');
   const [timeMin, setTimeMin] = useState('');
   const [timeSec, setTimeSec] = useState('');
   const [totalGuessCnt, setTotalGuessCnt] = useState('');
+  const navigate = useNavigate();
 
   const now = new Date();
   const options = { timeZone: 'Asia/Seoul' };
@@ -134,7 +134,7 @@ https://www.danchu.today/`;
   }
 
   const handleNewsClick = () => {
-    window.location.href = '/result';
+    navigate("/result");
   }
 
   const triggerFireworksConfetti = () => {
