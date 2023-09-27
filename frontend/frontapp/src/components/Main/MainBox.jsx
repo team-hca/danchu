@@ -93,24 +93,27 @@ export default function MainBox(props) {
   const countWord = quizInfo.count;
   const indexes = quizInfo.indexes;
   const spaces = active !== undefined ? "\u00A0\u00A0\u00A0" : "\u00A0";
+  const guesses = ["guess", "guessOne", "guessTwo"];
 
   let wordHighlights = [];
   if (words !== undefined) {
-    wordHighlights = [null, words.word1, words.word2, words.word3];
+    wordHighlights = [words.word1, words.word2, words.word3];
   }
 
   function StyledWord({ sentence }) {
-    for (let i = 0; i < 3; i++) {
-      if (sentence.includes(indexes[i]) && i < countWord) {
+    for (let i = 0; i < countWord; i++) {
+      if (sentence.includes(indexes[i])) {
         return sentence.split(indexes[i]).reduce((acc, part, idx) => {
           if (idx === 0) return [...acc, part];
           let content =
             active !== undefined
-              ? active === i
-                ? `${i + 1}`
-                : null
-              : wordHighlights[i + 1];
-
+              ? localStorage.getItem(guesses[i]) !== null
+                ? JSON.parse(localStorage.getItem(guesses[i]))[0][0]
+                    .similarity === 100
+                  ? JSON.parse(localStorage.getItem(guesses[i]))[0][0].word
+                  : `${i + 1}`
+                : `${i + 1}`
+              : wordHighlights[i];
           return [
             ...acc,
             <AnswerHighlight key={idx} active={active === i}>
