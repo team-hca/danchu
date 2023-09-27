@@ -247,7 +247,7 @@ https://www.danchu.today/`;
   const danchuTime = "걸린 시간 : " + timeHour + "시간 " + timeMin + "분 " + timeSec + "초";
   const winState = parseInt(localStorage.getItem('winState'));
   
-  return winState !== -1 ? (
+  return (winState === 1 || winState === 0) ? (
     <ModalContainer>
       {winState === 1 ? (
         <CongratTitle>
@@ -259,7 +259,7 @@ https://www.danchu.today/`;
           오늘의 단추를 포기하셨습니다.
         </CongratTitle>
       ) : null}
-
+  
       {winState === 1 ? (
         <img src={congratDanchu} alt="Congrat Danchu" style={{ width: '150px' }} />
       ) : winState === 0 ? (
