@@ -23,8 +23,8 @@ subfolderPath = os.path.join(dir, subfolderName)
 today = datetime.now()
 
 # 학습된 모델 가져오기
-model = FastText.load('ft230920_3.model')
-
+modelInNnp = FastText.load('ft230916_2.model')
+modelNotNnp = FastText.load('ft230927_4.model')
 
 mecab = MeCab()
 
@@ -51,12 +51,13 @@ def mergeTextFiles(inputFile, outputFile):
   # 숫자 걸러져서 '년, 월, 일, 개, 명, 만명, 세'만 남아버림. . . (6매, 290마력, 2계단, 188cm,20kg,3개동..)
   # ->보이는 것만이라도 불용어 처리
 
-# 불용어 처리 -> 리스트에 담음
+# 불용어,고유명사 처리 -> 리스트에 담음
 def doTextCleaning(inputFile,outputFile):
   try:
     with open(os.path.join(subfolderPath,'stopwords.txt'), 'r', encoding='utf-8') as f:
       listFile = f.readlines()
       stopwords = [listFile[i].strip() for i in range(len(listFile))]
+      #print(stopwords)
 
     tokenTxtFile = open(outputFile, "w", encoding="utf-8")
     list = []
@@ -71,13 +72,23 @@ def doTextCleaning(inputFile,outputFile):
         for c in temp:
           c = re.sub("[^ㄱ-ㅎㅏ-ㅣ가-힣 ]","",c)
           flag = True
-          if flag and c and c not in stopwords: #빈 경우, 불용어인 경우 제외
-            for li in mecab.pos(c):
-              if 'NNP' == li[1]:
+          if c and c in stopwords: #불용어인 경우 제외
+            flag = False
+
+          if c and c not in stopwords:
+            for li in mecab.pos(c): # +로 합쳐져서 나올 수도 있어서 .. 쪼개야함
+              if '+' in li[1]:# 합쳐진 애면
+                flag = False
+                break
+              #partsOfSpeech = li[1].split('+')
+              #print(partsOfSpeech)
+              #for part in partsOfSpeech:
+              if li[1] != 'NNG': #일반명사가 아니라면
+                #if 'NNP' == li[1]: #고유명사인 경우 제외
                 flag = False
                 break
 
-          if flag:
+          if flag and c: # 빈 경우 제외
             result.append(c)
           flag = True
         if result: #빈 경우 제외
@@ -87,11 +98,11 @@ def doTextCleaning(inputFile,outputFile):
 
     myJsonString = json.dumps(list, ensure_ascii=False)
     tokenTxtFile.write(myJsonString)
-  except OSError as e:
+  except Exception as e:
     #throw 같은 것
     raise e
   else:
-    return '전처리 완료'
+    print('전처리 완료')
   
 #데이터로 모델 생성
 def createModel(inputFile):
@@ -125,80 +136,44 @@ def changeModel():
   modelName = 'ft'+str((today+timedelta(days=1)).strftime('%y%m%d'))+'.model'
   model = FastText.load(modelName)
 
-#내일 사용할 모델을..할텐데  
-#데이터로 모델 학습
-# 수정 필요
 def doModelLearning(inputFile):
   try:
     with open(inputFile, 'r', encoding="utf-8") as f:
-        text = f.readlines()
-        data = json.loads(text[0])
+      text = f.readlines()
+      data = json.loads(text[0])
 
-    # 임베딩 프로세스에 대한 tqdm 프로그레스 바를 생성합니다.
-    with tqdm(total=7, desc="임베딩 훈련 중") as pbar:
-        embedding = FastText(data, vector_size=150, window=5, negative=5, epochs=7, min_count=5, workers=5, sg=1)
+      #ft+날짜 ex : ft230912.model
+      #내일 날짜로 새 모델 저장
 
-        # 각 에포크가 완료될 때마다 프로그레스 바를 업데이트합니다.
-        for _ in range(7):
-            embedding.train(data, total_examples=len(data), epochs=1)
-            pbar.update(1)
+      # 모델 재학습
+      # lr은 학습률. 얼마나 큰 단계로 가중치를 업데이트할지 결정
+      # 높은 학습률은 0.1이상 낮은 학습률을 0.01 이하
+      # 학습률이 높으면 빠르게 학습하지만, 너무 높으면 발산?할 수 있음 
+      # 낮으면 수렴할 가능성이 높지만 너무 오래걸릴 수도 있고 하한값에 갈 수도 o
+      model.build_vocab(data, update=True) #단어 사전 업데이트
+      model.train(data, total_examples=model.corpus_count, epochs=model.epochs) #모델 학습.
 
-    newModelName = 'ft' + str(today.strftime('%y%m%d')) + '_3.model'
-    embedding.save(newModelName)  # 임베딩 모델을 저장합니다.
+      # 새로운 모델을 저장
+      newModelName = 'ft'+str((today).strftime('%y%m%d'))+'_4.model'
+      model.save(newModelName)
 
-  except OSError as e:
-    # OSError를 처리합니다.
-    raise e
-  else:
-    print('학습 완료')
-  
-# 고유명사 처리 -> 리스트에 담음
-def doTextCleaningNNP(inputFile,outputFile):
-  try:
-    tokenTxtFile = open(outputFile, "w", encoding="utf-8")
-    list = []
-
-    with open(inputFile, 'r', encoding="utf-8") as f:
-      docs = f.readlines()
-
-      #문장
-      for doc in docs:
-        temp = doc.strip().split(',')
-        result = []
-
-        #단어
-        # 고유명사 제거
-        for c in temp:
-          c = re.sub("[^ㄱ-ㅎㅏ-ㅣ가-힣 ]","",c)
-          flag = True
-          if flag and c :
-            for li in mecab.pos(c): 
-              # print(li)
-              if 'NNP' == li[1]:
-                flag = False
-                break
-
-          if flag:
-            result.append(c)
-          flag = True
-        if result: #빈 경우 제외
-          list.append(result)
-
-    myJsonString = json.dumps(list, ensure_ascii=False)
-    tokenTxtFile.write(myJsonString)
-  except OSError as e:
+  except Exception as e:
     #throw 같은 것
     raise e
   else:
-    return '전처리 완료' 
+    print('재학습 완료')
 
 #정답 단어의 유사도 1000위까지 뽑기
-#만개 디비에 넣어둘까?
-def findWordSimilarityTop1000(answer):
+def findWordSimilarityTop1000(answer, answerType):
   try:
-    #총 단어의 개수 : 235698 인듯 -> 위키만 학습한 모델 기준
     #<class 'list'>
-    similarWords=model.wv.most_similar(answer,topn=1000) 
+    if answerType: #고유명사면
+      #print("NNP")
+      similarWords=modelInNnp.wv.most_similar(answer,topn=1000) 
+
+    else: #고유명사아니면
+      #print("NotNNp")
+      similarWords=modelNotNnp.wv.most_similar(answer,topn=1000) 
 
     similarWordsToJson = json.dumps(similarWords, ensure_ascii=False)
 
@@ -213,13 +188,35 @@ def findWordSimilarityTop1000(answer):
 #쓰여진 단어에 대해 유사도 등수 + 유사도 뽑아주기
 def findWordSimilarity(answer,inputWord):
   try:
-    # 실수(float)입니다. 이 값은 -1에서 1 사이의 범위에 있으며, 두 단어나 단어 벡터가 유사할수록 값이 더 큽니다. 0은 두 단어나 단어 벡터가 관련이 없음을 나타냅니다.
-    similarityBetweenWords = model.wv.similarity(answer, inputWord)
+    # 입력값 고유명사 판단
+    answerType = True
+    for li in mecab.pos(inputWord): # +로 합쳐져서 나올 수도 있어서 .. 쪼개야함
+      print(li[1])
+      if '+' in li[1]:# 합쳐진 애면
+        answerType = False
+        break
+      if li[1] != 'NNP': # 고유명사가 아니라면
+        answerType = False
+        break
 
-    print(similarityBetweenWords)
+    print(answerType)
+
+    # 실수(float)입니다. 이 값은 -1에서 1 사이의 범위에 있으며, 두 단어나 단어 벡터가 유사할수록 값이 더 큽니다. 0은 두 단어나 단어 벡터가 관련이 없음을 나타냅니다.
+    if answerType: #고유명사라면
+      similarityBetweenWords = modelInNnp.wv.similarity(answer, inputWord)
+    
+    else: #고유명사가 아니라면
+      similarityBetweenWords = modelNotNnp.wv.similarity(answer, inputWord)
+
+    #print(similarityBetweenWords)
     # <class 'numpy.float32'>
     wordSimilarityRespDto = {'정답': answer,'입력값':inputWord,'유사도': similarityBetweenWords.astype(float), '순위':-1}
-    similarWords=model.wv.most_similar(answer,topn=1000)
+
+    if answerType: #고유명사면
+      similarWords=modelInNnp.wv.most_similar(answer,topn=1000) 
+
+    else: #고유명사아니면
+      similarWords=modelNotNnp.wv.most_similar(answer,topn=1000) 
 
     # 1000개 안에 있을 경우에만 해주자
     for idx, (similarWord, similarity) in enumerate(similarWords):
@@ -227,7 +224,7 @@ def findWordSimilarity(answer,inputWord):
         wordSimilarityRespDto['순위'] = idx + 1
         print(f"{idx + 1}위")
         break
-  except OSError as e:
+  except Exception as e:
     #throw 같은 것
     raise e
   else:
