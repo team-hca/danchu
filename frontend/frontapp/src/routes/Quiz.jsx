@@ -9,7 +9,6 @@ import Main from "../components/Main/Main";
 import SubmitButton from "../components/SubmitButton";
 import { Content, Tab, Tabs } from "../components/Tabs";
 import sortGuess from "../util/sortGuess";
-import { useNavigate } from "react-router";
 
 const onClickGiveUp = (message = null, onConfirm, onCancel) => {
   if (!onConfirm || typeof onConfirm !== "function") {
@@ -947,13 +946,16 @@ export default function Quiz() {
                         JSON.parse(localStorage.getItem("guess"))[0].some(
                           (g) => g.word === recentGuess.word
                         )
-                          ? JSON.parse(localStorage.getItem("guess"))[0]
-                              .length > 0 &&
-                            JSON.parse(localStorage.getItem("guess"))[0].find(
+                          ? 
+                            (JSON.parse(localStorage.getItem("guess"))[0].find(
                               (item, index, arr) => {
                                 return item.word === recentGuess.word;
                               }
-                            ).rank
+                            ).rank === 0 ? "정답!" : JSON.parse(localStorage.getItem("guess"))[0].find(
+                              (item, index, arr) => {
+                                return item.word === recentGuess.word;
+                              }
+                            ).rank )
                           : JSON.parse(localStorage.getItem("guess"))[1]
                               .length > 0 &&
                             JSON.parse(localStorage.getItem("guess"))[1].find(
@@ -961,14 +963,17 @@ export default function Quiz() {
                                 return item.word === recentGuess.word;
                               }
                             )
-                          ? JSON.parse(localStorage.getItem("guess"))[1]
-                              .length > 0 &&
-                            JSON.parse(localStorage.getItem("guess"))[1].find(
+                          ? 
+                          JSON.parse(localStorage.getItem("guess"))[1].find(
                               (item, index, arr) => {
                                 return item.word === recentGuess.word;
                               }
-                            ).rank
-                          : recentGuess.rank}
+                            ).rank === -1 ? "1000위 이상": "이상"
+                          : 
+                          recentGuess.rank === -1?
+                          "1000위 이상" : "이상"
+                          
+                          }
                       </TdRank>
                     </RecentTr>
                   </>
@@ -988,7 +993,7 @@ export default function Quiz() {
                                 ? guess.similarity.toFixed(2)
                                 : guess.similarity}
                             </TdPercent>
-                            <TdRank>{guess.rank}</TdRank>
+                            <TdRank>{guess.rank===0?"정답!":guess.rank}</TdRank>
                           </tr>
                         )
                       ) : (
@@ -1000,7 +1005,7 @@ export default function Quiz() {
                               ? guess.similarity.toFixed(2)
                               : guess.similarity}
                           </TdPercent>
-                          <TdRank>{guess.rank}</TdRank>
+                          <TdRank>{guess.rank===0?"정답!": guess.rank}</TdRank>
                         </tr>
                       )
                   )}
@@ -1019,7 +1024,7 @@ export default function Quiz() {
                                 ? guess.similarity.toFixed(2)
                                 : guess.similarity}
                             </TdPercent>
-                            <TdRank>{guess.rank}</TdRank>
+                            <TdRank>{guess.rank===-1?"1000위 이상":guess.rank}</TdRank>
                           </tr>
                         )
                       ) : (
@@ -1031,7 +1036,7 @@ export default function Quiz() {
                               ? guess.similarity.toFixed(2)
                               : guess.similarity}
                           </TdPercent>
-                          <TdRank>{guess.rank}</TdRank>
+                          <TdRank>{guess.rank===-1?"1000위 이상": guess.rank}</TdRank>
                         </tr>
                       )
                   )}
@@ -1140,33 +1145,39 @@ export default function Quiz() {
                           : recentGuessOne.similarity.toFixed(2)}
                       </TdPercent>
                       <TdRank>
-                        {JSON.parse(localStorage.getItem("guessOne"))[0]
-                          .length > 0 &&
+                        {JSON.parse(localStorage.getItem("guessOne"))[0].length >
+                          0 &&
                         JSON.parse(localStorage.getItem("guessOne"))[0].some(
                           (g) => g.word === recentGuessOne.word
                         )
-                          ? JSON.parse(localStorage.getItem("guessOne"))[0]
-                              .length > 0 &&
-                            JSON.parse(
-                              localStorage.getItem("guessOne")
-                            )[0].find((item, index, arr) => {
-                              return item.word === recentGuessOne.word;
-                            }).rank
+                          ? 
+                            (JSON.parse(localStorage.getItem("guessOne"))[0].find(
+                              (item, index, arr) => {
+                                return item.word === recentGuessOne.word;
+                              }
+                            ).rank === 0 ? "정답!" : JSON.parse(localStorage.getItem("guessOne"))[0].find(
+                              (item, index, arr) => {
+                                return item.word === recentGuessOne.word;
+                              }
+                            ).rank )
                           : JSON.parse(localStorage.getItem("guessOne"))[1]
                               .length > 0 &&
-                            JSON.parse(
-                              localStorage.getItem("guessOne")
-                            )[1].find((item, index, arr) => {
-                              return item.word === recentGuessOne.word;
-                            })
-                          ? JSON.parse(localStorage.getItem("guessOne"))[1]
-                              .length > 0 &&
-                            JSON.parse(
-                              localStorage.getItem("guessOne")
-                            )[1].find((item, index, arr) => {
-                              return item.word === recentGuessOne.word;
-                            }).rank
-                          : recentGuessOne.rank}
+                            JSON.parse(localStorage.getItem("guessOne"))[1].find(
+                              (item, index, arr) => {
+                                return item.word === recentGuessOne.word;
+                              }
+                            )
+                          ? 
+                          JSON.parse(localStorage.getItem("guessOne"))[1].find(
+                              (item, index, arr) => {
+                                return item.word === recentGuessOne.word;
+                              }
+                            ).rank === -1 ? "1000위 이상": "이상"
+                          : 
+                          recentGuessOne.rank === -1?
+                          "1000위 이상" : "이상"
+                          
+                          }
                       </TdRank>
                     </RecentTr>
                   </>
@@ -1187,7 +1198,7 @@ export default function Quiz() {
                                 ? guess.similarity.toFixed(2)
                                 : guess.similarity}
                             </TdPercent>
-                            <TdRank>{guess.rank}</TdRank>
+                            <TdRank>{guess.rank===0?"정답!":guess.rank}</TdRank>
                           </tr>
                         )
                       ) : (
@@ -1199,7 +1210,7 @@ export default function Quiz() {
                               ? guess.similarity.toFixed(2)
                               : guess.similarity}
                           </TdPercent>
-                          <TdRank>{guess.rank}</TdRank>
+                          <TdRank>{guess.rank===0?"정답!":guess.rank}</TdRank>
                         </tr>
                       )
                   )}
@@ -1218,7 +1229,7 @@ export default function Quiz() {
                                 ? guess.similarity.toFixed(2)
                                 : guess.similarity}
                             </TdPercent>
-                            <TdRank>{guess.rank}</TdRank>
+                            <TdRank>{guess.rank===-1?"1000위 이상":guess.rank}</TdRank>
                           </tr>
                         )
                       ) : (
@@ -1230,7 +1241,7 @@ export default function Quiz() {
                               ? guess.similarity.toFixed(2)
                               : guess.similarity}
                           </TdPercent>
-                          <TdRank>{guess.rank}</TdRank>
+                          <TdRank>{guess.rank===-1?"1000위 이상":guess.rank}</TdRank>
                         </tr>
                       )
                   )}
@@ -1344,33 +1355,39 @@ export default function Quiz() {
                           : recentGuessTwo.similarity.toFixed(2)}
                       </TdPercent>
                       <TdRank>
-                        {JSON.parse(localStorage.getItem("guessTwo"))[0]
-                          .length > 0 &&
+                      {JSON.parse(localStorage.getItem("guessTwo"))[0].length >
+                          0 &&
                         JSON.parse(localStorage.getItem("guessTwo"))[0].some(
                           (g) => g.word === recentGuessTwo.word
                         )
-                          ? JSON.parse(localStorage.getItem("guessTwo"))[0]
-                              .length > 0 &&
-                            JSON.parse(
-                              localStorage.getItem("guessTwo")
-                            )[0].find((item, index, arr) => {
-                              return item.word === recentGuessTwo.word;
-                            }).rank
+                          ? 
+                            (JSON.parse(localStorage.getItem("guessTwo"))[0].find(
+                              (item, index, arr) => {
+                                return item.word === recentGuessTwo.word;
+                              }
+                            ).rank === 0 ? "정답!" : JSON.parse(localStorage.getItem("guessTwo"))[0].find(
+                              (item, index, arr) => {
+                                return item.word === recentGuessTwo.word;
+                              }
+                            ).rank )
                           : JSON.parse(localStorage.getItem("guessTwo"))[1]
                               .length > 0 &&
-                            JSON.parse(
-                              localStorage.getItem("guessTwo")
-                            )[1].find((item, index, arr) => {
-                              return item.word === recentGuessTwo.word;
-                            })
-                          ? JSON.parse(localStorage.getItem("guessTwo"))[1]
-                              .length > 0 &&
-                            JSON.parse(
-                              localStorage.getItem("guessTwo")
-                            )[1].find((item, index, arr) => {
-                              return item.word === recentGuessTwo.word;
-                            }).rank
-                          : recentGuessTwo.rank}
+                            JSON.parse(localStorage.getItem("guessTwo"))[1].find(
+                              (item, index, arr) => {
+                                return item.word === recentGuessTwo.word;
+                              }
+                            )
+                          ? 
+                          JSON.parse(localStorage.getItem("guessTwo"))[1].find(
+                              (item, index, arr) => {
+                                return item.word === recentGuessTwo.word;
+                              }
+                            ).rank === -1 ? "1000위 이상": "이상"
+                          : 
+                          recentGuessTwo.rank === -1?
+                          "1000위 이상" : "이상"
+                          
+                          }
                       </TdRank>
                     </RecentTr>
                   </>
@@ -1407,7 +1424,7 @@ export default function Quiz() {
                                 ? guess.similarity.toFixed(2)
                                 : guess.similarity}
                             </TdPercent>
-                            <TdRank>{guess.rank}</TdRank>
+                            <TdRank>{guess.rank===0?"정답!": guess.rank}</TdRank>
                           </tr>
                         )
                       ) : (
@@ -1419,7 +1436,7 @@ export default function Quiz() {
                               ? guess.similarity.toFixed(2)
                               : guess.similarity}
                           </TdPercent>
-                          <TdRank>{guess.rank}</TdRank>
+                          <TdRank>{guess.rank===0?"정답!":guess.rank}</TdRank>
                         </tr>
                       )
                   )}
@@ -1455,7 +1472,7 @@ export default function Quiz() {
                                 ? guess.similarity.toFixed(2)
                                 : guess.similarity}
                             </TdPercent>
-                            <TdRank>{guess.rank}</TdRank>
+                            <TdRank>{guess.rank===-1?"1000위 이상":guess.rank}</TdRank>
                           </tr>
                         )
                       ) : (
@@ -1467,7 +1484,7 @@ export default function Quiz() {
                               ? guess.similarity.toFixed(2)
                               : guess.similarity}
                           </TdPercent>
-                          <TdRank>{guess.rank}</TdRank>
+                          <TdRank>{guess.rank===-1?"1000위 이상": guess.rank}</TdRank>
                         </tr>
                       )
                   )}
