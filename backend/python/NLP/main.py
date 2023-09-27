@@ -99,23 +99,34 @@ def findTodayWordsSimilarity():
         quizCollectionOutput = db.daily_quiz.history
 
         # 정답들 몽고db에서 꺼내오기
-
-        findData = quizCollectionOutput.find({"date": (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d")}, {'word1':1,'word2':1,"word3":1, '_id': 0})
+        findData = quizCollectionOutput.find({"date": (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d")}, {'word1':1,'word2':1,"word3":1, 'word1_type':1, 'word2_type':1, 'word3_type':1, '_id': 0})
 
         answers = []
+        answersTypes = []
 
+        #print(*findData)
+        #findData...한번만 꺼낼 수 있음
         for docu in findData:
             answers.append(docu['word1'])
             answers.append(docu['word2'])
             answers.append(docu['word3'])
+            answersTypes.append(bool(docu['word1_type']))
+            answersTypes.append(bool(docu['word2_type']))
+            answersTypes.append(bool(docu['word3_type']))
+        #print(*answers)
+        #print(len(answers))
+        #print(*answersTypes)
 
         # 모델로 정답들 탑 1000 뽑고 몽고db에 넣기
-
         answerMostSimilarities = []
+
         for i in range(len(answers)):
-            if answers[i] :
-                answerMostSimilarities.append(FastText.findWordSimilarityTop1000(answers[i]))
-            else : 
+            if answers[i] : #정답 단어가 비어있지 않다면
+                #print("ok")
+                answerMostSimilarities.append(FastText.findWordSimilarityTop1000(answers[i],answersTypes[i]))
+
+            else :
+                #print("not")
                 #단어가 3개가 아닐 경우 처리
                 answerMostSimilarities.append({'정답': ' ', '유사도 높은 순 1000': ' '})
 
@@ -125,6 +136,9 @@ def findTodayWordsSimilarity():
             "word1": answers[0],
             "word2" : answers[1],
             "word3" : answers[2],
+            "word1_type" : answersTypes[0],
+            "word2_type" : answersTypes[1],
+            "word3_type" : answersTypes[2],
             "word1_top1000" : answerMostSimilarities[0]['유사도 높은 순 1000'],
             "word2_top1000" : answerMostSimilarities[1]['유사도 높은 순 1000'],
             "word3_top1000" : answerMostSimilarities[2]['유사도 높은 순 1000'],
