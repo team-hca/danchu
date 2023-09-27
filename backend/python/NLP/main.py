@@ -99,7 +99,7 @@ def findTodayWordsSimilarity():
         quizCollectionOutput = db.daily_quiz.history
 
         # 정답들 몽고db에서 꺼내오기
-        findData = quizCollectionOutput.find({"date": (datetime.now() + timedelta(days=2)).strftime("%Y-%m-%d")}, {'word1':1,'word2':1,"word3":1, 'word1_type':1, 'word2_type':1, 'word3_type':1, '_id': 0})
+        findData = quizCollectionOutput.find({"date": (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d")}, {'word1':1,'word2':1,"word3":1, 'word1_type':1, 'word2_type':1, 'word3_type':1, '_id': 0})
 
         answers = []
         answersTypes = []
