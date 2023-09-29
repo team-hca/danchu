@@ -231,12 +231,19 @@ export default function Quiz() {
   const [recentCountOne, setRecentCountOne] = useState();
   const [recentCountTwo, setRecentCountTwo] = useState();
   const [inputInitialize, setInputInitialize] = useState();
+  const [inputInitializeOne, setInputInitializeOne] = useState();
+  const [inputInitializeTwo, setInputInitializeTwo] = useState();
   const [indexes, setIndexes] = useState();
   const navigate = useNavigate();
 
   const giveUpConfirm = () => {
     alert("포기했습니다.");
-    localStorage.setItem("winState", 0);
+    // localStorage.setItem("winState", 0);
+    // if (quizCount === 1) {
+    //   let arr = localStorage.getItem("guess")? JSON.parse(localStorage.getItem("guess")): [[],[]];
+    //   let obj = new Object();
+
+    // }
     navigate("/congrat");
   };
   const cancelConfirm = () => {
@@ -662,8 +669,9 @@ export default function Quiz() {
       // setInputValueOne("");
     } else {
       recordStartTime();
-      sortGuess("guessOne");
       saveLocalStorageOne();
+      sortGuess("guessOne");
+      setInputInitializeOne("");
       return;
     }
   };
@@ -678,8 +686,9 @@ export default function Quiz() {
       // setInputValueTwo("");
     } else {
       recordStartTime();
-      sortGuess("guessTwo");
       saveLocalStorageTwo();
+      sortGuess("guessTwo");
+      setInputInitializeTwo("");
       return;
     }
   };
@@ -701,39 +710,37 @@ export default function Quiz() {
     ) {
     } else {
       recordStartTime();
-      sortGuess("guess");
       saveLocalStorage();
+      sortGuess("guess");
+      setInputInitialize("");
       return;
     }
   };
 
-  // const handleOnKeyPress = (e) => {
-  //   if (e.key === "Enter") {
-  //     if (inputValue.trim() === "" && !inputValue) {
-  //     } else {
-  //       recordStartTime();
-  //       saveLocalStorage();
-  //     }
-  //   }
-  // };
-  // const handleOnKeyPressOne = (e) => {
-  //   if (e.key === "Enter") {
-  //     if (inputValueOne.trim() === "" && !inputValueOne) {
-  //     } else {
-  //       recordStartTime();
-  //       saveLocalStorageOne();
-  //     }
-  //   }
-  // };
-  // const handleOnKeyPressTwo = (e) => {
-  //   if (e.key === "Enter") {
-  //     if (inputValueTwo.trim() === "" && !inputValueTwo) {
-  //     } else {
-  //       recordStartTime();
-  //       saveLocalStorageTwo();
-  //     }
-  //   }
-  // };
+  const handleOnKeyPress = (e) => {
+    if (e.key === "Enter") {
+      if (inputValue.trim() === "" || !inputValue) {
+      } else {
+        onSubmit();
+      }
+    }
+  };
+  const handleOnKeyPressOne = (e) => {
+    if (e.key === "Enter") {
+      if (inputValueOne.trim() === "" && !inputValueOne) {
+      } else {
+        onSubmitOne();
+      }
+    }
+  };
+  const handleOnKeyPressTwo = (e) => {
+    if (e.key === "Enter") {
+      if (inputValueTwo.trim() === "" && !inputValueTwo) {
+      } else {
+        onSubmitTwo();
+      }
+    }
+  };
 
   const handleClick = (e) => {
     const index = parseInt(e.target.id, 0);
@@ -790,16 +797,19 @@ export default function Quiz() {
   }, []);
 
   const handleInputChange = (event) => {
+    setInputInitialize(event.target.value);
     setInputValue(event.target.value);
     console.log("zero: " + inputValue);
   };
 
   const handleInputChangeOne = (event) => {
+    setInputInitializeOne(event.target.value);
     setInputValueOne(event.target.value);
     console.log("one: " + inputValueOne);
   };
 
   const handleInputChangeTwo = (event) => {
+    setInputInitializeTwo(event.target.value);
     setInputValueTwo(event.target.value);
     console.log("two: " + inputValueTwo);
   };
@@ -849,7 +859,7 @@ export default function Quiz() {
                 onChange={handleInputChange}
                 required
                 type="text"
-                // onKeyDown={handleOnKeyPress}
+                onKeyDown={handleOnKeyPress}
                 value={inputInitialize}
               ></InputStyle>
               <SubmitButton onClick={onSubmit}>단추</SubmitButton>
@@ -946,16 +956,17 @@ export default function Quiz() {
                         JSON.parse(localStorage.getItem("guess"))[0].some(
                           (g) => g.word === recentGuess.word
                         )
-                          ? 
-                            (JSON.parse(localStorage.getItem("guess"))[0].find(
+                          ? JSON.parse(localStorage.getItem("guess"))[0].find(
                               (item, index, arr) => {
                                 return item.word === recentGuess.word;
                               }
-                            ).rank === 0 ? "정답!" : JSON.parse(localStorage.getItem("guess"))[0].find(
-                              (item, index, arr) => {
-                                return item.word === recentGuess.word;
-                              }
-                            ).rank )
+                            ).rank === 0
+                            ? "정답!"
+                            : JSON.parse(localStorage.getItem("guess"))[0].find(
+                                (item, index, arr) => {
+                                  return item.word === recentGuess.word;
+                                }
+                              ).rank
                           : JSON.parse(localStorage.getItem("guess"))[1]
                               .length > 0 &&
                             JSON.parse(localStorage.getItem("guess"))[1].find(
@@ -963,17 +974,16 @@ export default function Quiz() {
                                 return item.word === recentGuess.word;
                               }
                             )
-                          ? 
-                          JSON.parse(localStorage.getItem("guess"))[1].find(
+                          ? JSON.parse(localStorage.getItem("guess"))[1].find(
                               (item, index, arr) => {
                                 return item.word === recentGuess.word;
                               }
-                            ).rank === -1 ? "1000위 이상": "이상"
-                          : 
-                          recentGuess.rank === -1?
-                          "1000위 이상" : "이상"
-                          
-                          }
+                            ).rank === -1
+                            ? "1000위 이상"
+                            : "이상"
+                          : recentGuess.rank === -1
+                          ? "1000위 이상"
+                          : "이상"}
                       </TdRank>
                     </RecentTr>
                   </>
@@ -993,7 +1003,9 @@ export default function Quiz() {
                                 ? guess.similarity.toFixed(2)
                                 : guess.similarity}
                             </TdPercent>
-                            <TdRank>{guess.rank===0?"정답!":guess.rank}</TdRank>
+                            <TdRank>
+                              {guess.rank === 0 ? "정답!" : guess.rank}
+                            </TdRank>
                           </tr>
                         )
                       ) : (
@@ -1005,7 +1017,9 @@ export default function Quiz() {
                               ? guess.similarity.toFixed(2)
                               : guess.similarity}
                           </TdPercent>
-                          <TdRank>{guess.rank===0?"정답!": guess.rank}</TdRank>
+                          <TdRank>
+                            {guess.rank === 0 ? "정답!" : guess.rank}
+                          </TdRank>
                         </tr>
                       )
                   )}
@@ -1024,7 +1038,9 @@ export default function Quiz() {
                                 ? guess.similarity.toFixed(2)
                                 : guess.similarity}
                             </TdPercent>
-                            <TdRank>{guess.rank===-1?"1000위 이상":guess.rank}</TdRank>
+                            <TdRank>
+                              {guess.rank === -1 ? "1000위 이상" : guess.rank}
+                            </TdRank>
                           </tr>
                         )
                       ) : (
@@ -1036,7 +1052,9 @@ export default function Quiz() {
                               ? guess.similarity.toFixed(2)
                               : guess.similarity}
                           </TdPercent>
-                          <TdRank>{guess.rank===-1?"1000위 이상": guess.rank}</TdRank>
+                          <TdRank>
+                            {guess.rank === -1 ? "1000위 이상" : guess.rank}
+                          </TdRank>
                         </tr>
                       )
                   )}
@@ -1049,9 +1067,10 @@ export default function Quiz() {
               <InputStyle
                 placeholder="단어를 추측해보세요"
                 onChange={handleInputChangeOne}
-                // onKeyDown={handleOnKeyPressOne}
                 required
                 type="text"
+                onKeyDown={handleOnKeyPressOne}
+                value={inputInitializeOne}
               ></InputStyle>
               <SubmitButton onClick={onSubmitOne}>단추</SubmitButton>
             </TextContainer>
@@ -1145,39 +1164,39 @@ export default function Quiz() {
                           : recentGuessOne.similarity.toFixed(2)}
                       </TdPercent>
                       <TdRank>
-                        {JSON.parse(localStorage.getItem("guessOne"))[0].length >
-                          0 &&
+                        {JSON.parse(localStorage.getItem("guessOne"))[0]
+                          .length > 0 &&
                         JSON.parse(localStorage.getItem("guessOne"))[0].some(
                           (g) => g.word === recentGuessOne.word
                         )
-                          ? 
-                            (JSON.parse(localStorage.getItem("guessOne"))[0].find(
-                              (item, index, arr) => {
+                          ? JSON.parse(
+                              localStorage.getItem("guessOne")
+                            )[0].find((item, index, arr) => {
+                              return item.word === recentGuessOne.word;
+                            }).rank === 0
+                            ? "정답!"
+                            : JSON.parse(
+                                localStorage.getItem("guessOne")
+                              )[0].find((item, index, arr) => {
                                 return item.word === recentGuessOne.word;
-                              }
-                            ).rank === 0 ? "정답!" : JSON.parse(localStorage.getItem("guessOne"))[0].find(
-                              (item, index, arr) => {
-                                return item.word === recentGuessOne.word;
-                              }
-                            ).rank )
+                              }).rank
                           : JSON.parse(localStorage.getItem("guessOne"))[1]
                               .length > 0 &&
-                            JSON.parse(localStorage.getItem("guessOne"))[1].find(
-                              (item, index, arr) => {
-                                return item.word === recentGuessOne.word;
-                              }
-                            )
-                          ? 
-                          JSON.parse(localStorage.getItem("guessOne"))[1].find(
-                              (item, index, arr) => {
-                                return item.word === recentGuessOne.word;
-                              }
-                            ).rank === -1 ? "1000위 이상": "이상"
-                          : 
-                          recentGuessOne.rank === -1?
-                          "1000위 이상" : "이상"
-                          
-                          }
+                            JSON.parse(
+                              localStorage.getItem("guessOne")
+                            )[1].find((item, index, arr) => {
+                              return item.word === recentGuessOne.word;
+                            })
+                          ? JSON.parse(
+                              localStorage.getItem("guessOne")
+                            )[1].find((item, index, arr) => {
+                              return item.word === recentGuessOne.word;
+                            }).rank === -1
+                            ? "1000위 이상"
+                            : "이상"
+                          : recentGuessOne.rank === -1
+                          ? "1000위 이상"
+                          : "이상"}
                       </TdRank>
                     </RecentTr>
                   </>
@@ -1198,7 +1217,9 @@ export default function Quiz() {
                                 ? guess.similarity.toFixed(2)
                                 : guess.similarity}
                             </TdPercent>
-                            <TdRank>{guess.rank===0?"정답!":guess.rank}</TdRank>
+                            <TdRank>
+                              {guess.rank === 0 ? "정답!" : guess.rank}
+                            </TdRank>
                           </tr>
                         )
                       ) : (
@@ -1210,7 +1231,9 @@ export default function Quiz() {
                               ? guess.similarity.toFixed(2)
                               : guess.similarity}
                           </TdPercent>
-                          <TdRank>{guess.rank===0?"정답!":guess.rank}</TdRank>
+                          <TdRank>
+                            {guess.rank === 0 ? "정답!" : guess.rank}
+                          </TdRank>
                         </tr>
                       )
                   )}
@@ -1229,7 +1252,9 @@ export default function Quiz() {
                                 ? guess.similarity.toFixed(2)
                                 : guess.similarity}
                             </TdPercent>
-                            <TdRank>{guess.rank===-1?"1000위 이상":guess.rank}</TdRank>
+                            <TdRank>
+                              {guess.rank === -1 ? "1000위 이상" : guess.rank}
+                            </TdRank>
                           </tr>
                         )
                       ) : (
@@ -1241,7 +1266,9 @@ export default function Quiz() {
                               ? guess.similarity.toFixed(2)
                               : guess.similarity}
                           </TdPercent>
-                          <TdRank>{guess.rank===-1?"1000위 이상":guess.rank}</TdRank>
+                          <TdRank>
+                            {guess.rank === -1 ? "1000위 이상" : guess.rank}
+                          </TdRank>
                         </tr>
                       )
                   )}
@@ -1257,9 +1284,10 @@ export default function Quiz() {
               <InputStyle
                 placeholder="단어를 추측해보세요"
                 onChange={handleInputChangeTwo}
-                // onKeyDown={handleOnKeyPressTwo}
                 required
                 type="text"
+                onKeyDown={handleOnKeyPressTwo}
+                value={inputInitializeTwo}
               ></InputStyle>
               <SubmitButton onClick={onSubmitTwo}>단추</SubmitButton>
             </TextContainer>
@@ -1355,39 +1383,39 @@ export default function Quiz() {
                           : recentGuessTwo.similarity.toFixed(2)}
                       </TdPercent>
                       <TdRank>
-                      {JSON.parse(localStorage.getItem("guessTwo"))[0].length >
-                          0 &&
+                        {JSON.parse(localStorage.getItem("guessTwo"))[0]
+                          .length > 0 &&
                         JSON.parse(localStorage.getItem("guessTwo"))[0].some(
                           (g) => g.word === recentGuessTwo.word
                         )
-                          ? 
-                            (JSON.parse(localStorage.getItem("guessTwo"))[0].find(
-                              (item, index, arr) => {
+                          ? JSON.parse(
+                              localStorage.getItem("guessTwo")
+                            )[0].find((item, index, arr) => {
+                              return item.word === recentGuessTwo.word;
+                            }).rank === 0
+                            ? "정답!"
+                            : JSON.parse(
+                                localStorage.getItem("guessTwo")
+                              )[0].find((item, index, arr) => {
                                 return item.word === recentGuessTwo.word;
-                              }
-                            ).rank === 0 ? "정답!" : JSON.parse(localStorage.getItem("guessTwo"))[0].find(
-                              (item, index, arr) => {
-                                return item.word === recentGuessTwo.word;
-                              }
-                            ).rank )
+                              }).rank
                           : JSON.parse(localStorage.getItem("guessTwo"))[1]
                               .length > 0 &&
-                            JSON.parse(localStorage.getItem("guessTwo"))[1].find(
-                              (item, index, arr) => {
-                                return item.word === recentGuessTwo.word;
-                              }
-                            )
-                          ? 
-                          JSON.parse(localStorage.getItem("guessTwo"))[1].find(
-                              (item, index, arr) => {
-                                return item.word === recentGuessTwo.word;
-                              }
-                            ).rank === -1 ? "1000위 이상": "이상"
-                          : 
-                          recentGuessTwo.rank === -1?
-                          "1000위 이상" : "이상"
-                          
-                          }
+                            JSON.parse(
+                              localStorage.getItem("guessTwo")
+                            )[1].find((item, index, arr) => {
+                              return item.word === recentGuessTwo.word;
+                            })
+                          ? JSON.parse(
+                              localStorage.getItem("guessTwo")
+                            )[1].find((item, index, arr) => {
+                              return item.word === recentGuessTwo.word;
+                            }).rank === -1
+                            ? "1000위 이상"
+                            : "이상"
+                          : recentGuessTwo.rank === -1
+                          ? "1000위 이상"
+                          : "이상"}
                       </TdRank>
                     </RecentTr>
                   </>
@@ -1424,7 +1452,9 @@ export default function Quiz() {
                                 ? guess.similarity.toFixed(2)
                                 : guess.similarity}
                             </TdPercent>
-                            <TdRank>{guess.rank===0?"정답!": guess.rank}</TdRank>
+                            <TdRank>
+                              {guess.rank === 0 ? "정답!" : guess.rank}
+                            </TdRank>
                           </tr>
                         )
                       ) : (
@@ -1436,7 +1466,9 @@ export default function Quiz() {
                               ? guess.similarity.toFixed(2)
                               : guess.similarity}
                           </TdPercent>
-                          <TdRank>{guess.rank===0?"정답!":guess.rank}</TdRank>
+                          <TdRank>
+                            {guess.rank === 0 ? "정답!" : guess.rank}
+                          </TdRank>
                         </tr>
                       )
                   )}
@@ -1472,7 +1504,9 @@ export default function Quiz() {
                                 ? guess.similarity.toFixed(2)
                                 : guess.similarity}
                             </TdPercent>
-                            <TdRank>{guess.rank===-1?"1000위 이상":guess.rank}</TdRank>
+                            <TdRank>
+                              {guess.rank === -1 ? "1000위 이상" : guess.rank}
+                            </TdRank>
                           </tr>
                         )
                       ) : (
@@ -1484,7 +1518,9 @@ export default function Quiz() {
                               ? guess.similarity.toFixed(2)
                               : guess.similarity}
                           </TdPercent>
-                          <TdRank>{guess.rank===-1?"1000위 이상": guess.rank}</TdRank>
+                          <TdRank>
+                            {guess.rank === -1 ? "1000위 이상" : guess.rank}
+                          </TdRank>
                         </tr>
                       )
                   )}
@@ -1492,11 +1528,14 @@ export default function Quiz() {
               </Table>
             </TableContainer>
           </Content>
-          <GiveUpContainer>
-            <GiveUpButtonContainer>
-              <Button onClick={confirmGiveUp}>포기하기</Button>
-            </GiveUpButtonContainer>
-          </GiveUpContainer>
+          {localStorage.getItem("winState") === "1" ||
+          localStorage.getItem("winState") === "0" ? null : (
+            <GiveUpContainer>
+              <GiveUpButtonContainer>
+                <Button onClick={confirmGiveUp}>포기하기</Button>
+              </GiveUpButtonContainer>
+            </GiveUpContainer>
+          )}
         </ContentContainer>
       </CenterContainer>
     </Container>
