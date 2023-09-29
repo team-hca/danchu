@@ -781,6 +781,11 @@ export default function Quiz() {
   };
 
   useEffect(() => {
+
+    sortGuess("guess");
+    sortGuess("guessOne");
+    sortGuess("guessTwo");
+
     handleQuiz();
     if (localStorage.getItem("guess")) {
       setGuess(localStorage.getItem("guess"));
