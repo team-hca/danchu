@@ -63,7 +63,7 @@ const highLightWord = {
   fontWeight: "bold",
 };
 
-const ModalComponent = ({ isOpen, openModalHandler }) => {
+const ModalComponent = ({ isOpen, closeModal }) => {
   const [hover, setHover] = useState(false);
   return (
     <Modal isOpen={isOpen} contentLabel="questionMarkModal" style={modalStyle}>
@@ -92,8 +92,7 @@ const ModalComponent = ({ isOpen, openModalHandler }) => {
         <p>숫자가 쓰여진 탭을 누르면 다른 정답 단어를 추측할 수 있습니다.</p>
         <br></br>
       </div>
-      <a
-        href="/quiz"
+      <button
         style={
           hover
             ? { ...buttonStyle.buttonLink, ...buttonStyle.buttonLinkHover }
@@ -103,7 +102,7 @@ const ModalComponent = ({ isOpen, openModalHandler }) => {
         onMouseLeave={() => setHover(false)}
       >
         닫기
-      </a>
+      </button>
     </Modal>
   );
 };
@@ -112,6 +111,10 @@ export default function QuestionMark() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModalHandler = () => {
     setIsModalOpen(!isModalOpen);
+  };
+
+  const closeModalHandler = () => {
+    setIsModalOpen(isModalOpen);
   };
 
   return (
@@ -125,7 +128,7 @@ export default function QuestionMark() {
     >
       <ModalComponent
         isOpen={isModalOpen}
-        openModalHandler={openModalHandler}
+        closeModal={closeModalHandler}
       />
       <g clipPath="url(#clip0_116_1124)">
         <path
