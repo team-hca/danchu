@@ -1,10 +1,12 @@
 import styled, { css } from "styled-components";
 
 export const Tabs = styled.div`
-  overflow: hidden;
-  font-family: Open Sans;
-  height: 3em;
-  width: 100%;
+  ${props => props.count === 1 && `
+    overflow: hidden;
+    font-family: Open Sans;
+    height: 3em;
+    width: 100%;
+  `}
 `;
 
 export const Tab = styled.button`
@@ -28,6 +30,7 @@ export const Tab = styled.button`
     color: white;
   }
 
+
   ${props =>
     props.count === 1 &&
     css`
@@ -35,6 +38,7 @@ export const Tab = styled.button`
     `}
 
 `;
+
 
 export const Content = styled.div`
   ${props => (props.active ? "" : "display:none")}
