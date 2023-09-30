@@ -94,7 +94,7 @@ const ContentContainer = styled.div`
   // width: 720px;
   width: 100%;
   background-color: var(--primary);
-  border-radius: 0px 0px 18px 18px;
+  border-radius: ${({ count }) => (count === 1 ? '18px' : '0 0 18px 18px')};
   // box-shadow: 5px 5px 5px;
 `;
 
@@ -856,7 +856,7 @@ export default function Quiz() {
             )}
           </Tabs>
         </TabContainer>
-        <ContentContainer>
+        <ContentContainer count={quizCount}>
           <Content active={active === 0}>
             <TextContainer>
               <InputStyle
