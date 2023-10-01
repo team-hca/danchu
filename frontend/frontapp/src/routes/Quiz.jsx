@@ -774,6 +774,18 @@ export default function Quiz() {
         if (!localStorage.getItem("winState")) {
           localStorage.setItem("winState", -1);
         }
+        const storedStartTimeTimestamp = parseInt(localStorage.getItem("startTime"), 10);
+        if (!isNaN(storedStartTimeTimestamp)) { //이미 저장된 스타트타임 있는 경우만
+          const storedStartTime = new Date(storedStartTimeTimestamp);
+          const currentDate = new Date();
+          //오늘 날짜와 다르다면
+          if(storedStartTime.getDate() !== currentDate.getDate() ||
+            storedStartTime.getMonth() !== currentDate.getMonth() ||
+            storedStartTime.getFullYear() !== currentDate.getFullYear()){
+              console.log("시작시간과 오늘날짜가 다릅니다.");
+              localStorage.removeItem("startTime");
+        }
+        }
       })
       .catch((error) => {
         console.error("today quiz request failed: ", error);
