@@ -794,6 +794,14 @@ export default function Quiz() {
 
   useEffect(() => {
 
+    const todayDate = `${today.getFullYear()}-${(today.getMonth() + 1)
+      .toString()
+      .padStart(2, "0")}-${today.getDate().toString().padStart(2, "0")}`;
+
+    if (localStorage.getItem("date") && localStorage.getItem("date") !== todayDate) {
+      localStorage.clear();
+    }
+
     sortGuess("guess");
     sortGuess("guessOne");
     sortGuess("guessTwo");
