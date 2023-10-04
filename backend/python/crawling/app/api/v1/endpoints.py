@@ -26,8 +26,8 @@ async def schedule_jobs(
 ):
     scheduler.add_job(
         scheduling_url_collector,
-        trigger="interval",
         (start_page, threshold, duration),
+        trigger="interval",
         minutes=minutes,
         id="job_collect_urls",
         replace_existing=True,
@@ -37,8 +37,8 @@ async def schedule_jobs(
 
     scheduler.add_job(
         update_articles_in_db,
-        trigger="interval",
         (duration,),
+        trigger="interval",
         minutes=minutes,
         id="job_collect_contents",
         replace_existing=True,
