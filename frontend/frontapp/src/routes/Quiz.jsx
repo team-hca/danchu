@@ -243,11 +243,11 @@ export default function Quiz() {
     let obj = new Object();
     // 2. 정답 가져오기
     axios
-    .get("https://www.danchu.today/api/v1/quiz/answer?winState=0&date=2023-10-04"
-      // `/v1/quiz/answer?winState=${parseInt(localStorage.getItem("winState"))}&date=${today.getFullYear()}-${(today.getMonth() + 1)
-      //   .toString()
-      //   .padStart(2, "0")}-${today.getDate().toString().padStart(2, "0")}
-      // }`
+    .get(
+      `/v1/quiz/answer?winState=${parseInt(localStorage.getItem("winState"))}&date=${today.getFullYear()}-${(today.getMonth() + 1)
+        .toString()
+        .padStart(2, "0")}-${today.getDate().toString().padStart(2, "0")}
+      }`
     )
     .then((response) => {
       obj.count = response.data.count;
