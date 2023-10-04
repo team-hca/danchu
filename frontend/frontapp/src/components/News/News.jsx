@@ -10,9 +10,32 @@ const Container = styled.div`
   justify-content: center;
   align-items: stretch;
   width: 720px;
+  margin-bottom: 100px;
+
+  @media (max-width: 720px) {
+    width: 100vw;
+    // padding: 0 15px;
+  }
 `;
 
 const LoadingMessage = styled.div`
+  flex: 1;
+  width: 100%;
+  max-width: 720px; // Added this line
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  position: relative;
+  justify-content: center;
+  overflow: hidden;
+  margin-bottom: 20px;
+
+  @media (max-width: 720px) {
+    padding: 0 15px;
+  }
+`;
+
+const Message = styled.div`
   position: relative;
   color: #ffc40e;
   text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
@@ -20,6 +43,10 @@ const LoadingMessage = styled.div`
   font-size: 30px;
   overflow: hidden;
   padding: 5px 0;
+
+  @media (max-width: 720px) {
+    font-size: 4vw;
+  }
 `;
 
 export default function News({ words }) {
@@ -43,10 +70,12 @@ export default function News({ words }) {
 
   if (loading) {
     return (
-      <>
+      <Container>
         <NewsMessage />
-        <LoadingMessage> 뉴스를 가져옵니다 ...</LoadingMessage>
-      </>
+        <LoadingMessage>
+          <Message>뉴스를 가져옵니다 ...</Message>
+        </LoadingMessage>
+      </Container>
     );
   } else {
     return (

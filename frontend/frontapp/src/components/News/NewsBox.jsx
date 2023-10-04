@@ -5,13 +5,17 @@ const Container = styled.div`
   flex: 1;
   height: auto;
   width: 100%;
-  max-width: 100%;
+  max-width: 720px; // Added this line
   display: flex;
   flex-direction: column;
   align-items: center;
   position: relative;
   justify-content: center;
   margin-top: 20px;
+
+  @media (max-width: 720px) {
+    padding: 0 15px;
+  }
 `;
 
 const NewsInfoBox = styled.div`
@@ -25,6 +29,10 @@ const NewsInfoBox = styled.div`
   box-shadow: 10px 10px 7px rgba(0, 0, 0.5, 0.5);
   text-align: center;
   margin-bottom: 15px;
+
+  @media (max-width: 720px) {
+    font-size: 4vw;
+  }
 `;
 
 const OverlayText = styled.div`
@@ -57,6 +65,11 @@ const OverlayText = styled.div`
   ::-webkit-scrollbar-thumb:hover {
     background: #555;
   }
+
+  @media (max-width: 720px) {
+    width: 100vw;
+    padding: 0 15px;
+  }
 `;
 const ScrollableContent = styled.div`
   background-color: var(--box);
@@ -69,6 +82,10 @@ const ScrollableContent = styled.div`
   max-height: 100%;
   overflow-y: auto;
   box-shadow: 1px 1px 2px rgba(37, 56, 70, 1);
+
+  @media (max-width: 720px) {
+    font-size: 4vw;
+  }
 `;
 
 const DummyItem = styled.div`
@@ -80,18 +97,30 @@ const DummyItem = styled.div`
   flex-direction: column;
   align-items: left;
   height: auto;
+
+  @media (max-width: 720px) {
+    font-size: 4vw;
+  }
 `;
 
 const TitleText = styled.div`
   font-size: 30px;
   font-weight: bold;
   margin-bottom: 40px;
+
+  @media (max-width: 720px) {
+    font-size: 4vw;
+  }
 `;
 
 const ContentText = styled.div`
   font-size: 20px;
   // font-weight: bold;
   margin-bottom: 10px;
+
+  @media (max-width: 720px) {
+    font-size: 3vw;
+  }
 `;
 
 const DateText = styled.div`
@@ -99,6 +128,10 @@ const DateText = styled.div`
   align-self: flex-start;
   margin-left: auto; // Pushes the date to the far right
   color: #777;
+
+  @media (max-width: 720px) {
+    font-size: 2vw;
+  }
 `;
 
 const ButtonWrapper = styled.button`
@@ -138,12 +171,22 @@ const LastItemTitleText = styled(TitleText)`
   color: #ffc40e; // 색상 변경
   font-size: 35px; // 크기 변경
   text-align: center;
+
+  @media (max-width: 720px) {
+    width: 100vw;
+    padding: 0 15px;
+  }
 `;
 
 const LastItemContentText = styled(ContentText)`
   color: #007bff; // 색상 변경
   font-size: 25px; // 크기 변경
   text-align: center;
+
+  @media (max-width: 720px) {
+    width: 100vw;
+    padding: 0 15px;
+  }
 `;
 // 개행 처리 함수
 function NewlineText({ text }) {
