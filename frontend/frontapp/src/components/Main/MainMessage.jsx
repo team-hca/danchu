@@ -4,7 +4,7 @@ import styled from "styled-components";
 const Container = styled.div`
   flex: 1;
   width: 100%;
-  max-width: 100%;
+  max-width: 720px; // Added this line
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -12,6 +12,10 @@ const Container = styled.div`
   justify-content: center;
   overflow: hidden;
   margin-bottom: 20px;
+
+  @media (max-width: 720px) {
+    padding: 0 15px;
+  }
 `;
 
 const Message = styled.div`
@@ -22,6 +26,10 @@ const Message = styled.div`
   font-size: 30px;
   overflow: hidden;
   padding: 5px 0;
+
+  @media (max-width: 720px) {
+    font-size: 4vw;
+  }
 `;
 
 const RedText = styled.span`
@@ -29,11 +37,10 @@ const RedText = styled.span`
 `;
 
 export default function MainMessage() {
-
   const today = new Date();
 
   const YEAR = today.getFullYear();
-  const MONTH = today.getMonth()+1;
+  const MONTH = today.getMonth() + 1;
   const DAY = today.getDate();
 
   return (

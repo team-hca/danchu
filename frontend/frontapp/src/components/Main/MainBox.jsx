@@ -7,13 +7,17 @@ const Container = styled.div`
   flex: 1;
   height: auto;
   width: 100%;
-  max-width: 100%;
+  max-width: 720px; // Added this line
   display: flex;
   flex-direction: column;
   align-items: center;
   position: relative;
   justify-content: center;
   margin-top: 20px;
+
+  @media (max-width: 720px) {
+    padding: 0 15px;
+  }
 `;
 
 const ScrollableContent = styled.div`
@@ -30,6 +34,11 @@ const ScrollableContent = styled.div`
   font-size: 30px;
   margin: 30px;
   padding: 10px;
+
+  @media (max-width: 720px) {
+    font-size: 5vw;
+    margin: 15px;
+  }
 `;
 
 const SentenceBox = styled.div`
@@ -41,6 +50,11 @@ const SentenceBox = styled.div`
   line-height: 60px;
   box-shadow: 10px 10px 7px rgba(0, 0, 0.5, 0.5);
   text-align: center;
+
+  @media (max-width: 720px) {
+    font-size: 4vw;
+    line-height: 16vw;
+  }
 `;
 
 const AnswerHighlight = styled.span`
@@ -72,6 +86,16 @@ const MainButton = styled.button`
   }
 
   &:active img {
+  }
+
+  @media (max-width: 720px) {
+    margin-left: 0;
+    right: 0;
+    width: 100%;
+
+    img {
+      width: 50vw;
+    }
   }
 `;
 

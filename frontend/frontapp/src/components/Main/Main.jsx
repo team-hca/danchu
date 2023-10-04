@@ -10,6 +10,11 @@ const Container = styled.div`
   align-items: stretch;
   width: 720px;
   margin-bottom: 100px;
+
+  @media (max-width: 720px) {
+    width: 100vw;
+    left: 20%;
+  }
 `;
 
 export default function Main({ quizInfo, active, words }) {
