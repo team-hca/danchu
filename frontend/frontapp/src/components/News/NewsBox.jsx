@@ -147,8 +147,10 @@ const LastItemContentText = styled(ContentText)`
 `;
 // 개행 처리 함수
 function NewlineText({ text }) {
-  const newText = text.replace(/\n/g, "");
-  return <>{newText}</>;
+  if (text) {
+    const newText = text.replace(/\n/g, "");
+    return <>{newText}</>;
+  }
 }
 
 export default function NewsBox({ newsData }) {
@@ -183,45 +185,64 @@ export default function NewsBox({ newsData }) {
     )}일 ${amOrPm} ${adjustedHour}시 ${minute}분`;
   }
 
+  function sortNewsData(newsData) {
+    return newsData.sort((a, b) => {
+      const dateA = new Date(a.date_time);
+      const dateB = new Date(b.date_time);
+      return dateB - dateA;
+    });
+  }
+
+  const sortedNewsData = sortNewsData(newsData);
+  console.log(sortedNewsData);
+
   return (
     <Container>
       <NewsInfoBox>
         <OverlayText>
           <ScrollableContent>
             {[
-              ...newsData,
+              ...sortedNewsData,
               {
                 title: "끝",
                 content: "더 이상의 뉴스가 없습니다.",
                 url: "#",
                 date: "",
               },
-            ].map((data, index, arr) => {
+            ].map((sortedNewsData, index, arr) => {
               const isLastItem = index === arr.length - 1;
 
               if (isLastItem) {
                 return (
-                  <DummyItem key={data.title + index}>
-                    <LastItemTitleText>{data.title}</LastItemTitleText>
+                  <DummyItem key={sortedNewsData.title + index}>
+                    <LastItemTitleText>
+                      {sortedNewsData.title}
+                    </LastItemTitleText>
                     <LastItemContentText>
-                      <NewlineText text={data.content} />
+                      <NewlineText text={sortedNewsData.content} />
                     </LastItemContentText>
-                    {data.date_time && <DateText>{data.date_time}</DateText>}
+                    {sortedNewsData.date_time && (
+                      <DateText>{sortedNewsData.date_time}</DateText>
+                    )}
                   </DummyItem>
                 );
               } else {
                 return (
-                  <DummyItem key={data.title + index}>
+                  <DummyItem key={sortedNewsData.title + index}>
                     <ButtonWrapper
-                      onClick={() => window.open(data.url, "_blank")}
+                      onClick={() => window.open(sortedNewsData.url, "_blank")}
                     >
-                      <TitleText>{data.title}</TitleText>
+                      <TitleText>{sortedNewsData.title}</TitleText>
                       <ContentText>
-                        <NewlineText text={formatContent(data.content)} />
+                        <NewlineText
+                          text={formatContent(sortedNewsData.content)}
+                        />
                       </ContentText>
                     </ButtonWrapper>
-                    {data.date_time && (
-                      <DateText>{formatDate(data.date_time)}</DateText>
+                    {sortedNewsData.date_time && (
+                      <DateText>
+                        {formatDate(sortedNewsData.date_time)}
+                      </DateText>
                     )}
                   </DummyItem>
                 );
