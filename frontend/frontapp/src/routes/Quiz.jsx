@@ -9,6 +9,7 @@ import Main from "../components/Main/Main";
 import SubmitButton from "../components/SubmitButton";
 import { Content, Tab, Tabs } from "../components/Tabs";
 import sortGuess from "../util/sortGuess";
+import Footer from "../components/Common/Footer";
 
 const onClickGiveUp = (message = null, onConfirm, onCancel) => {
   if (!onConfirm || typeof onConfirm !== "function") {
@@ -839,730 +840,735 @@ export default function Quiz() {
     console.log("two: " + inputValueTwo);
   };
 
-  return quizSentence ? (
-    <Container>
-      <Header />
-      <CenterContainer>
-        <Main quizInfo={quizSentence} active={active} />
-        <TabContainer>
-          <Tabs>
-            <Tab
-              count={quizCount}
-              onClick={handleClick}
-              active={active === 0}
-              id={0}
-            >
-              <H3 id={0}>1</H3>
-            </Tab>
-            {quizCount === 1 ? null : (
-              <Tab
-                count={quizCount}
-                onClick={handleClick}
-                active={active === 1}
-                id={1}
-              >
-                <H3 id={1}>2</H3>
-              </Tab>
-            )}
-            {quizCount === 2 || quizCount === 1 ? null : (
-              <Tab
-                count={quizCount}
-                onClick={handleClick}
-                active={active === 2}
-                id={2}
-              >
-                <H3 id={2}>3</H3>
-              </Tab>
-            )}
-          </Tabs>
-        </TabContainer>
-        <ContentContainer count={quizCount}>
-          <Content active={active === 0}>
-            <TextContainer>
-              <InputStyle
-                placeholder="단어를 추측해보세요"
-                onChange={handleInputChange}
-                required
-                type="text"
-                onKeyDown={handleOnKeyPress}
-                value={inputInitialize}
-              ></InputStyle>
-              <SubmitButton onClick={onSubmit}>단추</SubmitButton>
-            </TextContainer>
-            <TableContainer>
-              <Table>
-                {/* <Thead> */}
-                <tr>
-                  <ThNumber>#</ThNumber>
-                  <ThGuess>단어추측</ThGuess>
-                  <ThPercent>유사도</ThPercent>
-                  <ThRank>유사도 순위</ThRank>
-                </tr>
-                {/* </Thead> */}
-                {/* <tbody> */}
-                {recentGuess && Object.keys(recentGuess).includes("word") ? (
-                  <>
-                    <RecentTr>
-                      <TdNumber>
-                        {JSON.parse(localStorage.getItem("guess"))[0].length >
-                          0 &&
-                        JSON.parse(localStorage.getItem("guess"))[0].some(
-                          (g) => g.word === recentGuess.word
-                        )
-                          ? JSON.parse(localStorage.getItem("guess"))[0]
-                              .length > 0 &&
-                            JSON.parse(localStorage.getItem("guess"))[0].find(
-                              (item, index, arr) => {
-                                // setRecentGuess(inputValue);
-                                console.log("guess-item.word: " + item.word);
-                                console.log(
-                                  "guess-recentGuess: " + recentGuess.word
-                                );
-                                return item.word === recentGuess.word;
-                              }
-                            ).count
-                          : localStorage.getItem("guess") &&
-                            JSON.parse(localStorage.getItem("guess"))[1]
-                              .length > 0 &&
-                            JSON.parse(localStorage.getItem("guess"))[1].find(
-                              (item, index, arr) => {
-                                // setRecentGuess(inputValue);
-                                console.log("item.word: " + item.word);
-                                console.log("recentGuess: " + recentGuess.word);
-                                return item.word === recentGuess.word;
-                              }
+  return (
+    quizSentence ? (
+      <>
+        <Container>
+          <Header />
+          <CenterContainer>
+            <Main quizInfo={quizSentence} active={active} />
+            <TabContainer>
+              <Tabs>
+                <Tab
+                  count={quizCount}
+                  onClick={handleClick}
+                  active={active === 0}
+                  id={0}
+                >
+                  <H3 id={0}>1</H3>
+                </Tab>
+                {quizCount === 1 ? null : (
+                  <Tab
+                    count={quizCount}
+                    onClick={handleClick}
+                    active={active === 1}
+                    id={1}
+                  >
+                    <H3 id={1}>2</H3>
+                  </Tab>
+                )}
+                {quizCount === 2 || quizCount === 1 ? null : (
+                  <Tab
+                    count={quizCount}
+                    onClick={handleClick}
+                    active={active === 2}
+                    id={2}
+                  >
+                    <H3 id={2}>3</H3>
+                  </Tab>
+                )}
+              </Tabs>
+            </TabContainer>
+            <ContentContainer count={quizCount}>
+              <Content active={active === 0}>
+                <TextContainer>
+                  <InputStyle
+                    placeholder="단어를 추측해보세요"
+                    onChange={handleInputChange}
+                    required
+                    type="text"
+                    onKeyDown={handleOnKeyPress}
+                    value={inputInitialize}
+                  ></InputStyle>
+                  <SubmitButton onClick={onSubmit}>단추</SubmitButton>
+                </TextContainer>
+                <TableContainer>
+                  <Table>
+                    {/* <Thead> */}
+                    <tr>
+                      <ThNumber>#</ThNumber>
+                      <ThGuess>단어추측</ThGuess>
+                      <ThPercent>유사도</ThPercent>
+                      <ThRank>유사도 순위</ThRank>
+                    </tr>
+                    {/* </Thead> */}
+                    {/* <tbody> */}
+                    {recentGuess && Object.keys(recentGuess).includes("word") ? (
+                      <>
+                        <RecentTr>
+                          <TdNumber>
+                            {JSON.parse(localStorage.getItem("guess"))[0].length >
+                              0 &&
+                            JSON.parse(localStorage.getItem("guess"))[0].some(
+                              (g) => g.word === recentGuess.word
                             )
-                          ? localStorage.getItem("guess") &&
-                            JSON.parse(localStorage.getItem("guess"))[1]
-                              .length > 0 &&
-                            JSON.parse(localStorage.getItem("guess"))[1].find(
-                              (item, index, arr) => {
-                                // setRecentGuess(inputValue);
-                                console.log("item.word: " + item.word);
-                                console.log("recentGuess: " + recentGuess.word);
-                                return item.word === recentGuess.word;
-                              }
-                            ).count
-                          : recentGuess.count}
-                      </TdNumber>
-                      <TdGuess>{recentGuess.word}</TdGuess>
-                      <TdPercent>
-                        {localStorage.getItem("guess") &&
-                        JSON.parse(localStorage.getItem("guess"))[0] &&
-                        JSON.parse(localStorage.getItem("guess"))[0].some(
-                          (g) => g.word === recentGuess.word
-                        )
-                          ? localStorage.getItem("guess") &&
+                              ? JSON.parse(localStorage.getItem("guess"))[0]
+                                  .length > 0 &&
+                                JSON.parse(localStorage.getItem("guess"))[0].find(
+                                  (item, index, arr) => {
+                                    // setRecentGuess(inputValue);
+                                    console.log("guess-item.word: " + item.word);
+                                    console.log(
+                                      "guess-recentGuess: " + recentGuess.word
+                                    );
+                                    return item.word === recentGuess.word;
+                                  }
+                                ).count
+                              : localStorage.getItem("guess") &&
+                                JSON.parse(localStorage.getItem("guess"))[1]
+                                  .length > 0 &&
+                                JSON.parse(localStorage.getItem("guess"))[1].find(
+                                  (item, index, arr) => {
+                                    // setRecentGuess(inputValue);
+                                    console.log("item.word: " + item.word);
+                                    console.log("recentGuess: " + recentGuess.word);
+                                    return item.word === recentGuess.word;
+                                  }
+                                )
+                              ? localStorage.getItem("guess") &&
+                                JSON.parse(localStorage.getItem("guess"))[1]
+                                  .length > 0 &&
+                                JSON.parse(localStorage.getItem("guess"))[1].find(
+                                  (item, index, arr) => {
+                                    // setRecentGuess(inputValue);
+                                    console.log("item.word: " + item.word);
+                                    console.log("recentGuess: " + recentGuess.word);
+                                    return item.word === recentGuess.word;
+                                  }
+                                ).count
+                              : recentGuess.count}
+                          </TdNumber>
+                          <TdGuess>{recentGuess.word}</TdGuess>
+                          <TdPercent>
+                            {localStorage.getItem("guess") &&
                             JSON.parse(localStorage.getItem("guess"))[0] &&
-                            JSON.parse(localStorage.getItem("guess"))[0]
-                              .find((item, index, arr) => {
-                                return item.word === recentGuess.word;
-                              })
-                              .similarity.toFixed(2)
-                          : localStorage.getItem("guess") &&
-                            JSON.parse(localStorage.getItem("guess"))[1] &&
-                            JSON.parse(localStorage.getItem("guess"))[1].find(
-                              (item, index, arr) => {
-                                return item.word === recentGuess.word;
-                              }
+                            JSON.parse(localStorage.getItem("guess"))[0].some(
+                              (g) => g.word === recentGuess.word
                             )
-                          ? localStorage.getItem("guess") &&
-                            JSON.parse(localStorage.getItem("guess"))[1] &&
-                            JSON.parse(localStorage.getItem("guess"))[1]
-                              .find((item, index, arr) => {
-                                return item.word === recentGuess.word;
-                              })
-                              .similarity.toFixed(2)
-                          : recentGuess.similarity.toFixed(2)}
-                      </TdPercent>
-                      <TdRank>
-                        {JSON.parse(localStorage.getItem("guess"))[0].length >
-                          0 &&
-                        JSON.parse(localStorage.getItem("guess"))[0].some(
-                          (g) => g.word === recentGuess.word
-                        )
-                          ? JSON.parse(localStorage.getItem("guess"))[0].find(
-                              (item, index, arr) => {
-                                return item.word === recentGuess.word;
-                              }
-                            ).rank === 0
-                            ? "정답!"
-                            : JSON.parse(localStorage.getItem("guess"))[0].find(
-                                (item, index, arr) => {
-                                  return item.word === recentGuess.word;
-                                }
-                              ).rank
-                          : JSON.parse(localStorage.getItem("guess"))[1]
-                              .length > 0 &&
-                            JSON.parse(localStorage.getItem("guess"))[1].find(
-                              (item, index, arr) => {
-                                return item.word === recentGuess.word;
-                              }
-                            )
-                          ? JSON.parse(localStorage.getItem("guess"))[1].find(
-                              (item, index, arr) => {
-                                return item.word === recentGuess.word;
-                              }
-                            ).rank === -1
-                            ? "1000위 이상"
-                            : "이상"
-                          : recentGuess.rank === -1
-                          ? "1000위 이상"
-                          : "이상"}
-                      </TdRank>
-                    </RecentTr>
-                  </>
-                ) : null}
-                {localStorage.getItem("guess") != null &&
-                  JSON.parse(localStorage.getItem("guess"))[0] &&
-                  JSON.parse(localStorage.getItem("guess"))[0].map(
-                    (guess, idx) =>
-                      recentGuess &&
-                      Object.keys(recentGuess).includes("word") ? (
-                        guess.word === recentGuess.word ? null : (
-                          <tr>
-                            <TdNumber>{guess.count}</TdNumber>
-                            <TdGuess>{guess.word}</TdGuess>
-                            <TdPercent>
-                              {guess.similarity
-                                ? guess.similarity.toFixed(2)
-                                : guess.similarity}
-                            </TdPercent>
-                            <TdRank>
-                              {guess.rank === 0 ? "정답!" : guess.rank}
-                            </TdRank>
-                          </tr>
-                        )
-                      ) : (
-                        <tr>
-                          <TdNumber>{guess.count}</TdNumber>
-                          <TdGuess>{guess.word}</TdGuess>
-                          <TdPercent>
-                            {guess.similarity
-                              ? guess.similarity.toFixed(2)
-                              : guess.similarity}
+                              ? localStorage.getItem("guess") &&
+                                JSON.parse(localStorage.getItem("guess"))[0] &&
+                                JSON.parse(localStorage.getItem("guess"))[0]
+                                  .find((item, index, arr) => {
+                                    return item.word === recentGuess.word;
+                                  })
+                                  .similarity.toFixed(2)
+                              : localStorage.getItem("guess") &&
+                                JSON.parse(localStorage.getItem("guess"))[1] &&
+                                JSON.parse(localStorage.getItem("guess"))[1].find(
+                                  (item, index, arr) => {
+                                    return item.word === recentGuess.word;
+                                  }
+                                )
+                              ? localStorage.getItem("guess") &&
+                                JSON.parse(localStorage.getItem("guess"))[1] &&
+                                JSON.parse(localStorage.getItem("guess"))[1]
+                                  .find((item, index, arr) => {
+                                    return item.word === recentGuess.word;
+                                  })
+                                  .similarity.toFixed(2)
+                              : recentGuess.similarity.toFixed(2)}
                           </TdPercent>
                           <TdRank>
-                            {guess.rank === 0 ? "정답!" : guess.rank}
+                            {JSON.parse(localStorage.getItem("guess"))[0].length >
+                              0 &&
+                            JSON.parse(localStorage.getItem("guess"))[0].some(
+                              (g) => g.word === recentGuess.word
+                            )
+                              ? JSON.parse(localStorage.getItem("guess"))[0].find(
+                                  (item, index, arr) => {
+                                    return item.word === recentGuess.word;
+                                  }
+                                ).rank === 0
+                                ? "정답!"
+                                : JSON.parse(localStorage.getItem("guess"))[0].find(
+                                    (item, index, arr) => {
+                                      return item.word === recentGuess.word;
+                                    }
+                                  ).rank
+                              : JSON.parse(localStorage.getItem("guess"))[1]
+                                  .length > 0 &&
+                                JSON.parse(localStorage.getItem("guess"))[1].find(
+                                  (item, index, arr) => {
+                                    return item.word === recentGuess.word;
+                                  }
+                                )
+                              ? JSON.parse(localStorage.getItem("guess"))[1].find(
+                                  (item, index, arr) => {
+                                    return item.word === recentGuess.word;
+                                  }
+                                ).rank === -1
+                                ? "1000위 이상"
+                                : "이상"
+                              : recentGuess.rank === -1
+                              ? "1000위 이상"
+                              : "이상"}
                           </TdRank>
-                        </tr>
-                      )
-                  )}
-                {localStorage.getItem("guess") != null &&
-                  JSON.parse(localStorage.getItem("guess"))[1] &&
-                  JSON.parse(localStorage.getItem("guess"))[1].map(
-                    (guess, idx) =>
-                      recentGuess &&
-                      Object.keys(recentGuess).includes("word") ? (
-                        guess.word === recentGuess.word ? null : (
-                          <tr>
-                            <TdNumber>{guess.count}</TdNumber>
-                            <TdGuess>{guess.word}</TdGuess>
-                            <TdPercent>
-                              {guess.similarity
-                                ? guess.similarity.toFixed(2)
-                                : guess.similarity}
-                            </TdPercent>
-                            <TdRank>
-                              {guess.rank === -1 ? "1000위 이상" : guess.rank}
-                            </TdRank>
-                          </tr>
-                        )
-                      ) : (
-                        <tr>
-                          <TdNumber>{guess.count}</TdNumber>
-                          <TdGuess>{guess.word}</TdGuess>
+                        </RecentTr>
+                      </>
+                    ) : null}
+                    {localStorage.getItem("guess") != null &&
+                      JSON.parse(localStorage.getItem("guess"))[0] &&
+                      JSON.parse(localStorage.getItem("guess"))[0].map(
+                        (guess, idx) =>
+                          recentGuess &&
+                          Object.keys(recentGuess).includes("word") ? (
+                            guess.word === recentGuess.word ? null : (
+                              <tr>
+                                <TdNumber>{guess.count}</TdNumber>
+                                <TdGuess>{guess.word}</TdGuess>
+                                <TdPercent>
+                                  {guess.similarity
+                                    ? guess.similarity.toFixed(2)
+                                    : guess.similarity}
+                                </TdPercent>
+                                <TdRank>
+                                  {guess.rank === 0 ? "정답!" : guess.rank}
+                                </TdRank>
+                              </tr>
+                            )
+                          ) : (
+                            <tr>
+                              <TdNumber>{guess.count}</TdNumber>
+                              <TdGuess>{guess.word}</TdGuess>
+                              <TdPercent>
+                                {guess.similarity
+                                  ? guess.similarity.toFixed(2)
+                                  : guess.similarity}
+                              </TdPercent>
+                              <TdRank>
+                                {guess.rank === 0 ? "정답!" : guess.rank}
+                              </TdRank>
+                            </tr>
+                          )
+                      )}
+                    {localStorage.getItem("guess") != null &&
+                      JSON.parse(localStorage.getItem("guess"))[1] &&
+                      JSON.parse(localStorage.getItem("guess"))[1].map(
+                        (guess, idx) =>
+                          recentGuess &&
+                          Object.keys(recentGuess).includes("word") ? (
+                            guess.word === recentGuess.word ? null : (
+                              <tr>
+                                <TdNumber>{guess.count}</TdNumber>
+                                <TdGuess>{guess.word}</TdGuess>
+                                <TdPercent>
+                                  {guess.similarity
+                                    ? guess.similarity.toFixed(2)
+                                    : guess.similarity}
+                                </TdPercent>
+                                <TdRank>
+                                  {guess.rank === -1 ? "1000위 이상" : guess.rank}
+                                </TdRank>
+                              </tr>
+                            )
+                          ) : (
+                            <tr>
+                              <TdNumber>{guess.count}</TdNumber>
+                              <TdGuess>{guess.word}</TdGuess>
+                              <TdPercent>
+                                {guess.similarity
+                                  ? guess.similarity.toFixed(2)
+                                  : guess.similarity}
+                              </TdPercent>
+                              <TdRank>
+                                {guess.rank === -1 ? "1000위 이상" : guess.rank}
+                              </TdRank>
+                            </tr>
+                          )
+                      )}
+                    {/* </tbody> */}
+                  </Table>
+                </TableContainer>
+              </Content>
+              <Content active={active === 1}>
+                <TextContainer>
+                  <InputStyle
+                    placeholder="단어를 추측해보세요"
+                    onChange={handleInputChangeOne}
+                    required
+                    type="text"
+                    onKeyDown={handleOnKeyPressOne}
+                    value={inputInitializeOne}
+                  ></InputStyle>
+                  <SubmitButton onClick={onSubmitOne}>단추</SubmitButton>
+                </TextContainer>
+                <TableContainer>
+                  <Table>
+                    {/* <Thead> */}
+                    <tr>
+                      <ThNumber>#</ThNumber>
+                      <ThGuess>단어추측</ThGuess>
+                      <ThPercent>유사도</ThPercent>
+                      <ThRank>유사도 순위</ThRank>
+                    </tr>
+                    {recentGuessOne &&
+                    Object.keys(recentGuessOne).includes("word") ? (
+                      <>
+                        <RecentTr>
+                          <TdNumber>
+                            {JSON.parse(localStorage.getItem("guessOne"))[0]
+                              .length > 0 &&
+                            JSON.parse(localStorage.getItem("guessOne"))[0].some(
+                              (g) => g.word === recentGuessOne.word
+                            )
+                              ? JSON.parse(localStorage.getItem("guessOne"))[0]
+                                  .length > 0 &&
+                                JSON.parse(
+                                  localStorage.getItem("guessOne")
+                                )[0].find((item, index, arr) => {
+                                  // setRecentGuess(inputValue);
+                                  console.log("guess-item.wordOne: " + item.word);
+                                  console.log(
+                                    "guess-recentGuessOne: " + recentGuessOne.word
+                                  );
+                                  return item.word === recentGuessOne.word;
+                                }).count
+                              : localStorage.getItem("guessOne") &&
+                                JSON.parse(localStorage.getItem("guessOne"))[1]
+                                  .length > 0 &&
+                                JSON.parse(
+                                  localStorage.getItem("guessOne")
+                                )[1].find((item, index, arr) => {
+                                  // setRecentGuess(inputValue);
+                                  console.log("item.wordOne: " + item.word);
+                                  console.log(
+                                    "recentGuessOne: " + recentGuessOne.word
+                                  );
+                                  return item.word === recentGuessOne.word;
+                                })
+                              ? localStorage.getItem("guessOne") &&
+                                JSON.parse(localStorage.getItem("guessOne"))[1]
+                                  .length > 0 &&
+                                JSON.parse(
+                                  localStorage.getItem("guessOne")
+                                )[1].find((item, index, arr) => {
+                                  // setRecentGuess(inputValue);
+                                  console.log("item.word: " + item.word);
+                                  console.log(
+                                    "recentGuessOne: " + recentGuessOne.word
+                                  );
+                                  return item.word === recentGuessOne.word;
+                                }).count
+                              : recentGuessOne.count}
+                          </TdNumber>
+                          <TdGuess>{recentGuessOne.word}</TdGuess>
                           <TdPercent>
-                            {guess.similarity
-                              ? guess.similarity.toFixed(2)
-                              : guess.similarity}
-                          </TdPercent>
-                          <TdRank>
-                            {guess.rank === -1 ? "1000위 이상" : guess.rank}
-                          </TdRank>
-                        </tr>
-                      )
-                  )}
-                {/* </tbody> */}
-              </Table>
-            </TableContainer>
-          </Content>
-          <Content active={active === 1}>
-            <TextContainer>
-              <InputStyle
-                placeholder="단어를 추측해보세요"
-                onChange={handleInputChangeOne}
-                required
-                type="text"
-                onKeyDown={handleOnKeyPressOne}
-                value={inputInitializeOne}
-              ></InputStyle>
-              <SubmitButton onClick={onSubmitOne}>단추</SubmitButton>
-            </TextContainer>
-            <TableContainer>
-              <Table>
-                {/* <Thead> */}
-                <tr>
-                  <ThNumber>#</ThNumber>
-                  <ThGuess>단어추측</ThGuess>
-                  <ThPercent>유사도</ThPercent>
-                  <ThRank>유사도 순위</ThRank>
-                </tr>
-                {recentGuessOne &&
-                Object.keys(recentGuessOne).includes("word") ? (
-                  <>
-                    <RecentTr>
-                      <TdNumber>
-                        {JSON.parse(localStorage.getItem("guessOne"))[0]
-                          .length > 0 &&
-                        JSON.parse(localStorage.getItem("guessOne"))[0].some(
-                          (g) => g.word === recentGuessOne.word
-                        )
-                          ? JSON.parse(localStorage.getItem("guessOne"))[0]
-                              .length > 0 &&
-                            JSON.parse(
-                              localStorage.getItem("guessOne")
-                            )[0].find((item, index, arr) => {
-                              // setRecentGuess(inputValue);
-                              console.log("guess-item.wordOne: " + item.word);
-                              console.log(
-                                "guess-recentGuessOne: " + recentGuessOne.word
-                              );
-                              return item.word === recentGuessOne.word;
-                            }).count
-                          : localStorage.getItem("guessOne") &&
-                            JSON.parse(localStorage.getItem("guessOne"))[1]
-                              .length > 0 &&
-                            JSON.parse(
-                              localStorage.getItem("guessOne")
-                            )[1].find((item, index, arr) => {
-                              // setRecentGuess(inputValue);
-                              console.log("item.wordOne: " + item.word);
-                              console.log(
-                                "recentGuessOne: " + recentGuessOne.word
-                              );
-                              return item.word === recentGuessOne.word;
-                            })
-                          ? localStorage.getItem("guessOne") &&
-                            JSON.parse(localStorage.getItem("guessOne"))[1]
-                              .length > 0 &&
-                            JSON.parse(
-                              localStorage.getItem("guessOne")
-                            )[1].find((item, index, arr) => {
-                              // setRecentGuess(inputValue);
-                              console.log("item.word: " + item.word);
-                              console.log(
-                                "recentGuessOne: " + recentGuessOne.word
-                              );
-                              return item.word === recentGuessOne.word;
-                            }).count
-                          : recentGuessOne.count}
-                      </TdNumber>
-                      <TdGuess>{recentGuessOne.word}</TdGuess>
-                      <TdPercent>
-                        {localStorage.getItem("guessOne") &&
-                        JSON.parse(localStorage.getItem("guessOne"))[0] &&
-                        JSON.parse(localStorage.getItem("guessOne"))[0].some(
-                          (g) => g.word === recentGuessOne.word
-                        )
-                          ? localStorage.getItem("guessOne") &&
+                            {localStorage.getItem("guessOne") &&
                             JSON.parse(localStorage.getItem("guessOne"))[0] &&
-                            JSON.parse(localStorage.getItem("guessOne"))[0]
-                              .find((item, index, arr) => {
-                                return item.word === recentGuessOne.word;
-                              })
-                              .similarity.toFixed(2)
-                          : localStorage.getItem("guessOne") &&
-                            JSON.parse(localStorage.getItem("guessOne"))[1] &&
-                            JSON.parse(
-                              localStorage.getItem("guessOne")
-                            )[1].find((item, index, arr) => {
-                              return item.word === recentGuessOne.word;
-                            })
-                          ? localStorage.getItem("guessOne") &&
-                            JSON.parse(localStorage.getItem("guessOne"))[1] &&
-                            JSON.parse(localStorage.getItem("guessOne"))[1]
-                              .find((item, index, arr) => {
-                                return item.word === recentGuessOne.word;
-                              })
-                              .similarity.toFixed(2)
-                          : recentGuessOne.similarity.toFixed(2)}
-                      </TdPercent>
-                      <TdRank>
-                        {JSON.parse(localStorage.getItem("guessOne"))[0]
-                          .length > 0 &&
-                        JSON.parse(localStorage.getItem("guessOne"))[0].some(
-                          (g) => g.word === recentGuessOne.word
-                        )
-                          ? JSON.parse(
-                              localStorage.getItem("guessOne")
-                            )[0].find((item, index, arr) => {
-                              return item.word === recentGuessOne.word;
-                            }).rank === 0
-                            ? "정답!"
-                            : JSON.parse(
-                                localStorage.getItem("guessOne")
-                              )[0].find((item, index, arr) => {
-                                return item.word === recentGuessOne.word;
-                              }).rank
-                          : JSON.parse(localStorage.getItem("guessOne"))[1]
-                              .length > 0 &&
-                            JSON.parse(
-                              localStorage.getItem("guessOne")
-                            )[1].find((item, index, arr) => {
-                              return item.word === recentGuessOne.word;
-                            })
-                          ? JSON.parse(
-                              localStorage.getItem("guessOne")
-                            )[1].find((item, index, arr) => {
-                              return item.word === recentGuessOne.word;
-                            }).rank === -1
-                            ? "1000위 이상"
-                            : "이상"
-                          : recentGuessOne.rank === -1
-                          ? "1000위 이상"
-                          : "이상"}
-                      </TdRank>
-                    </RecentTr>
-                  </>
-                ) : null}
-
-                {localStorage.getItem("guessOne") != null &&
-                  JSON.parse(localStorage.getItem("guessOne"))[0] &&
-                  JSON.parse(localStorage.getItem("guessOne"))[0].map(
-                    (guess, idx) =>
-                      recentGuessOne &&
-                      Object.keys(recentGuessOne).includes("word") ? (
-                        guess.word === recentGuessOne.word ? null : (
-                          <tr>
-                            <TdNumber>{guess.count}</TdNumber>
-                            <TdGuess>{guess.word}</TdGuess>
-                            <TdPercent>
-                              {guess.similarity
-                                ? guess.similarity.toFixed(2)
-                                : guess.similarity}
-                            </TdPercent>
-                            <TdRank>
-                              {guess.rank === 0 ? "정답!" : guess.rank}
-                            </TdRank>
-                          </tr>
-                        )
-                      ) : (
-                        <tr>
-                          <TdNumber>{guess.count}</TdNumber>
-                          <TdGuess>{guess.word}</TdGuess>
-                          <TdPercent>
-                            {guess.similarity
-                              ? guess.similarity.toFixed(2)
-                              : guess.similarity}
+                            JSON.parse(localStorage.getItem("guessOne"))[0].some(
+                              (g) => g.word === recentGuessOne.word
+                            )
+                              ? localStorage.getItem("guessOne") &&
+                                JSON.parse(localStorage.getItem("guessOne"))[0] &&
+                                JSON.parse(localStorage.getItem("guessOne"))[0]
+                                  .find((item, index, arr) => {
+                                    return item.word === recentGuessOne.word;
+                                  })
+                                  .similarity.toFixed(2)
+                              : localStorage.getItem("guessOne") &&
+                                JSON.parse(localStorage.getItem("guessOne"))[1] &&
+                                JSON.parse(
+                                  localStorage.getItem("guessOne")
+                                )[1].find((item, index, arr) => {
+                                  return item.word === recentGuessOne.word;
+                                })
+                              ? localStorage.getItem("guessOne") &&
+                                JSON.parse(localStorage.getItem("guessOne"))[1] &&
+                                JSON.parse(localStorage.getItem("guessOne"))[1]
+                                  .find((item, index, arr) => {
+                                    return item.word === recentGuessOne.word;
+                                  })
+                                  .similarity.toFixed(2)
+                              : recentGuessOne.similarity.toFixed(2)}
                           </TdPercent>
                           <TdRank>
-                            {guess.rank === 0 ? "정답!" : guess.rank}
+                            {JSON.parse(localStorage.getItem("guessOne"))[0]
+                              .length > 0 &&
+                            JSON.parse(localStorage.getItem("guessOne"))[0].some(
+                              (g) => g.word === recentGuessOne.word
+                            )
+                              ? JSON.parse(
+                                  localStorage.getItem("guessOne")
+                                )[0].find((item, index, arr) => {
+                                  return item.word === recentGuessOne.word;
+                                }).rank === 0
+                                ? "정답!"
+                                : JSON.parse(
+                                    localStorage.getItem("guessOne")
+                                  )[0].find((item, index, arr) => {
+                                    return item.word === recentGuessOne.word;
+                                  }).rank
+                              : JSON.parse(localStorage.getItem("guessOne"))[1]
+                                  .length > 0 &&
+                                JSON.parse(
+                                  localStorage.getItem("guessOne")
+                                )[1].find((item, index, arr) => {
+                                  return item.word === recentGuessOne.word;
+                                })
+                              ? JSON.parse(
+                                  localStorage.getItem("guessOne")
+                                )[1].find((item, index, arr) => {
+                                  return item.word === recentGuessOne.word;
+                                }).rank === -1
+                                ? "1000위 이상"
+                                : "이상"
+                              : recentGuessOne.rank === -1
+                              ? "1000위 이상"
+                              : "이상"}
                           </TdRank>
-                        </tr>
-                      )
-                  )}
-                {localStorage.getItem("guessOne") != null &&
-                  JSON.parse(localStorage.getItem("guessOne"))[1] &&
-                  JSON.parse(localStorage.getItem("guessOne"))[1].map(
-                    (guess, idx) =>
-                      recentGuessOne &&
-                      Object.keys(recentGuessOne).includes("word") ? (
-                        guess.word === recentGuessOne.word ? null : (
-                          <tr>
-                            <TdNumber>{guess.count}</TdNumber>
-                            <TdGuess>{guess.word}</TdGuess>
-                            <TdPercent>
-                              {guess.similarity
-                                ? guess.similarity.toFixed(2)
-                                : guess.similarity}
-                            </TdPercent>
-                            <TdRank>
-                              {guess.rank === -1 ? "1000위 이상" : guess.rank}
-                            </TdRank>
-                          </tr>
-                        )
-                      ) : (
-                        <tr>
-                          <TdNumber>{guess.count}</TdNumber>
-                          <TdGuess>{guess.word}</TdGuess>
-                          <TdPercent>
-                            {guess.similarity
-                              ? guess.similarity.toFixed(2)
-                              : guess.similarity}
-                          </TdPercent>
-                          <TdRank>
-                            {guess.rank === -1 ? "1000위 이상" : guess.rank}
-                          </TdRank>
-                        </tr>
-                      )
-                  )}
-                {/* </Thead> */}
-                {/* <tbody> */}
+                        </RecentTr>
+                      </>
+                    ) : null}
 
-                {/* </tbody> */}
-              </Table>
-            </TableContainer>
-          </Content>
-          <Content active={active === 2}>
-            <TextContainer>
-              <InputStyle
-                placeholder="단어를 추측해보세요"
-                onChange={handleInputChangeTwo}
-                required
-                type="text"
-                onKeyDown={handleOnKeyPressTwo}
-                value={inputInitializeTwo}
-              ></InputStyle>
-              <SubmitButton onClick={onSubmitTwo}>단추</SubmitButton>
-            </TextContainer>
-            <TableContainer>
-              <Table>
-                {/* <Thead> */}
-                <tr>
-                  <ThNumber>#</ThNumber>
-                  <ThGuess>단어추측</ThGuess>
-                  <ThPercent>유사도</ThPercent>
-                  <ThRank>유사도 순위</ThRank>
-                </tr>
-                {/* </Thead> */}
-                {/* <tbody> */}
-                {recentGuessTwo &&
-                Object.keys(recentGuessTwo).includes("word") ? (
-                  <>
-                    <RecentTr>
-                      <TdNumber>
-                        {JSON.parse(localStorage.getItem("guessTwo"))[0]
-                          .length > 0 &&
-                        JSON.parse(localStorage.getItem("guessTwo"))[0].some(
-                          (g) => g.word === recentGuessTwo.word
-                        )
-                          ? JSON.parse(localStorage.getItem("guessTwo"))[0]
+                    {localStorage.getItem("guessOne") != null &&
+                      JSON.parse(localStorage.getItem("guessOne"))[0] &&
+                      JSON.parse(localStorage.getItem("guessOne"))[0].map(
+                        (guess, idx) =>
+                          recentGuessOne &&
+                          Object.keys(recentGuessOne).includes("word") ? (
+                            guess.word === recentGuessOne.word ? null : (
+                              <tr>
+                                <TdNumber>{guess.count}</TdNumber>
+                                <TdGuess>{guess.word}</TdGuess>
+                                <TdPercent>
+                                  {guess.similarity
+                                    ? guess.similarity.toFixed(2)
+                                    : guess.similarity}
+                                </TdPercent>
+                                <TdRank>
+                                  {guess.rank === 0 ? "정답!" : guess.rank}
+                                </TdRank>
+                              </tr>
+                            )
+                          ) : (
+                            <tr>
+                              <TdNumber>{guess.count}</TdNumber>
+                              <TdGuess>{guess.word}</TdGuess>
+                              <TdPercent>
+                                {guess.similarity
+                                  ? guess.similarity.toFixed(2)
+                                  : guess.similarity}
+                              </TdPercent>
+                              <TdRank>
+                                {guess.rank === 0 ? "정답!" : guess.rank}
+                              </TdRank>
+                            </tr>
+                          )
+                      )}
+                    {localStorage.getItem("guessOne") != null &&
+                      JSON.parse(localStorage.getItem("guessOne"))[1] &&
+                      JSON.parse(localStorage.getItem("guessOne"))[1].map(
+                        (guess, idx) =>
+                          recentGuessOne &&
+                          Object.keys(recentGuessOne).includes("word") ? (
+                            guess.word === recentGuessOne.word ? null : (
+                              <tr>
+                                <TdNumber>{guess.count}</TdNumber>
+                                <TdGuess>{guess.word}</TdGuess>
+                                <TdPercent>
+                                  {guess.similarity
+                                    ? guess.similarity.toFixed(2)
+                                    : guess.similarity}
+                                </TdPercent>
+                                <TdRank>
+                                  {guess.rank === -1 ? "1000위 이상" : guess.rank}
+                                </TdRank>
+                              </tr>
+                            )
+                          ) : (
+                            <tr>
+                              <TdNumber>{guess.count}</TdNumber>
+                              <TdGuess>{guess.word}</TdGuess>
+                              <TdPercent>
+                                {guess.similarity
+                                  ? guess.similarity.toFixed(2)
+                                  : guess.similarity}
+                              </TdPercent>
+                              <TdRank>
+                                {guess.rank === -1 ? "1000위 이상" : guess.rank}
+                              </TdRank>
+                            </tr>
+                          )
+                      )}
+                    {/* </Thead> */}
+                    {/* <tbody> */}
+
+                    {/* </tbody> */}
+                  </Table>
+                </TableContainer>
+              </Content>
+              <Content active={active === 2}>
+                <TextContainer>
+                  <InputStyle
+                    placeholder="단어를 추측해보세요"
+                    onChange={handleInputChangeTwo}
+                    required
+                    type="text"
+                    onKeyDown={handleOnKeyPressTwo}
+                    value={inputInitializeTwo}
+                  ></InputStyle>
+                  <SubmitButton onClick={onSubmitTwo}>단추</SubmitButton>
+                </TextContainer>
+                <TableContainer>
+                  <Table>
+                    {/* <Thead> */}
+                    <tr>
+                      <ThNumber>#</ThNumber>
+                      <ThGuess>단어추측</ThGuess>
+                      <ThPercent>유사도</ThPercent>
+                      <ThRank>유사도 순위</ThRank>
+                    </tr>
+                    {/* </Thead> */}
+                    {/* <tbody> */}
+                    {recentGuessTwo &&
+                    Object.keys(recentGuessTwo).includes("word") ? (
+                      <>
+                        <RecentTr>
+                          <TdNumber>
+                            {JSON.parse(localStorage.getItem("guessTwo"))[0]
                               .length > 0 &&
-                            JSON.parse(
-                              localStorage.getItem("guessTwo")
-                            )[0].find((item, index, arr) => {
-                              // setRecentGuess(inputValue);
-                              console.log("guess-item.word: " + item.word);
-                              console.log(
-                                "guess-recentGuessTwo: " + recentGuessTwo.word
-                              );
-                              return item.word === recentGuessTwo.word;
-                            }).count
-                          : localStorage.getItem("guessTwo") &&
-                            JSON.parse(localStorage.getItem("guessTwo"))[1]
-                              .length > 0 &&
-                            JSON.parse(
-                              localStorage.getItem("guessTwo")
-                            )[1].find((item, index, arr) => {
-                              // setRecentGuess(inputValue);
-                              console.log("item.word: " + item.word);
-                              console.log(
-                                "recentGuessTwo: " + recentGuessTwo.word
-                              );
-                              return item.word === recentGuessTwo.word;
-                            })
-                          ? localStorage.getItem("guessTwo") &&
-                            JSON.parse(localStorage.getItem("guessTwo"))[1]
-                              .length > 0 &&
-                            JSON.parse(
-                              localStorage.getItem("guessTwo")
-                            )[1].find((item, index, arr) => {
-                              // setRecentGuess(inputValue);
-                              console.log("item.word: " + item.word);
-                              console.log(
-                                "recentGuessTwo: " + recentGuessTwo.word
-                              );
-                              return item.word === recentGuessTwo.word;
-                            }).count
-                          : recentGuessTwo.count}
-                      </TdNumber>
-                      <TdGuess>{recentGuessTwo.word}</TdGuess>
-                      <TdPercent>
-                        {localStorage.getItem("guessTwo") &&
-                        JSON.parse(localStorage.getItem("guessTwo"))[0] &&
-                        JSON.parse(localStorage.getItem("guessTwo"))[0].some(
-                          (g) => g.word === recentGuessTwo.word
-                        )
-                          ? localStorage.getItem("guessTwo") &&
+                            JSON.parse(localStorage.getItem("guessTwo"))[0].some(
+                              (g) => g.word === recentGuessTwo.word
+                            )
+                              ? JSON.parse(localStorage.getItem("guessTwo"))[0]
+                                  .length > 0 &&
+                                JSON.parse(
+                                  localStorage.getItem("guessTwo")
+                                )[0].find((item, index, arr) => {
+                                  // setRecentGuess(inputValue);
+                                  console.log("guess-item.word: " + item.word);
+                                  console.log(
+                                    "guess-recentGuessTwo: " + recentGuessTwo.word
+                                  );
+                                  return item.word === recentGuessTwo.word;
+                                }).count
+                              : localStorage.getItem("guessTwo") &&
+                                JSON.parse(localStorage.getItem("guessTwo"))[1]
+                                  .length > 0 &&
+                                JSON.parse(
+                                  localStorage.getItem("guessTwo")
+                                )[1].find((item, index, arr) => {
+                                  // setRecentGuess(inputValue);
+                                  console.log("item.word: " + item.word);
+                                  console.log(
+                                    "recentGuessTwo: " + recentGuessTwo.word
+                                  );
+                                  return item.word === recentGuessTwo.word;
+                                })
+                              ? localStorage.getItem("guessTwo") &&
+                                JSON.parse(localStorage.getItem("guessTwo"))[1]
+                                  .length > 0 &&
+                                JSON.parse(
+                                  localStorage.getItem("guessTwo")
+                                )[1].find((item, index, arr) => {
+                                  // setRecentGuess(inputValue);
+                                  console.log("item.word: " + item.word);
+                                  console.log(
+                                    "recentGuessTwo: " + recentGuessTwo.word
+                                  );
+                                  return item.word === recentGuessTwo.word;
+                                }).count
+                              : recentGuessTwo.count}
+                          </TdNumber>
+                          <TdGuess>{recentGuessTwo.word}</TdGuess>
+                          <TdPercent>
+                            {localStorage.getItem("guessTwo") &&
                             JSON.parse(localStorage.getItem("guessTwo"))[0] &&
-                            JSON.parse(localStorage.getItem("guessTwo"))[0]
-                              .find((item, index, arr) => {
-                                return item.word === recentGuessTwo.word;
-                              })
-                              .similarity.toFixed(2)
-                          : localStorage.getItem("guessTwo") &&
-                            JSON.parse(localStorage.getItem("guessTwo"))[1] &&
-                            JSON.parse(
-                              localStorage.getItem("guessTwo")
-                            )[1].find((item, index, arr) => {
-                              return item.word === recentGuessTwo.word;
-                            })
-                          ? localStorage.getItem("guessTwo") &&
-                            JSON.parse(localStorage.getItem("guessTwo"))[1] &&
-                            JSON.parse(localStorage.getItem("guessTwo"))[1]
-                              .find((item, index, arr) => {
-                                return item.word === recentGuessTwo.word;
-                              })
-                              .similarity.toFixed(2)
-                          : recentGuessTwo.similarity.toFixed(2)}
-                      </TdPercent>
-                      <TdRank>
-                        {JSON.parse(localStorage.getItem("guessTwo"))[0]
-                          .length > 0 &&
-                        JSON.parse(localStorage.getItem("guessTwo"))[0].some(
-                          (g) => g.word === recentGuessTwo.word
-                        )
-                          ? JSON.parse(
-                              localStorage.getItem("guessTwo")
-                            )[0].find((item, index, arr) => {
-                              return item.word === recentGuessTwo.word;
-                            }).rank === 0
-                            ? "정답!"
-                            : JSON.parse(
-                                localStorage.getItem("guessTwo")
-                              )[0].find((item, index, arr) => {
-                                return item.word === recentGuessTwo.word;
-                              }).rank
-                          : JSON.parse(localStorage.getItem("guessTwo"))[1]
+                            JSON.parse(localStorage.getItem("guessTwo"))[0].some(
+                              (g) => g.word === recentGuessTwo.word
+                            )
+                              ? localStorage.getItem("guessTwo") &&
+                                JSON.parse(localStorage.getItem("guessTwo"))[0] &&
+                                JSON.parse(localStorage.getItem("guessTwo"))[0]
+                                  .find((item, index, arr) => {
+                                    return item.word === recentGuessTwo.word;
+                                  })
+                                  .similarity.toFixed(2)
+                              : localStorage.getItem("guessTwo") &&
+                                JSON.parse(localStorage.getItem("guessTwo"))[1] &&
+                                JSON.parse(
+                                  localStorage.getItem("guessTwo")
+                                )[1].find((item, index, arr) => {
+                                  return item.word === recentGuessTwo.word;
+                                })
+                              ? localStorage.getItem("guessTwo") &&
+                                JSON.parse(localStorage.getItem("guessTwo"))[1] &&
+                                JSON.parse(localStorage.getItem("guessTwo"))[1]
+                                  .find((item, index, arr) => {
+                                    return item.word === recentGuessTwo.word;
+                                  })
+                                  .similarity.toFixed(2)
+                              : recentGuessTwo.similarity.toFixed(2)}
+                          </TdPercent>
+                          <TdRank>
+                            {JSON.parse(localStorage.getItem("guessTwo"))[0]
                               .length > 0 &&
-                            JSON.parse(
-                              localStorage.getItem("guessTwo")
-                            )[1].find((item, index, arr) => {
-                              return item.word === recentGuessTwo.word;
-                            })
-                          ? JSON.parse(
-                              localStorage.getItem("guessTwo")
-                            )[1].find((item, index, arr) => {
-                              return item.word === recentGuessTwo.word;
-                            }).rank === -1
-                            ? "1000위 이상"
-                            : "이상"
-                          : recentGuessTwo.rank === -1
-                          ? "1000위 이상"
-                          : "이상"}
-                      </TdRank>
-                    </RecentTr>
-                  </>
-                ) : null}
-                {/* {localStorage.getItem("guessTwo") != null &&
-                  JSON.parse(localStorage.getItem("guessTwo"))[0] &&
-                  JSON.parse(localStorage.getItem("guessTwo"))[0].map(
-                    (guess, idx) =>
-                      guess.word === recentGuessTwo ? null : (
-                        <tr>
-                          <TdNumber>{guess.count}</TdNumber>
-                          <TdGuess>{guess.word}</TdGuess>
-                          <TdPercent>
-                            {guess.similarity
-                              ? guess.similarity.toFixed(2)
-                              : guess.similarity}
-                          </TdPercent>
-                          <TdRank>{guess.rank}</TdRank>
-                        </tr>
-                      )
-                  )} */}
-                {localStorage.getItem("guessTwo") != null &&
-                  JSON.parse(localStorage.getItem("guessTwo"))[0] &&
-                  JSON.parse(localStorage.getItem("guessTwo"))[0].map(
-                    (guess, idx) =>
-                      recentGuessTwo &&
-                      Object.keys(recentGuessTwo).includes("word") ? (
-                        guess.word === recentGuessTwo.word ? null : (
-                          <tr>
-                            <TdNumber>{guess.count}</TdNumber>
-                            <TdGuess>{guess.word}</TdGuess>
-                            <TdPercent>
-                              {guess.similarity
-                                ? guess.similarity.toFixed(2)
-                                : guess.similarity}
-                            </TdPercent>
-                            <TdRank>
-                              {guess.rank === 0 ? "정답!" : guess.rank}
-                            </TdRank>
-                          </tr>
-                        )
-                      ) : (
-                        <tr>
-                          <TdNumber>{guess.count}</TdNumber>
-                          <TdGuess>{guess.word}</TdGuess>
-                          <TdPercent>
-                            {guess.similarity
-                              ? guess.similarity.toFixed(2)
-                              : guess.similarity}
-                          </TdPercent>
-                          <TdRank>
-                            {guess.rank === 0 ? "정답!" : guess.rank}
+                            JSON.parse(localStorage.getItem("guessTwo"))[0].some(
+                              (g) => g.word === recentGuessTwo.word
+                            )
+                              ? JSON.parse(
+                                  localStorage.getItem("guessTwo")
+                                )[0].find((item, index, arr) => {
+                                  return item.word === recentGuessTwo.word;
+                                }).rank === 0
+                                ? "정답!"
+                                : JSON.parse(
+                                    localStorage.getItem("guessTwo")
+                                  )[0].find((item, index, arr) => {
+                                    return item.word === recentGuessTwo.word;
+                                  }).rank
+                              : JSON.parse(localStorage.getItem("guessTwo"))[1]
+                                  .length > 0 &&
+                                JSON.parse(
+                                  localStorage.getItem("guessTwo")
+                                )[1].find((item, index, arr) => {
+                                  return item.word === recentGuessTwo.word;
+                                })
+                              ? JSON.parse(
+                                  localStorage.getItem("guessTwo")
+                                )[1].find((item, index, arr) => {
+                                  return item.word === recentGuessTwo.word;
+                                }).rank === -1
+                                ? "1000위 이상"
+                                : "이상"
+                              : recentGuessTwo.rank === -1
+                              ? "1000위 이상"
+                              : "이상"}
                           </TdRank>
-                        </tr>
-                      )
-                  )}
-                {/* {localStorage.getItem("guessTwo") != null &&
-                  JSON.parse(localStorage.getItem("guessTwo"))[1] &&
-                  JSON.parse(localStorage.getItem("guessTwo"))[1].map(
-                    (guess, idx) =>
-                      guess.word === recentGuessTwo ? null : (
-                        <tr>
-                          <TdNumber>{guess.count}</TdNumber>
-                          <TdGuess>{guess.word}</TdGuess>
-                          <TdPercent>
-                            {guess.similarity
-                              ? guess.similarity.toFixed(2)
-                              : guess.similarity}
-                          </TdPercent>
-                          <TdRank>{guess.rank}</TdRank>
-                        </tr>
-                      )
-                  )} */}
-                {localStorage.getItem("guessTwo") != null &&
-                  JSON.parse(localStorage.getItem("guessTwo"))[1] &&
-                  JSON.parse(localStorage.getItem("guessTwo"))[1].map(
-                    (guess, idx) =>
-                      recentGuessTwo &&
-                      Object.keys(recentGuessTwo).includes("word") ? (
-                        guess.word === recentGuessTwo.word ? null : (
-                          <tr>
-                            <TdNumber>{guess.count}</TdNumber>
-                            <TdGuess>{guess.word}</TdGuess>
-                            <TdPercent>
-                              {guess.similarity
-                                ? guess.similarity.toFixed(2)
-                                : guess.similarity}
-                            </TdPercent>
-                            <TdRank>
-                              {guess.rank === -1 ? "1000위 이상" : guess.rank}
-                            </TdRank>
-                          </tr>
-                        )
-                      ) : (
-                        <tr>
-                          <TdNumber>{guess.count}</TdNumber>
-                          <TdGuess>{guess.word}</TdGuess>
-                          <TdPercent>
-                            {guess.similarity
-                              ? guess.similarity.toFixed(2)
-                              : guess.similarity}
-                          </TdPercent>
-                          <TdRank>
-                            {guess.rank === -1 ? "1000위 이상" : guess.rank}
-                          </TdRank>
-                        </tr>
-                      )
-                  )}
-                {/* </tbody> */}
-              </Table>
-            </TableContainer>
-          </Content>
-          {localStorage.getItem("winState") === "1" ||
-          localStorage.getItem("winState") === "0" ? null : (
-            <GiveUpContainer>
-              <GiveUpButtonContainer>
-                <Button onClick={confirmGiveUp}>포기하기</Button>
-              </GiveUpButtonContainer>
-            </GiveUpContainer>
-          )}
-        </ContentContainer>
-      </CenterContainer>
-    </Container>
-  ) : null;
+                        </RecentTr>
+                      </>
+                    ) : null}
+                    {/* {localStorage.getItem("guessTwo") != null &&
+                      JSON.parse(localStorage.getItem("guessTwo"))[0] &&
+                      JSON.parse(localStorage.getItem("guessTwo"))[0].map(
+                        (guess, idx) =>
+                          guess.word === recentGuessTwo ? null : (
+                            <tr>
+                              <TdNumber>{guess.count}</TdNumber>
+                              <TdGuess>{guess.word}</TdGuess>
+                              <TdPercent>
+                                {guess.similarity
+                                  ? guess.similarity.toFixed(2)
+                                  : guess.similarity}
+                              </TdPercent>
+                              <TdRank>{guess.rank}</TdRank>
+                            </tr>
+                          )
+                      )} */}
+                    {localStorage.getItem("guessTwo") != null &&
+                      JSON.parse(localStorage.getItem("guessTwo"))[0] &&
+                      JSON.parse(localStorage.getItem("guessTwo"))[0].map(
+                        (guess, idx) =>
+                          recentGuessTwo &&
+                          Object.keys(recentGuessTwo).includes("word") ? (
+                            guess.word === recentGuessTwo.word ? null : (
+                              <tr>
+                                <TdNumber>{guess.count}</TdNumber>
+                                <TdGuess>{guess.word}</TdGuess>
+                                <TdPercent>
+                                  {guess.similarity
+                                    ? guess.similarity.toFixed(2)
+                                    : guess.similarity}
+                                </TdPercent>
+                                <TdRank>
+                                  {guess.rank === 0 ? "정답!" : guess.rank}
+                                </TdRank>
+                              </tr>
+                            )
+                          ) : (
+                            <tr>
+                              <TdNumber>{guess.count}</TdNumber>
+                              <TdGuess>{guess.word}</TdGuess>
+                              <TdPercent>
+                                {guess.similarity
+                                  ? guess.similarity.toFixed(2)
+                                  : guess.similarity}
+                              </TdPercent>
+                              <TdRank>
+                                {guess.rank === 0 ? "정답!" : guess.rank}
+                              </TdRank>
+                            </tr>
+                          )
+                      )}
+                    {/* {localStorage.getItem("guessTwo") != null &&
+                      JSON.parse(localStorage.getItem("guessTwo"))[1] &&
+                      JSON.parse(localStorage.getItem("guessTwo"))[1].map(
+                        (guess, idx) =>
+                          guess.word === recentGuessTwo ? null : (
+                            <tr>
+                              <TdNumber>{guess.count}</TdNumber>
+                              <TdGuess>{guess.word}</TdGuess>
+                              <TdPercent>
+                                {guess.similarity
+                                  ? guess.similarity.toFixed(2)
+                                  : guess.similarity}
+                              </TdPercent>
+                              <TdRank>{guess.rank}</TdRank>
+                            </tr>
+                          )
+                      )} */}
+                    {localStorage.getItem("guessTwo") != null &&
+                      JSON.parse(localStorage.getItem("guessTwo"))[1] &&
+                      JSON.parse(localStorage.getItem("guessTwo"))[1].map(
+                        (guess, idx) =>
+                          recentGuessTwo &&
+                          Object.keys(recentGuessTwo).includes("word") ? (
+                            guess.word === recentGuessTwo.word ? null : (
+                              <tr>
+                                <TdNumber>{guess.count}</TdNumber>
+                                <TdGuess>{guess.word}</TdGuess>
+                                <TdPercent>
+                                  {guess.similarity
+                                    ? guess.similarity.toFixed(2)
+                                    : guess.similarity}
+                                </TdPercent>
+                                <TdRank>
+                                  {guess.rank === -1 ? "1000위 이상" : guess.rank}
+                                </TdRank>
+                              </tr>
+                            )
+                          ) : (
+                            <tr>
+                              <TdNumber>{guess.count}</TdNumber>
+                              <TdGuess>{guess.word}</TdGuess>
+                              <TdPercent>
+                                {guess.similarity
+                                  ? guess.similarity.toFixed(2)
+                                  : guess.similarity}
+                              </TdPercent>
+                              <TdRank>
+                                {guess.rank === -1 ? "1000위 이상" : guess.rank}
+                              </TdRank>
+                            </tr>
+                          )
+                      )}
+                    {/* </tbody> */}
+                  </Table>
+                </TableContainer>
+              </Content>
+              {localStorage.getItem("winState") === "1" ||
+              localStorage.getItem("winState") === "0" ? null : (
+                <GiveUpContainer>
+                  <GiveUpButtonContainer>
+                    <Button onClick={confirmGiveUp}>포기하기</Button>
+                  </GiveUpButtonContainer>
+                </GiveUpContainer>
+              )}
+            </ContentContainer>
+          </CenterContainer>
+        </Container>
+        <Footer />
+      </>
+    ) : null
+  );
 }
