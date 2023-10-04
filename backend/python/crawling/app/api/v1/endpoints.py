@@ -4,7 +4,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from app.service.crawler.url_collector import remove_and_insert_urls_into_db
 from app.service.crawler.url_collector import scheduling_url_collector
 from app.service.crawler.content_collector import update_articles_in_db
-from app.service.crawler.content_collector import scheduling_content_collector
+from app.service.crawler.content_collector import update_302_error_articles_in_db
 from datetime import datetime
 
 router = APIRouter()
@@ -22,8 +22,8 @@ async def schedule_jobs(
     threshold: int,
     duration: float,
     minutes: float,
+    hours: float,
 ):
-    print("url 크롤링 스케줄러를 등록합니다.")
     scheduler.add_job(
         scheduling_url_collector,
         "interval",
@@ -31,18 +31,29 @@ async def schedule_jobs(
         minutes=minutes,
         id="job_collect_urls",
         replace_existing=True,
+        max_instances=5,
     )
     print("url 크롤링 스케줄러 등록완료!")
-    print("content 크롤링 스케줄러를 등록합니다.")
+
     scheduler.add_job(
-        scheduling_content_collector,
+        update_articles_in_db,
         "interval",
         (duration,),
         minutes=minutes,
         id="job_collect_contents",
         replace_existing=True,
+        max_instances=5,
     )
     print("content 크롤링 스케줄러 등록완료!")
+
+    scheduler.add_job(
+        update_302_error_articles_in_db,
+        "interval",
+        minutes=minutes,
+        id="job_302_error_update",
+        replace_existing=True,
+    )
+    print("302 에러 업데이트 스케줄러 등록 완료!")
 
 
 @router.get("/", tags=["views"])
@@ -58,6 +69,7 @@ async def schedule_collection_tasks(
     threshold: int = 10,
     duration: float = 0.1,
     minutes: float = 1.0,
+    hours: int = 24,
 ):
     """***주어진 파라미터를 기반으로 URL 및 Content 크롤링 작업을 스케줄링합니다***.
 
@@ -65,6 +77,7 @@ async def schedule_collection_tasks(
     - **threshold**: 페이지 임계값 (10000을 입력하면 그날 최대 페이지까지 얻을 수 있음)
     - **duration**: 크롤링 딜레이 시간 (분 단위)
     - **minutes**: scheduler time interval. 기본 값 : 1분
+    - **hours**: scheduler time interval. 기본 값(302 업데이트) : 24시간
 
     APScheduler를 사용하여 1분마다 실행됩니다. 백그라운드에서 수행됩니다.
     """
@@ -139,5 +152,20 @@ async def start_content_collection(
     try:
         background_tasks.add_task(update_articles_in_db, duration)
         return {"status": "Contents collection started."}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.put("/api/v1/collection/update/302-error/", tags=["collection"])
+async def start_302_error_content_collection(background_tasks: BackgroundTasks):
+    """***DB에 존재하는 status 필드 값이 "302"인 document의 url, cralwed, status를 update하는 API입니다.***
+    ***302에러는 url이 존재하지만 콘텐츠의 이동이 있어서 처음 크롤링 당시 에러가 났던 url이기 때문입니다.***
+    - 필드 값 없음.
+
+    백그라운드에서 수행됩니다.
+    """
+    try:
+        background_tasks.add_task(update_302_error_articles_in_db)
+        return {"status": "302 Error Contents collection started."}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
