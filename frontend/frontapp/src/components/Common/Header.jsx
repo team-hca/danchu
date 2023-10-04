@@ -14,6 +14,12 @@ const Container = styled.div`
   position: relative;
   margin-top: 0px;
   margin-bottom: 200px;
+
+  @media (max-width: 720px) {
+    width: 100w;
+    padding: 0 15px;
+    margin-bottom: 150px;
+  }
 `;
 
 const Logo = styled.img`
@@ -22,6 +28,11 @@ const Logo = styled.img`
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
+
+  @media (max-width: 720px) {
+    width: 50vw;
+    padding: 0 15px;
+  }
 `;
 
 const QuestionMark = styled.button`
@@ -39,16 +50,10 @@ const QuestionMark = styled.button`
     outline: none;
   }
 
-  img {
-    transition: transform 0.3s;
-  }
-
-  &:hover img {
-    transform: scale(1.1);
-  }
-
-  &:active img {
-    opacity: 0.7;
+  @media (max-width: 720px) {
+    // width: 30vw;
+    left: 50vw;
+    padding: 0 15px;
   }
 `;
 
