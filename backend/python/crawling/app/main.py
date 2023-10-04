@@ -12,7 +12,7 @@ app = FastAPI(
 
 @app.on_event("startup")
 async def startup_event():
-    await schedule_jobs(start_page=1, threshold=10, duration=0.1, minutes=1.0)
+    await schedule_jobs(start_page=1, threshold=10, duration=0.1, minutes=1, hours=24)
 
 
 # static 폴더 설정 (예: CSS, JS, 이미지 등)
