@@ -42,6 +42,7 @@ async def schedule_jobs(
         minutes=minutes,
         id="job_collect_contents",
         replace_existing=True,
+        max_instances=5,
     )
     print("content 크롤링 스케줄러 등록완료!")
 
