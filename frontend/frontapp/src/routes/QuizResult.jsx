@@ -8,13 +8,19 @@ import News from "../components/News/News";
 import Error from "./Error";
 
 const Container = styled.div`
-  width: auto;
+  width: 100%;
+  max-width: 1200px;
   display: flex;
   flex-direction: column;
-  // overflow-y: auto;
   align-items: center;
   justify-content: center;
+  margin: auto;
+
+  @media (max-width: 720px) {
+    width: 200%;
+  }
 `;
+
 let today = new Date();
 
 function getWordsFromLocalStorage() {
