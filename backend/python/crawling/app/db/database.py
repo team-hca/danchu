@@ -26,6 +26,17 @@ async def fetch_uncrawled_documents(crawled: str):
     return documents
 
 
+# 특정 에러 코드 도큐먼트 반환 함수
+async def fetch_error_documents(status: str):
+    collection = await initialize_db()
+    query = {"status": status}
+    sort_fields = [("date", ASCENDING), ("created_at", ASCENDING)]
+    documents = (
+        await collection.find(query).sort(sort_fields).to_list(None)
+    )  # fetch up to 1000 documents
+    return documents
+
+
 async def update_document_in_db(document_id, update_data):
     collection = await initialize_db()
     try:
