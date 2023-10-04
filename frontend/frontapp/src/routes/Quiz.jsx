@@ -239,7 +239,73 @@ export default function Quiz() {
 
   const giveUpConfirm = () => {
     alert("포기했습니다.");
-    // localStorage.setItem("winState", 0);
+    localStorage.setItem("winState", 0); // 1. winState 변경
+    let obj = new Object();
+    // 2. 정답 가져오기
+    axios
+    .get(
+      `/v1/quiz/answer?winState=${parseInt(localStorage.getItem("winState"))}&date=${today.getFullYear()}-${(today.getMonth() + 1)
+        .toString()
+        .padStart(2, "0")}-${today.getDate().toString().padStart(2, "0")}
+      }`
+    )
+    .then((response) => {
+      obj.count = response.data.count;
+      obj.answers = response.data.answers;
+
+      // 3. 정답 넣기
+      let arr = localStorage.getItem("guess") // 1번 문제
+      ? JSON.parse(localStorage.getItem("guess"))
+      : [[], []];
+
+      let tmpObj = new Object();
+      tmpObj.word = obj.answers[0];      tmpObj.similarity = 100;
+      tmpObj.rank = 0;
+      tmpObj.count = arr[0].length + arr[1].length + 1;
+      if ((!localStorage.getItem("guess")) || (JSON.parse(localStorage.getItem("guess"))[0][0]["word"] !== obj.answers[0])) {
+        arr[0].unshift(tmpObj);
+        localStorage.setItem("guess", JSON.stringify(arr));
+      }
+
+      if (obj.count >= 2) { // 2번 문제
+        arr = localStorage.getItem("guessOne")
+        ? JSON.parse(localStorage.getItem("guessOne"))
+        : [[], []];
+
+        tmpObj = new Object();
+        tmpObj.word = obj.answers[1];
+        tmpObj.similarity = 100;
+        tmpObj.rank = 0;
+        tmpObj.count = arr[0].length + arr[1].length + 1;
+
+        if ((!localStorage.getItem("guessOne")) || (JSON.parse(localStorage.getItem("guessOne"))[0][0]["word"] !== obj.answers[0])) {
+          arr[0].unshift(tmpObj);
+          localStorage.setItem("guessOne", JSON.stringify(arr));
+        }
+      }
+
+      if (obj.count === 3) { // 3번 문제
+        arr = localStorage.getItem("guessTwo")
+        ? JSON.parse(localStorage.getItem("guessTwo"))
+        : [[], []];
+
+        tmpObj = new Object();
+        tmpObj.word = obj.answers[2];
+        tmpObj.similarity = 100;
+        tmpObj.rank = 0;
+        tmpObj.count = arr[0].length + arr[1].length + 1;
+
+        if ((!localStorage.getItem("guessTwo")) || (JSON.parse(localStorage.getItem("guessTwo"))[0][0]["word"] !== obj.answers[0])) {
+          arr[0].unshift(tmpObj);
+          localStorage.setItem("guessTwo", JSON.stringify(arr));
+        }
+      }
+      
+    })
+    .catch((error) => {
+      console.error("quiz answer request failed: ", error);
+    });
+
     // if (quizCount === 1) {
     //   let arr = localStorage.getItem("guess")? JSON.parse(localStorage.getItem("guess")): [[],[]];
     //   let obj = new Object();
