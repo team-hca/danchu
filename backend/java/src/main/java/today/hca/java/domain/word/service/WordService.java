@@ -93,9 +93,8 @@ public class WordService {
         int rankValue = doc.getInteger("순위");
 
         resultDto.setWord(inputValue);
-        resultDto.setSimilarity(similarityValue);
+        resultDto.setSimilarity(similarityValue * 100); // 백분율로 반환하도록 * 100
         resultDto.setItAnswer(false);
-
 
         return resultDto;
 
