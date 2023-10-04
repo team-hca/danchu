@@ -240,8 +240,14 @@ export default function Quiz() {
   const giveUpConfirm = () => {
     alert("포기했습니다.");
     localStorage.setItem("winState", 0); // 1. winState 변경
+
+    // 2. startTime 없으면 세팅
+    if (!localStorage.getItem("startTime")) {
+      localStorage.setItem("startTime", Date.now());
+    }
+
     let obj = new Object();
-    // 2. 정답 가져오기
+    // 3. 정답 가져오기
     axios
     .get(
       `/v1/quiz/answer?winState=${parseInt(localStorage.getItem("winState"))}&date=${today.getFullYear()}-${(today.getMonth() + 1)
@@ -253,7 +259,7 @@ export default function Quiz() {
       obj.count = response.data.count;
       obj.answers = response.data.answers;
 
-      // 3. 정답 넣기
+      // 4. 정답 넣기
       let arr = localStorage.getItem("guess") // 1번 문제
       ? JSON.parse(localStorage.getItem("guess"))
       : [[], []];
