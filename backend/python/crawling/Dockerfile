@@ -1,5 +1,5 @@
 # 파이썬 3.11을 베이스로 하는 이미지
-FROM python:3.11.5-slim-bookworm
+FROM python:3.11.5-slim
 
 # 작업 디렉토리 설정
 WORKDIR /app
