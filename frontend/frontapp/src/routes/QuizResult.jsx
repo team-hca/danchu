@@ -1,7 +1,6 @@
 import axios from "axios";
 import { React, useEffect, useState } from "react";
 import styled from "styled-components";
-import Footer from "../components/Common/Footer";
 import Header from "../components/Common/Header";
 import Main from "../components/Main/Main";
 import News from "../components/News/News";
@@ -30,7 +29,6 @@ function getWordsFromLocalStorage() {
       guessTwo && guessTwo[0] && guessTwo[0][0] ? guessTwo[0][0].word : null,
   };
 }
-const winState = JSON.parse(localStorage.getItem("winState"));
 
 const ErrorComponent = () => {
   return <Error />;
@@ -39,6 +37,7 @@ const ErrorComponent = () => {
 export default function QuizResult() {
   // QuizResult props로 sentence 받는 걸로 수정해야 함
   const [quizInfo, setQuizInfo] = useState();
+  const winState = JSON.parse(localStorage.getItem("winState"));
   useEffect(() => {
     axios
       .get(
@@ -67,7 +66,6 @@ export default function QuizResult() {
           <News words={words} />
         </Container>
       )}
-      <Footer />
     </>
   );
 }
