@@ -16,8 +16,8 @@ const Container = styled.div`
 `;
 
 const NewsInfoBox = styled.div`
-  border: 1px solid var(--gray-1000);
-  border-radius: 5px;
+  //border: 1px solid var(--gray-1000);
+  border-radius: 16px;
   width: 100%;
   height: 860px;
   background-color: var(--box);
@@ -121,7 +121,7 @@ const ButtonWrapper = styled.button`
   }
 
   &:hover ${ContentText} {
-    color: #007bff;
+    color: #253846;
     text-shadow: none;
   }
 
@@ -142,7 +142,7 @@ const LastItemTitleText = styled(TitleText)`
 `;
 
 const LastItemContentText = styled(ContentText)`
-  color: #007bff; // 색상 변경
+  color: #253846; // 색상 변경
   font-size: 25px; // 크기 변경
   text-align: center;
 `;
