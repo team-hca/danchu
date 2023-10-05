@@ -17,7 +17,7 @@ const Container = styled.div`
 const Message = styled.div`
   position: relative;
   color: #253846;
-  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+  // text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
   font-weight: bold;
   font-size: 30px;
   overflow: hidden;

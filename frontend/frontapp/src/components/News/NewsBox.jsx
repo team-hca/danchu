@@ -23,7 +23,8 @@ const NewsInfoBox = styled.div`
   background-color: var(--box);
   word-break: keep-all;
   line-height: 60px;
-  box-shadow: 10px 10px 7px rgba(0, 0, 0.5, 0.5);
+  // box-shadow: 10px 10px 7px rgba(0, 0, 0.5, 0.5);
+  box-shadow: 8px 10px 8px rgba(0, 0, 0.2, 0.2);
   text-align: center;
   margin-bottom: 15px;
 `;
@@ -69,7 +70,8 @@ const ScrollableContent = styled.div`
   flex-direction: column;
   max-height: 100%;
   overflow-y: auto;
-  box-shadow: 1px 1px 2px rgba(37, 56, 70, 1);
+  // box-shadow: 1px 1px 2px rgba(37, 56, 70, 1);
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
 `;
 
 const DummyItem = styled.div`
@@ -195,7 +197,7 @@ export default function NewsBox({ newsData }) {
   }
 
   const sortedNewsData = sortNewsData(newsData);
-  console.log(sortedNewsData);
+  // console.log(sortedNewsData);
 
   return (
     <Container>
