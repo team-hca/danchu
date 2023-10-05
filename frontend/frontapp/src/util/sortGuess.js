@@ -26,7 +26,7 @@ const sortGuess = (key) => {
   localStorage.setItem(key, JSON.stringify(sortedData));
 
   // 변경된 데이터 출력
-  console.log("Sorted data:", sortedData);
+  // console.log("Sorted data:", sortedData);
 
   return "OK";
 };

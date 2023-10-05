@@ -13,8 +13,8 @@ const Container = styled.div`
 `;
 
 export default function Main({ quizInfo, active, words }) {
-  console.log("quizInfo : ", quizInfo);
-  console.log("active : ", active);
+  // console.log("quizInfo : ", quizInfo);
+  // console.log("active : ", active);
   return (
     <Container>
       <MainMessage />
