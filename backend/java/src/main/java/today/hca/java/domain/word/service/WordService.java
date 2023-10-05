@@ -2,13 +2,9 @@ package today.hca.java.domain.word.service;
 
 import lombok.RequiredArgsConstructor;
 import org.bson.Document;
-import org.bson.json.JsonObject;
-import org.bson.json.JsonReader;
 import org.springframework.stereotype.Service;
 import today.hca.java.domain.word.dto.response.WordSimilarityResponseDto;
 import today.hca.java.domain.word.entity.QuizAnswer;
-import today.hca.java.domain.word.entity.Similarity1000;
-import today.hca.java.domain.word.entity.WordSimilarity;
 import today.hca.java.domain.word.repository.QuizAnswerRepository;
 import today.hca.java.domain.word.repository.WordSimilarityRepository;
 
@@ -21,10 +17,8 @@ import java.net.http.HttpResponse;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 import java.util.regex.Pattern;
-import java.util.regex.Matcher;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +30,6 @@ public class WordService {
         String pattern = "^[가-힣]*$"; // 한글만 등장하는지
 
         boolean result = Pattern.matches(pattern, guessWord);
-        //System.out.println(result);
 
         if (!result) {
             throw new IllegalArgumentException("올바르지 않은 입력입니다.");
@@ -47,7 +40,7 @@ public class WordService {
         //오늘의 날짜를 변수 값으로 넣어야함!
         QuizAnswer todayQuiz = quizAnswerRepository.findByDate(getDate());
         //오늘의 퀴즈 데이터를 가지고와서 퀴즈num에 맞는 데이터 비교
-        switch (Integer.parseInt(quizNum)) {
+        switch (Integer.parseInt(quizNum)) { // 정답인 경우
             case 1 -> {
                 if (todayQuiz.getWord1().equals(guessWord)) {
                     resultDto.setItAnswer(true);
@@ -76,16 +69,22 @@ public class WordService {
                 }
             }
         }
+
+        // 정답 아닌 경우
+        double lastSimilarity = 100; // simialrity 범위 -1 ~ 1 이므로 * 100 한 100으로 초기화
         String answer="";
                 switch (Integer.parseInt(quizNum)) {
             case 1 -> {
                answer = todayQuiz.getWord1();
+               lastSimilarity = wordSimilarityRepository.findByDateAndReturnWord1LastSimilarityOnly(getDate()).getWord1_1000() * 100;
             }
             case 2 -> {
                 answer = todayQuiz.getWord2();
+                lastSimilarity = wordSimilarityRepository.findByDateAndReturnWord2LastSimilarityOnly(getDate()).getWord2_1000() * 100;
             }
             case 3 -> {
                 answer = todayQuiz.getWord3();
+                lastSimilarity = wordSimilarityRepository.findByDateAndReturnWord3LastSimilarityOnly(getDate()).getWord3_1000() * 100;
             }
         }
         String word =guessWord;
@@ -111,6 +110,11 @@ public class WordService {
         resultDto.setSimilarity(similarityValue * 100); // 백분율로 반환하도록 * 100
         resultDto.setItAnswer(false);
         resultDto.setRank(rankValue);
+
+        // 1000위 유사도와 비교해서 순위 수정
+        if (resultDto.getRank() == -1 && resultDto.getSimilarity() >= lastSimilarity) {
+            resultDto.setRank(-2);
+        }
 
         return resultDto;
 
