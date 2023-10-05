@@ -115,7 +115,6 @@ export default function CongratModal() {
     const winState = parseInt(localStorage.getItem('winState'));
 
     const rawDanchuTime = Math.floor((parseInt(localStorage.getItem("endTime")) - parseInt(localStorage.getItem("startTime")))/1000);
-    console.log(rawDanchuTime);
     const danchuHours = Math.floor(rawDanchuTime / 3600);
     const danchuMinutes = Math.floor((rawDanchuTime % 3600) / 60);
     const danchuSeconds = rawDanchuTime % 60;
@@ -136,10 +135,9 @@ https://www.danchu.today/`;
       .then(() => {
         alert('결과를 복사하였습니다!');
       })
-      .catch(e => {
-        console.error('복사 실패:', e);
-        alert('결과를 복사하지 못했습니다.');
-      });
+      .catch(
+        alert('결과를 복사하지 못했습니다.')
+      );
   }
 
   const handleNewsClick = () => {
