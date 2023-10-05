@@ -10,13 +10,13 @@ const LinkStyle = styled(Link)`
 
 const ButtonStyle = styled.button`
   width: 80%;
-  height: 54px;
+  height: 60px;
   margin-right:-10%;
   background-color: var(--background);
   border-radius: 8px;
-
+  font-family: "tmoney";
   color: var(--secondary);
-  font-size: 16px;
+  font-size: 20px;
 
   &:hover {
     border-radius: 8px;

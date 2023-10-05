@@ -15,7 +15,8 @@ const Container = styled.div`
 const LoadingMessage = styled.div`
   position: relative;
   color: #ffc40e;
-  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+  // color: var(--background);
+  // text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
   font-weight: bold;
   font-size: 30px;
   overflow: hidden;
