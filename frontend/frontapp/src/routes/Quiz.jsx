@@ -339,7 +339,7 @@ export default function Quiz() {
         }`
       )
       .then((response) => {
-        console.log(JSON.stringify(response.data));
+        // console.log(JSON.stringify(response.data));
         obj.similarity = response.data.similarity;
         obj.rank = response.data.rank;
 
@@ -438,7 +438,7 @@ export default function Quiz() {
             setGuess(JSON.parse(localStorage.getItem("guess")));
           }
         }
-        console.log(JSON.stringify(obj));
+        // console.log(JSON.stringify(obj));
       })
       .catch((error) => {
         alert("한글 단어를 입력해주세요!");
@@ -458,7 +458,7 @@ export default function Quiz() {
         }`
       )
       .then((response) => {
-        console.log(JSON.stringify(response.data));
+        // console.log(JSON.stringify(response.data));
         obj.similarity = response.data.similarity;
         obj.rank = response.data.rank;
 
@@ -549,7 +549,7 @@ export default function Quiz() {
             setGuessOne(JSON.parse(localStorage.getItem("guessOne")));
           }
         }
-        console.log(JSON.stringify(obj));
+        // console.log(JSON.stringify(obj));
       })
       .catch((error) => {
         console.error("today quiz similarity One request failed: " + error);
@@ -568,7 +568,7 @@ export default function Quiz() {
         }`
       )
       .then((response) => {
-        console.log(JSON.stringify(response.data));
+        // console.log(JSON.stringify(response.data));
         obj.similarity = response.data.similarity;
         obj.rank = response.data.rank;
 
@@ -649,7 +649,7 @@ export default function Quiz() {
             setGuessTwo(JSON.parse(localStorage.getItem("guessTwo")));
           }
         }
-        console.log(JSON.stringify(obj));
+        // console.log(JSON.stringify(obj));
       })
       .catch((error) => {
         console.error("today quiz similarity Two request failed: " + error);
@@ -692,7 +692,7 @@ export default function Quiz() {
 
   const recordStartTime = () => {
     if (localStorage.getItem("startTime")) {
-      console.log(localStorage.getItem("startTime"));
+      // console.log(localStorage.getItem("startTime"));
     } else {
       localStorage.setItem("startTime", Date.now());
     }
@@ -754,11 +754,11 @@ export default function Quiz() {
       )
       .then((response) => {
         const sentence = response.data;
-        console.log(sentence);
+        // console.log(sentence);
         setQuizSentence(sentence);
-        console.log("quizSentence: " + quizSentence);
+        // console.log("quizSentence: " + quizSentence);
         setQuizCount(response.data.count);
-        console.log("quizcount: " + quizCount);
+        // console.log("quizcount: " + quizCount);
         setIndexes(response.data.indexes);
         if (!localStorage.getItem("date")) {
           localStorage.setItem(
@@ -818,30 +818,30 @@ export default function Quiz() {
     }
     if (localStorage.getItem("guessOne")) {
       setGuessOne(localStorage.getItem("guessOne"));
-      console.log("guessOne: " + guessOne);
+      // console.log("guessOne: " + guessOne);
     }
     if (localStorage.getItem("guessTwo")) {
       setGuessTwo(localStorage.getItem("guessTwo"));
-      console.log("guessTwo: " + guessTwo);
+      // console.log("guessTwo: " + guessTwo);
     }
   }, [recentGuess, recentGuessOne, recentGuessTwo]);
 
   const handleInputChange = (event) => {
     setInputInitialize(event.target.value);
     setInputValue(event.target.value);
-    console.log("zero: " + inputValue);
+    // console.log("zero: " + inputValue);
   };
 
   const handleInputChangeOne = (event) => {
     setInputInitializeOne(event.target.value);
     setInputValueOne(event.target.value);
-    console.log("one: " + inputValueOne);
+    // console.log("one: " + inputValueOne);
   };
 
   const handleInputChangeTwo = (event) => {
     setInputInitializeTwo(event.target.value);
     setInputValueTwo(event.target.value);
-    console.log("two: " + inputValueTwo);
+    // console.log("two: " + inputValueTwo);
   };
 
   return quizSentence ? (
@@ -925,10 +925,10 @@ export default function Quiz() {
                               JSON.parse(localStorage.getItem("guess"))[0].find(
                                 (item, index, arr) => {
                                   // setRecentGuess(inputValue);
-                                  console.log("guess-item.word: " + item.word);
-                                  console.log(
-                                    "guess-recentGuess: " + recentGuess.word
-                                  );
+                                  // console.log("guess-item.word: " + item.word);
+                                  // console.log(
+                                  //   "guess-recentGuess: " + recentGuess.word
+                                  // );
                                   return item.word === recentGuess.word;
                                 }
                               ).count
@@ -938,10 +938,10 @@ export default function Quiz() {
                               JSON.parse(localStorage.getItem("guess"))[1].find(
                                 (item, index, arr) => {
                                   // setRecentGuess(inputValue);
-                                  console.log("item.word: " + item.word);
-                                  console.log(
-                                    "recentGuess: " + recentGuess.word
-                                  );
+                                  // console.log("item.word: " + item.word);
+                                  // console.log(
+                                  //   "recentGuess: " + recentGuess.word
+                                  // );
                                   return item.word === recentGuess.word;
                                 }
                               )
@@ -951,10 +951,10 @@ export default function Quiz() {
                               JSON.parse(localStorage.getItem("guess"))[1].find(
                                 (item, index, arr) => {
                                   // setRecentGuess(inputValue);
-                                  console.log("item.word: " + item.word);
-                                  console.log(
-                                    "recentGuess: " + recentGuess.word
-                                  );
+                                  // console.log("item.word: " + item.word);
+                                  // console.log(
+                                  //   "recentGuess: " + recentGuess.word
+                                  // );
                                   return item.word === recentGuess.word;
                                 }
                               ).count
@@ -1139,10 +1139,10 @@ export default function Quiz() {
                                 localStorage.getItem("guessOne")
                               )[0].find((item, index, arr) => {
                                 // setRecentGuess(inputValue);
-                                console.log("guess-item.wordOne: " + item.word);
-                                console.log(
-                                  "guess-recentGuessOne: " + recentGuessOne.word
-                                );
+                                // console.log("guess-item.wordOne: " + item.word);
+                                // console.log(
+                                //   "guess-recentGuessOne: " + recentGuessOne.word
+                                // );
                                 return item.word === recentGuessOne.word;
                               }).count
                             : localStorage.getItem("guessOne") &&
@@ -1152,10 +1152,10 @@ export default function Quiz() {
                                 localStorage.getItem("guessOne")
                               )[1].find((item, index, arr) => {
                                 // setRecentGuess(inputValue);
-                                console.log("item.wordOne: " + item.word);
-                                console.log(
-                                  "recentGuessOne: " + recentGuessOne.word
-                                );
+                                // console.log("item.wordOne: " + item.word);
+                                // console.log(
+                                //   "recentGuessOne: " + recentGuessOne.word
+                                // );
                                 return item.word === recentGuessOne.word;
                               })
                             ? localStorage.getItem("guessOne") &&
@@ -1165,10 +1165,10 @@ export default function Quiz() {
                                 localStorage.getItem("guessOne")
                               )[1].find((item, index, arr) => {
                                 // setRecentGuess(inputValue);
-                                console.log("item.word: " + item.word);
-                                console.log(
-                                  "recentGuessOne: " + recentGuessOne.word
-                                );
+                                // console.log("item.word: " + item.word);
+                                // console.log(
+                                //   "recentGuessOne: " + recentGuessOne.word
+                                // );
                                 return item.word === recentGuessOne.word;
                               }).count
                             : recentGuessOne.count}
@@ -1358,10 +1358,10 @@ export default function Quiz() {
                                 localStorage.getItem("guessTwo")
                               )[0].find((item, index, arr) => {
                                 // setRecentGuess(inputValue);
-                                console.log("guess-item.word: " + item.word);
-                                console.log(
-                                  "guess-recentGuessTwo: " + recentGuessTwo.word
-                                );
+                                // console.log("guess-item.word: " + item.word);
+                                // console.log(
+                                //   "guess-recentGuessTwo: " + recentGuessTwo.word
+                                // );
                                 return item.word === recentGuessTwo.word;
                               }).count
                             : localStorage.getItem("guessTwo") &&
@@ -1371,10 +1371,10 @@ export default function Quiz() {
                                 localStorage.getItem("guessTwo")
                               )[1].find((item, index, arr) => {
                                 // setRecentGuess(inputValue);
-                                console.log("item.word: " + item.word);
-                                console.log(
-                                  "recentGuessTwo: " + recentGuessTwo.word
-                                );
+                                // console.log("item.word: " + item.word);
+                                // console.log(
+                                //   "recentGuessTwo: " + recentGuessTwo.word
+                                // );
                                 return item.word === recentGuessTwo.word;
                               })
                             ? localStorage.getItem("guessTwo") &&
@@ -1384,10 +1384,10 @@ export default function Quiz() {
                                 localStorage.getItem("guessTwo")
                               )[1].find((item, index, arr) => {
                                 // setRecentGuess(inputValue);
-                                console.log("item.word: " + item.word);
-                                console.log(
-                                  "recentGuessTwo: " + recentGuessTwo.word
-                                );
+                                // console.log("item.word: " + item.word);
+                                // console.log(
+                                //   "recentGuessTwo: " + recentGuessTwo.word
+                                // );
                                 return item.word === recentGuessTwo.word;
                               }).count
                             : recentGuessTwo.count}
