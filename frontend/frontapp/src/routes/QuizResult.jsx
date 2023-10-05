@@ -30,7 +30,6 @@ function getWordsFromLocalStorage() {
       guessTwo && guessTwo[0] && guessTwo[0][0] ? guessTwo[0][0].word : null,
   };
 }
-const winState = JSON.parse(localStorage.getItem("winState"));
 
 const ErrorComponent = () => {
   return <Error />;
@@ -39,6 +38,7 @@ const ErrorComponent = () => {
 export default function QuizResult() {
   // QuizResult props로 sentence 받는 걸로 수정해야 함
   const [quizInfo, setQuizInfo] = useState();
+  const winState = JSON.parse(localStorage.getItem("winState"));
   useEffect(() => {
     axios
       .get(
