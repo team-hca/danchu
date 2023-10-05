@@ -21,10 +21,10 @@ public interface WordSimilarityRepository extends MongoRepository<Similarity1000
     @Query(value="{ 'date' : ?0 }", fields="{ 'word1_1000' : 1 }")
     Similarity1000 findByDateAndReturnWord1LastSimilarityOnly(String date);
 
-    @Query(value="{ 'date' : ?0 }", fields="{ 'word1_1000' : 2 }")
+    @Query(value="{ 'date' : ?0 }", fields="{ 'word2_1000' : 1 }")
     Similarity1000 findByDateAndReturnWord2LastSimilarityOnly(String date);
 
-    @Query(value="{ 'date' : ?0 }", fields="{ 'word1_1000' : 3 }")
+    @Query(value="{ 'date' : ?0 }", fields="{ 'word3_1000' : 1 }")
     Similarity1000 findByDateAndReturnWord3LastSimilarityOnly(String date);
 
 }
