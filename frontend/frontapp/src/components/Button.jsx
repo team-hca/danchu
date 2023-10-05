@@ -12,11 +12,12 @@ const ButtonStyle = styled.button`
   width: 60%;
   height: 54px;
   background-color: var(--gray-300);
-//   border: 1px solid var(--gray-500);
+  border: 1.5px solid var(--gray-500);
   border-radius: 8px;
 
   color: var(--secondary);
-  font-size: 16px;
+  font-size: 20px;
+  font-family: "tmoney";
 
   &:hover {
     // border: 1px solid var(--primary);

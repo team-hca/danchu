@@ -33,7 +33,9 @@ const GlobalVariableStyle = createGlobalStyle`
 
 }
 #root {
-  font-family: "KIMM";
+  // font-family: "KCC-Ganpan";
+  // font-family: "Cafe24";
+  font-family: "tmoney";
 }
 
 body {
