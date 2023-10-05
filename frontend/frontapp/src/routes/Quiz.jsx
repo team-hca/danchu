@@ -256,6 +256,7 @@ export default function Quiz() {
       }`
     )
     .then((response) => {
+
       obj.count = response.data.count;
       obj.answers = response.data.answers;
 
@@ -268,7 +269,7 @@ export default function Quiz() {
       tmpObj.word = obj.answers[0];      tmpObj.similarity = 100;
       tmpObj.rank = 0;
       tmpObj.count = arr[0].length + arr[1].length + 1;
-      if ((!localStorage.getItem("guess")) || (JSON.parse(localStorage.getItem("guess"))[0][0]["word"] !== obj.answers[0])) {
+      if ((!localStorage.getItem("guess")) || JSON.parse(localStorage.getItem("guess"))[0][0].length === 0 || (JSON.parse(localStorage.getItem("guess"))[0][0]["word"] !== obj.answers[0])) {
         arr[0].unshift(tmpObj);
         localStorage.setItem("guess", JSON.stringify(arr));
       }
@@ -284,7 +285,7 @@ export default function Quiz() {
         tmpObj.rank = 0;
         tmpObj.count = arr[0].length + arr[1].length + 1;
 
-        if ((!localStorage.getItem("guessOne")) || (JSON.parse(localStorage.getItem("guessOne"))[0][0]["word"] !== obj.answers[0])) {
+        if ((!localStorage.getItem("guessOne")) || JSON.parse(localStorage.getItem("guessOne"))[0][0].length === 0 || (JSON.parse(localStorage.getItem("guessOne"))[0][0]["word"] !== obj.answers[0])) {
           arr[0].unshift(tmpObj);
           localStorage.setItem("guessOne", JSON.stringify(arr));
         }
@@ -301,7 +302,7 @@ export default function Quiz() {
         tmpObj.rank = 0;
         tmpObj.count = arr[0].length + arr[1].length + 1;
 
-        if ((!localStorage.getItem("guessTwo")) || (JSON.parse(localStorage.getItem("guessTwo"))[0][0]["word"] !== obj.answers[0])) {
+        if ((!localStorage.getItem("guessTwo")) || JSON.parse(localStorage.getItem("guessTwo"))[0][0].length === 0 || (JSON.parse(localStorage.getItem("guessTwo"))[0][0]["word"] !== obj.answers[0])) {
           arr[0].unshift(tmpObj);
           localStorage.setItem("guessTwo", JSON.stringify(arr));
         }
