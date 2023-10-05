@@ -1,22 +1,23 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import reportWebVitals from './reportWebVitals';
-import ResetStyle from './styles/reset';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import reportWebVitals from "./reportWebVitals";
+import ResetStyle from "./styles/reset";
 import "./fonts/font.css";
 
-import { RouterProvider } from 'react-router-dom';
-import router from './Router';
-import GlobalVariableStyle from './styles/global';
+import { RouterProvider } from "react-router-dom";
+import router from "./Router";
+import GlobalVariableStyle from "./styles/global";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  
-  <React.StrictMode>
+  // <React.StrictMode>
+  <>
     <ResetStyle />
-    <RouterProvider router={router}/>
+    <RouterProvider router={router} />
     <GlobalVariableStyle></GlobalVariableStyle>
-  </React.StrictMode>
+  </>
+  // </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
