@@ -232,8 +232,8 @@ export default function Quiz() {
           localStorage.getItem("winState")
         )}&date=${today.getFullYear()}-${(today.getMonth() + 1)
           .toString()
-          .padStart(2, "0")}-${today.getDate().toString().padStart(2, "0")}
-      }`
+          .padStart(2, "0")}-${today.getDate().toString().padStart(2, "0")
+        }`
       )
       .then((response) => {
         obj.count = response.data.count;
