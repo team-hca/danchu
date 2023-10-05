@@ -89,7 +89,7 @@ export default function MainBox(props) {
   const location = useLocation();
 
   useEffect(() => {
-    console.log(location.pathname);
+    // console.log(location.pathname);
   }, []);
 
   const sentence = quizInfo.sentence;
