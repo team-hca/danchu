@@ -190,7 +190,7 @@ def findWordSimilarity(answer,inputWord):
   try:
     # 입력값 고유명사 판단
     answerType = True
-    for li in mecab.pos(inputWord): # +로 합쳐져서 나올 수도 있어서 .. 쪼개야함
+    for li in mecab.pos(answer): # +로 합쳐져서 나올 수도 있어서 .. 쪼개야함
       print(li[1])
       if '+' in li[1]:# 합쳐진 애면
         answerType = False
