@@ -95,9 +95,6 @@ const ErrorComponent = () => {
 
 export default function CongratModal() {
   const successContentCopy = useRef(null);
-  const [timeHour, setTimeHour] = useState('');
-  const [timeMin, setTimeMin] = useState('');
-  const [timeSec, setTimeSec] = useState('');
   const [totalGuessCnt, setTotalGuessCnt] = useState('');
   const navigate = useNavigate();
 
@@ -117,6 +114,12 @@ export default function CongratModal() {
     let copiedContent;
     const winState = parseInt(localStorage.getItem('winState'));
 
+    const rawDanchuTime = Math.floor((parseInt(localStorage.getItem("endTime")) - parseInt(localStorage.getItem("startTime")))/1000);
+    const danchuHours = Math.floor(rawDanchuTime / 3600);
+    const danchuMinutes = Math.floor((rawDanchuTime % 3600) / 60);
+    const danchuSeconds = rawDanchuTime % 60;
+    const danchuTime = `${String(danchuHours).padStart(2, '0')}시간 ${String(danchuMinutes).padStart(2, '0')}분 ${String(danchuSeconds).padStart(2, '0')}초`;
+
     if (winState === 1) {
       copiedContent = `${year}년 ${month}월 ${date}일의 단추를 맞혔습니다!
 ${danchuTrial}
@@ -132,10 +135,9 @@ https://www.danchu.today/`;
       .then(() => {
         alert('결과를 복사하였습니다!');
       })
-      .catch(e => {
-        console.error('복사 실패:', e);
-        alert('결과를 복사하지 못했습니다.');
-      });
+      .catch(
+        alert('결과를 복사하지 못했습니다.')
+      );
   }
 
   const handleNewsClick = () => {
@@ -195,22 +197,9 @@ https://www.danchu.today/`;
 
   useEffect(() => {
     const existingEndTime = localStorage.getItem('endTime');
-    const startTime = localStorage.getItem('startTime');
 
     if (!existingEndTime) {
       localStorage.setItem('endTime', Date.now());
-    }
-
-    if (startTime && existingEndTime) {
-      const elapsedTime = parseInt(existingEndTime, 10) - parseInt(startTime, 10);
-
-      const hours = Math.floor(elapsedTime / (1000 * 60 * 60));
-      const minutes = Math.floor((elapsedTime % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((elapsedTime % (1000 * 60)) / 1000);
-
-      setTimeHour(hours.toString().padStart(2, '0'));
-      setTimeMin(minutes.toString().padStart(2, '0'));
-      setTimeSec(seconds.toString().padStart(2, '0'));
     }
 
     // 1번문제
@@ -255,13 +244,15 @@ https://www.danchu.today/`;
   }, []);
 
   const danchuTrial = "시도 횟수: " + totalGuessCnt;
-  const danchuTime = "걸린 시간 : " + timeHour + "시간 " + timeMin + "분 " + timeSec + "초";
+  const rawDanchuTime = Math.floor((parseInt(localStorage.getItem("endTime")) - parseInt(localStorage.getItem("startTime")))/1000);
+  const danchuHours = Math.floor(rawDanchuTime / 3600);
+  const danchuMinutes = Math.floor((rawDanchuTime % 3600) / 60);
+  const danchuSeconds = rawDanchuTime % 60;
+  const danchuTime = `${String(danchuHours).padStart(2, '0')}시간 ${String(danchuMinutes).padStart(2, '0')}분 ${String(danchuSeconds).padStart(2, '0')}초`;
   const winState = parseInt(localStorage.getItem('winState'));
   
   return (winState === 1 || winState === 0) ? (
     <ModalContainer>
-
-      {/* <QuizResult quizSentence={quizSentence} /> quizSentence를 QuizResult 컴포넌트로 전달 */}
       
       {winState === 1 ? (
         <CongratTitle>
