@@ -468,6 +468,7 @@ export default function Quiz() {
         console.log(JSON.stringify(obj));
       })
       .catch((error) => {
+        alert("한글 단어를 입력해주세요!");
         console.error("today quiz similarity request failed: " + error);
       });
   };
