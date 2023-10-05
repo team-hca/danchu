@@ -135,9 +135,10 @@ https://www.danchu.today/`;
       .then(() => {
         alert('결과를 복사하였습니다!');
       })
-      .catch(
-        alert('결과를 복사하지 못했습니다.')
-      );
+      .catch(e => {
+        alert('결과를 복사하지 못했습니다.');
+      });
+
   }
 
   const handleNewsClick = () => {
