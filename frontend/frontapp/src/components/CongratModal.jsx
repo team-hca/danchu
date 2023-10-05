@@ -124,7 +124,7 @@ ${danchuTime}
 https://www.danchu.today/`;
     } else if (winState === 0) {
       copiedContent = `${year}년 ${month}월 ${date}일의 단추를 포기하셨습니다.
-내일의 새로운 단추에 다시 도전하세요.
+내일 새로운 단추에 다시 도전하세요.
 https://www.danchu.today/`;
     }
 
