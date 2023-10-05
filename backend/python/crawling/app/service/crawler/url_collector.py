@@ -9,7 +9,7 @@ from tqdm import tqdm
 import importlib
 import httpx
 from app.db.database import (
-    fetch_all_documents_from_db,
+    fetch_documents_by_date_from_db,
     insert_dataframe_into_db,
 )
 from app.core import config
@@ -108,7 +108,7 @@ async def remove_and_insert_urls_into_db(
     importlib.reload(config)
     new_df = await collect_urls(start_page, start_date, end_date, threshold, duration)
     count = len(new_df)
-    old_df = await fetch_all_documents_from_db()
+    old_df = await fetch_documents_by_date_from_db(start_date, end_date)
     if not old_df.empty:
         new_df = new_df[~new_df["url"].isin(old_df["url"])]
     count -= len(new_df)
@@ -124,7 +124,9 @@ async def scheduling_url_collector(start_page: int, threshold: int, duration: fl
         start_page, config.CURRENT_DATE, config.CURRENT_DATE, threshold, duration
     )
     count = len(new_df)
-    old_df = await fetch_all_documents_from_db()
+    old_df = await fetch_documents_by_date_from_db(
+        config.CURRENT_DATE, config.CURRENT_DATE
+    )
     if not old_df.empty:
         new_df = new_df[~new_df["url"].isin(old_df["url"])]
     count -= len(new_df)
