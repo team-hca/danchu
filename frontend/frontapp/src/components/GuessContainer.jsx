@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import Text from "./Text";
 import SubmitButton from "./SubmitButton";
+import logoImg from "../icon/danchu_logo.png";
 
 const TextContainer = styled.div`
   margin: 40px 40px 40px 40px;
@@ -99,7 +100,8 @@ export default function GuessContainer() {
     <>
       <TextContainer>
         <Text></Text>
-        <SubmitButton onClick={onSubmit}>단추</SubmitButton>
+          <img src={logoImg} alt="logo img" onClick={onSubmit} style={{ width: '60px', cursor: 'pointer' }} />
+        {/*<SubmitButton onClick={onSubmit}>단추</SubmitButton>*/}
       </TextContainer>
       <TableContainer>
         <Table>
