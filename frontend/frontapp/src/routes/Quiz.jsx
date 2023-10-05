@@ -10,6 +10,7 @@ import SubmitButton from "../components/SubmitButton";
 import { Content, Tab, Tabs } from "../components/Tabs";
 import sortGuess from "../util/sortGuess";
 import Footer from "../components/Common/Footer";
+import logoImg from "../icon/danchu_logo.png";
 
 const onClickGiveUp = (message = null, onConfirm, onCancel) => {
   if (!onConfirm || typeof onConfirm !== "function") {
@@ -182,7 +183,7 @@ const InputStyle = styled.input`
   color: ${(props) => props.color};
   weight: 300;
   word-break: break-all;
-  width: 70%;
+  width: 80%;
   height: 56px;
   border-radius: 18px;
   border: 0px;
@@ -893,12 +894,13 @@ export default function Quiz() {
                   onKeyDown={handleOnKeyPress}
                   value={inputInitialize}
                 ></InputStyle>
-                <SubmitButton onClick={onSubmit}>
-                  단추
+                <img src={logoImg} alt="logo img" onClick={onSubmit} style={{ width: '60px', cursor: 'pointer' }} />
+                {/*<SubmitButton onClick={onSubmit}>*/}
+                {/*  단추*/}
                   {/* <Icon> */}
                   {/* <danchuButton></danchuButton> */}
                   {/* </Icon> */}
-                </SubmitButton>
+                {/*</SubmitButton>*/}
               </TextContainer>
               <TableContainer>
                 <Table>
@@ -1112,7 +1114,8 @@ export default function Quiz() {
                   onKeyDown={handleOnKeyPressOne}
                   value={inputInitializeOne}
                 ></InputStyle>
-                <SubmitButton onClick={onSubmitOne}>단추</SubmitButton>
+                <img src={logoImg} alt="logo img" onClick={onSubmitOne} style={{ width: '60px', cursor: 'pointer' }} />
+                {/*<SubmitButton onClick={onSubmitOne}>단추</SubmitButton>*/}
               </TextContainer>
               <TableContainer>
                 <Table>
@@ -1329,7 +1332,8 @@ export default function Quiz() {
                   onKeyDown={handleOnKeyPressTwo}
                   value={inputInitializeTwo}
                 ></InputStyle>
-                <SubmitButton onClick={onSubmitTwo}>단추</SubmitButton>
+                <img src={logoImg} alt="logo img" onClick={onSubmitTwo} style={{ width: '60px', cursor: 'pointer' }} />
+                {/*<SubmitButton onClick={onSubmitTwo}>단추</SubmitButton>*/}
               </TextContainer>
               <TableContainer>
                 <Table>
