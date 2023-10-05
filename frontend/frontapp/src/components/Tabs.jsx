@@ -20,7 +20,7 @@ export const Tab = styled.button`
 
   // margin-right: 0.1em;
   font-size: 1em;
-  border: ${props => (props.active ? "1px solid #ccc" : "")};
+  // border: ${props => (props.active ? "1px solid #ccc" : "")};
   border-bottom: ${props => (props.active ? "none" : "")};
   background-color: ${props => (props.active ? "var(--primary)" : "var(--secondary)")};
   height: ${props => (props.active ? "3em" : "2.6em; top:.4em")};
