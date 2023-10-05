@@ -12,6 +12,7 @@ const Container = styled.div`
   position: relative;
   justify-content: center;
   margin-top: 20px;
+  margin-bottom: 100px;
 `;
 
 const NewsInfoBox = styled.div`
