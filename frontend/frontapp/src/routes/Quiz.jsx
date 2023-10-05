@@ -228,7 +228,7 @@ export default function Quiz() {
     // 3. 정답 가져오기
     axios
       .get(
-        `/v1/quiz/answer?winState=${parseInt(
+        `/api/v1/quiz/answer?winState=${parseInt(
           localStorage.getItem("winState")
         )}&date=${today.getFullYear()}-${(today.getMonth() + 1)
           .toString()
