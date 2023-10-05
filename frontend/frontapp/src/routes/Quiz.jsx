@@ -105,7 +105,21 @@ const GiveUpContainer = styled.div`
   width: 100%;
 `;
 
+const NewsContainer = styled.div`
+  // justify-content: right;
+  // float: right;
+  width: 100%;
+`;
+
 const GiveUpButtonContainer = styled.div`
+  float: right;
+  // width: 100%;
+  width: 300px;
+  margin-bottom: 40px;
+  margin-right: -20px;
+`;
+
+const NewsButtonContainer = styled.div`
   float: right;
   // width: 100%;
   width: 300px;
@@ -329,6 +343,9 @@ export default function Quiz() {
     giveUpConfirm,
     cancelConfirm
   );
+  const goToNews = () => {
+    navigate('/result');
+  };
 
   let today = new Date();
 
@@ -357,8 +374,9 @@ export default function Quiz() {
         // alert("bbb");
         if (obj.similarity === 100.0) {
           // alert("aaa");
-          if (quizCount === 1) {
-            localStorage.setItem("winState", 1);
+          if (quizCount === 1){
+            if(localStorage.getItem("winState") === '-1') {
+              localStorage.setItem("winState", 1);}
             navigate("/congrat");
           } else if (quizCount === 2) {
             if (
@@ -366,7 +384,8 @@ export default function Quiz() {
               JSON.parse(localStorage.getItem("guessOne"))[0].length > 0 &&
               JSON.parse(localStorage.getItem("guessOne"))[0][0].rank === 0
             ) {
-              localStorage.setItem("winState", 1);
+              if(localStorage.getItem("winState") === '-1') {
+                localStorage.setItem("winState", 1);}
               navigate("/congrat");
             } else {
               // alert("에");
@@ -383,7 +402,9 @@ export default function Quiz() {
                 JSON.parse(localStorage.getItem("guessTwo"))[0].length > 0 &&
                 JSON.parse(localStorage.getItem("guessTwo"))[0][0].rank === 0
               ) {
-                localStorage.setItem("winState", 1);
+                if(localStorage.getItem("winState") === '-1') {
+                  localStorage.setItem("winState", 1);
+                }
                 navigate("/congrat");
               } else {
                 // alert("에에");
@@ -484,7 +505,8 @@ export default function Quiz() {
               JSON.parse(localStorage.getItem("guess"))[0].length > 0 &&
               JSON.parse(localStorage.getItem("guessOne"))[0][0].rank === 0
             ) {
-              localStorage.setItem("winState", 1);
+              if(localStorage.getItem("winState") === '-1') {
+                localStorage.setItem("winState", 1);}
               navigate("/congrat");
             } else {
               // alert("에");
@@ -492,16 +514,18 @@ export default function Quiz() {
             }
           } else {
             if (
-              localStorage.getItem("guess") &&
-              JSON.parse(localStorage.getItem("guess"))[0].length > 0 &&
-              JSON.parse(localStorage.getItem("guess"))[0][0].rank === 0
+                localStorage.getItem("guess") &&
+                JSON.parse(localStorage.getItem("guess"))[0].length > 0 &&
+                JSON.parse(localStorage.getItem("guess"))[0][0].rank === 0
             ) {
               if (
-                localStorage.getItem("guessTwo") &&
-                JSON.parse(localStorage.getItem("guessTwo"))[0].length > 0 &&
-                JSON.parse(localStorage.getItem("guessTwo"))[0][0].rank === 0
+                  localStorage.getItem("guessTwo") &&
+                  JSON.parse(localStorage.getItem("guessTwo"))[0].length > 0 &&
+                  JSON.parse(localStorage.getItem("guessTwo"))[0][0].rank === 0
               ) {
-                localStorage.setItem("winState", 1);
+                if (localStorage.getItem("winState") === '-1') {
+                  localStorage.setItem("winState", 1);
+                }
                 navigate("/congrat");
               } else {
                 // alert("에에");
@@ -671,7 +695,8 @@ export default function Quiz() {
                 JSON.parse(localStorage.getItem("guessOne"))[0].length > 0 &&
                 JSON.parse(localStorage.getItem("guessOne"))[0][0].rank === 0
               ) {
-                localStorage.setItem("winState", 1);
+                if(localStorage.getItem("winState") === '-1') {
+                  localStorage.setItem("winState", 1);}
                 navigate("/congrat");
               } else {
                 // alert("에에");
@@ -1630,7 +1655,12 @@ export default function Quiz() {
                 </TableContainer>
               </Content>
               {localStorage.getItem("winState") === "1" ||
-              localStorage.getItem("winState") === "0" ? null : (
+              localStorage.getItem("winState") === "0" ?
+                  (<NewsContainer>
+                <NewsButtonContainer>
+                  <Button onClick={goToNews}>단추 뉴스</Button>
+                </NewsButtonContainer>
+              </NewsContainer>) : (
                 <GiveUpContainer>
                   <GiveUpButtonContainer>
                     <Button onClick={confirmGiveUp}>포기하기</Button>
