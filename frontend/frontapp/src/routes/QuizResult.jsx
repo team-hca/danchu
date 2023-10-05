@@ -1,7 +1,6 @@
 import axios from "axios";
 import { React, useEffect, useState } from "react";
 import styled from "styled-components";
-import Footer from "../components/Common/Footer";
 import Header from "../components/Common/Header";
 import Main from "../components/Main/Main";
 import News from "../components/News/News";
@@ -67,7 +66,6 @@ export default function QuizResult() {
           <News words={words} />
         </Container>
       )}
-      <Footer />
     </>
   );
 }
