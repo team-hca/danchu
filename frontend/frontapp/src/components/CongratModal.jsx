@@ -124,8 +124,7 @@ ${danchuTime}
 https://www.danchu.today/`;
     } else if (winState === 0) {
       copiedContent = `${year}년 ${month}월 ${date}일의 단추를 포기하셨습니다.
-${danchuTrial}
-${danchuTime}
+내일 새로운 단추에 다시 도전하세요.
 https://www.danchu.today/`;
     }
 
@@ -282,9 +281,13 @@ https://www.danchu.today/`;
       ) : null}
   
       <SuccessContent ref={successContentCopy}>
-        <SuccessDetail>{danchuDate}</SuccessDetail>
-        <SuccessDetail>{danchuTrial}</SuccessDetail>
-        <SuccessDetail>{danchuTime}</SuccessDetail>
+        {winState === 1 && (
+          <>
+            <SuccessDetail>{danchuDate}</SuccessDetail>
+            <SuccessDetail>{danchuTrial}</SuccessDetail>
+            <SuccessDetail>{danchuTime}</SuccessDetail>
+          </>
+        )}
       </SuccessContent>
   
       <ButtonContainer>
