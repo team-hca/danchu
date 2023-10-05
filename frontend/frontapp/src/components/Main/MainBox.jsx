@@ -24,22 +24,25 @@ const ScrollableContent = styled.div`
   justify-content: center;
   max-height: 100%;
   overflow-y: hidden;
-  color: #253846;
-  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+  // color: #253846;
+  color: var(--background);
+  color: var(--secondary);
+  // text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
   font-weight: bold;
-  font-size: 30px;
+  font-size: 32px;
   margin: 30px;
   padding: 10px;
 `;
 
 const SentenceBox = styled.div`
-  border: 1px solid var(--gray-1000);
-  border-radius: 5px;
+  // border: 5px solid var(--secondary);
+  border-radius: 16px;
   width: 100%;
   background-color: Ghostwhite;
+  // background-color: var(--secondary);
   word-break: keep-all;
   line-height: 60px;
-  box-shadow: 10px 10px 7px rgba(0, 0, 0.5, 0.5);
+  box-shadow: 8px 10px 8px rgba(0, 0, 0.2, 0.2);
   text-align: center;
 `;
 
