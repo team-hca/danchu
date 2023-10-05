@@ -22,6 +22,9 @@ public class Similarity1000 {
     private List<String[]> word1_top1000;
     private List<String[]> word2_top1000;
     private List<String[]> word3_top1000;
+    private double word1_1000;
+    private double word2_1000;
+    private double word3_1000;
     private String created_at;
     private String modified_at;
 
