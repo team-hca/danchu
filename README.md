@@ -43,4 +43,22 @@
 - 관련 뉴스 화면<br>
 <img src="/uploads/daab321ccda886afba5a50b1f6533bbb/result.PNG" width="50%"><br>
 
+### 👍 작동 화면
     
+- 도움말<br>
+<img src="/uploads/55e862834a4419f6e118ef2d235fa977/물음표클릭.gif" width="50%"><br>
+
+- 오류 페이지<br>
+<img src="/uploads/063234e34df16d1b38496c5ae45b6b11/오류페이지.gif" width="50%"><br>
+
+- 퀴즈 맞히기<br>
+<img src="/uploads/e3081bba8a43bb658f85d3f7de182229/1번퀴즈_맞히기.gif" width="50%"><br>
+
+- 축하 해주기<br>
+<img src="/uploads/2db09ffe2db5abee3c55f8c74b1f1359/축포.gif" width="50%"><br>
+
+- 결과 복사하기<br>
+<img src="/uploads/5907a90ea101c011450d2b876e6ab1fc/결과복사.gif" width="50%"><br>
+
+- 결과 복사하기<br>
+<img src="/uploads/e3dce7462bface620f9324f9ad7718eb/뉴스보러가기.gif" width="50%"><br>
