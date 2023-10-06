@@ -2,9 +2,10 @@ package today.hca.java;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
-@SpringBootApplication(exclude={DataSourceAutoConfiguration.class})
+@SpringBootApplication
+@EnableMongoRepositories(basePackages = {"today.hca.java.domain.news.repository", "today.hca.java.domain.word.repository", "today.hca.java.domain.quiz.repository"})
 public class JavaApplication {
 
     public static void main(String[] args) {
