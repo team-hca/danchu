@@ -1,12 +1,14 @@
 package today.hca.java.domain.word.dto.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.*;
 
-@Getter
+@Data
+@Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class WordSimilarityResponseDto {
     private boolean isItAnswer;
     private double similarity;
     private String word;
+    private int rank;
 }
