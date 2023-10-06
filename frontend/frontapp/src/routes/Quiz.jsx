@@ -882,7 +882,22 @@ export default function Quiz() {
                   onKeyDown={handleOnKeyPress}
                   value={inputInitialize}
                 ></InputStyle>
-                <img src={logoImg} alt="logo img" onClick={onSubmit} style={{ width: '60px', cursor: 'pointer' }} />
+                <img
+                  src={logoImg}
+                  alt="logo img"
+                  onClick={onSubmit}
+                  style={{
+                    width: '60px',
+                    cursor: 'pointer',
+                    transition: 'transform 0.2s',
+                  }}
+                  onMouseOver={(e) => {
+                    e.target.style.transform = 'scale(1.1)'; 
+                  }}
+                  onMouseOut={(e) => {
+                    e.target.style.transform = 'scale(1)'; 
+                  }}
+                />
                 {/*<SubmitButton onClick={onSubmit}>*/}
                 {/*  단추*/}
                   {/* <Icon> */}
@@ -1102,7 +1117,22 @@ export default function Quiz() {
                   onKeyDown={handleOnKeyPressOne}
                   value={inputInitializeOne}
                 ></InputStyle>
-                <img src={logoImg} alt="logo img" onClick={onSubmitOne} style={{ width: '60px', cursor: 'pointer' }} />
+                <img
+                  src={logoImg}
+                  alt="logo img"
+                  onClick={onSubmitOne}
+                  style={{
+                    width: '60px',
+                    cursor: 'pointer',
+                    transition: 'transform 0.2s',
+                  }}
+                  onMouseOver={(e) => {
+                    e.target.style.transform = 'scale(1.1)'; 
+                  }}
+                  onMouseOut={(e) => {
+                    e.target.style.transform = 'scale(1)'; 
+                  }}
+                />
                 {/*<SubmitButton onClick={onSubmitOne}>단추</SubmitButton>*/}
               </TextContainer>
               <TableContainer>
@@ -1320,7 +1350,22 @@ export default function Quiz() {
                   onKeyDown={handleOnKeyPressTwo}
                   value={inputInitializeTwo}
                 ></InputStyle>
-                <img src={logoImg} alt="logo img" onClick={onSubmitTwo} style={{ width: '60px', cursor: 'pointer' }} />
+                <img
+                  src={logoImg}
+                  alt="logo img"
+                  onClick={onSubmitTwo}
+                  style={{
+                    width: '60px',
+                    cursor: 'pointer',
+                    transition: 'transform 0.2s',
+                  }}
+                  onMouseOver={(e) => {
+                    e.target.style.transform = 'scale(1.1)';
+                  }}
+                  onMouseOut={(e) => {
+                    e.target.style.transform = 'scale(1)';
+                  }}
+                />
                 {/*<SubmitButton onClick={onSubmitTwo}>단추</SubmitButton>*/}
               </TextContainer>
               <TableContainer>
