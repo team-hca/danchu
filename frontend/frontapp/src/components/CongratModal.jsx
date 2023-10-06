@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import styled from "styled-components";
 import confetti from 'canvas-confetti';
 import Error from "../routes/Error";
+import sortGuess from "../util/sortGuess";
 import congratDanchu from '../icon/congrat_danchu.png';
 import giveupDanchu from '../icon/giveup_danchu.png';
 
@@ -142,6 +143,10 @@ https://www.danchu.today/`;
   }
 
   const handleNewsClick = () => {
+    sortGuess("guess");
+    sortGuess("guessOne");
+    sortGuess("guessTwo");
+
     navigate("/result");
   }
 
