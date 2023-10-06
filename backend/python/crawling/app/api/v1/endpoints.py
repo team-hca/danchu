@@ -5,7 +5,8 @@ from app.service.crawler.url_collector import remove_and_insert_urls_into_db
 from app.service.crawler.url_collector import scheduling_url_collector
 from app.service.crawler.content_collector import update_articles_in_db
 from app.service.crawler.content_collector import update_302_error_articles_in_db
-from datetime import datetime
+import asyncio
+import logging
 
 router = APIRouter()
 
@@ -16,13 +17,51 @@ templates = Jinja2Templates(directory="static/html")
 scheduler = AsyncIOScheduler()
 scheduler.start()
 
+# 동적 스케줄링 설정
+lock_collect_urls = asyncio.Lock()
+lock_collect_contents = asyncio.Lock()
+lock_302_error_update = asyncio.Lock()
+
+# 로깅 설정 초기화
+logging.basicConfig()
+
+# 'apscheduler.scheduler' 로거를 가져와서 로깅 레벨을 ERROR로 설정
+scheduler_logger = logging.getLogger("apscheduler.scheduler")
+scheduler_logger.setLevel(logging.ERROR)
+
+
+# 커스텀 로그 필터 생성
+class IgnoreJobExecutionSkipFilter(logging.Filter):
+    def filter(self, record):
+        return "skipped: maximum number of running instances reached" not in record.msg
+
+
+# 필터 인스턴스 생성
+my_filter = IgnoreJobExecutionSkipFilter()
+
+# 로거에 필터 추가
+scheduler_logger.addFilter(my_filter)
+
+
+# 커스텀 로그 필터 생성
+class IgnoreJobExecutionSkipFilter(logging.Filter):
+    def filter(self, record):
+        return "skipped: maximum number of running instances reached" not in record.msg
+
+
+# 필터 인스턴스 생성
+my_filter = IgnoreJobExecutionSkipFilter()
+
+# 로거에 필터 추가
+scheduler_logger.addFilter(my_filter)
+
 
 async def schedule_jobs(
     start_page: int,
     threshold: int,
     duration: float,
     minutes: float,
-    hours: float,
+    hours: int,
 ):
     scheduler.add_job(
         scheduling_url_collector,
@@ -31,7 +70,7 @@ async def schedule_jobs(
         minutes=minutes,
         id="job_collect_urls",
         replace_existing=True,
-        max_instances=5,
+        max_instances=1,
     )
     print("url 크롤링 스케줄러 등록완료!")
 
@@ -42,16 +81,17 @@ async def schedule_jobs(
         minutes=minutes,
         id="job_collect_contents",
         replace_existing=True,
-        max_instances=5,
+        max_instances=1,
     )
     print("content 크롤링 스케줄러 등록완료!")
 
     scheduler.add_job(
         update_302_error_articles_in_db,
         "interval",
-        minutes=minutes,
+        hours=hours,
         id="job_302_error_update",
         replace_existing=True,
+        max_instances=1,
     )
     print("302 에러 업데이트 스케줄러 등록 완료!")
 
@@ -82,27 +122,84 @@ async def schedule_collection_tasks(
     APScheduler를 사용하여 1분마다 실행됩니다. 백그라운드에서 수행됩니다.
     """
     try:
-        await schedule_jobs(start_page, threshold, duration, minutes)
+        await schedule_jobs(start_page, threshold, duration, minutes, hours)
         return {"status": "Tasks scheduled to run every minute."}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.get("/api/v1/collection/scheduling/stop", tags=["scheduling"])
-async def stop_scheduled_collection():
-    """***실행중인 크롤링 작업스케줄링을 중단합니다.***"""
+@router.get("/api/v1/collection/scheduling/stop-all", tags=["scheduling"])
+async def stop_all_scheduled_collection():
+    """***실행중인 모든 크롤링 작업스케줄링을 중단합니다.***"""
 
     try:
         # job_collect_urls 작업이 존재하면 중지
         if scheduler.get_job("job_collect_urls"):
             scheduler.remove_job("job_collect_urls")
+            print("urls 크롤링을 스케줄러에서 제거합니다.")
 
         # job_collect_contents 작업이 존재하면 중지
         if scheduler.get_job("job_collect_contents"):
             scheduler.remove_job("job_collect_contents")
-        return {"status": "Collection tasks stopped."}
+            print("contents 크롤링을 스케줄러에서 제거합니다.")
+
+        # job_302_error_update 작업이 존재하면 중지
+        if scheduler.get_job("job_302_error_update"):
+            scheduler.remove_job("job_302_error_update")
+            print("302-error update 기능을 스케줄러에서 제거합니다.")
+
+        return {"status": "Collection all tasks stopped."}
     except Exception as e:
-        raise HTTPException(status_code=500, detail="Failed to stop collecting.")
+        raise HTTPException(status_code=500, detail="Failed to stop all collecting.")
+
+
+@router.get("/api/v1/collection/scheduling/stop/urls", tags=["scheduling"])
+async def stop_urls_scheduled_collection():
+    """***실행중인 urls 크롤링 작업스케줄링을 중단합니다.***"""
+
+    try:
+        # job_collect_urls 작업이 존재하면 중지
+        if scheduler.get_job("job_collect_urls"):
+            scheduler.remove_job("job_collect_urls")
+            print("urls 크롤링을 스케줄러에서 제거합니다.")
+
+        return {"status": "Collection urls tasks stopped."}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Failed to stop urls collecting.")
+
+
+@router.get("/api/v1/collection/scheduling/stop/contents", tags=["scheduling"])
+async def stop_contents_scheduled_collection():
+    """***실행중인 contents 크롤링 작업스케줄링을 중단합니다.***"""
+
+    try:
+        # job_collect_contents 작업이 존재하면 중지
+        if scheduler.get_job("job_collect_contents"):
+            scheduler.remove_job("job_collect_contents")
+            print("contents 크롤링을 스케줄러에서 제거합니다.")
+
+        return {"status": "Collection contents tasks stopped."}
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, detail="Failed to stop contents collecting."
+        )
+
+
+@router.get("/api/v1/collection/scheduling/stop/302-error", tags=["scheduling"])
+async def stop_302_error_scheduled_collection():
+    """***실행중인 302-error 업데이트 작업스케줄링을 중단합니다.***"""
+
+    try:
+        # job_302_error_update 작업이 존재하면 중지
+        if scheduler.get_job("job_302_error_update"):
+            scheduler.remove_job("job_302_error_update")
+            print("302-error update 기능을 스케줄러에서 제거합니다.")
+
+        return {"status": "update 302-error tasks stopped."}
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, detail="Failed to stop 302-error updating."
+        )
 
 
 @router.post("/api/v1/collection/urls/", tags=["collection"])
