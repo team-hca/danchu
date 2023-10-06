@@ -340,18 +340,15 @@ export default function Quiz() {
         }`
       )
       .then((response) => {
-        // console.log(JSON.stringify(response.data));
         obj.similarity = response.data.similarity;
-        obj.rank = response.data.rank;
+        obj.rank = (response.data.rank === -2 ? "????" : response.data.rank);
 
         obj.count = localStorage.getItem("guess")
           ? JSON.parse(localStorage.getItem("guess"))[0].length +
             JSON.parse(localStorage.getItem("guess"))[1].length +
             1
           : 1;
-        // alert("bbb");
         if (obj.similarity === 100.0) {
-          // alert("aaa");
           if (quizCount === 1) {
             if (localStorage.getItem("winState") === "-1") {
               localStorage.setItem("winState", 1);
@@ -368,7 +365,6 @@ export default function Quiz() {
               }
               navigate("/congrat");
             } else {
-              // alert("에");
               alert("1번 단추를 맞혔습니다!\n나머지 단추도 모두 맞혀보세요!");
             }
           } else {
@@ -432,7 +428,6 @@ export default function Quiz() {
             setRecentGuess(obj);
           } else {
             // guess가 있고 처음 추측할 때
-            // alert("three");
             arr[0].push(obj);
             setRecentGuess(obj);
             localStorage.setItem("guess", JSON.stringify(arr));
@@ -459,9 +454,8 @@ export default function Quiz() {
         }`
       )
       .then((response) => {
-        // console.log(JSON.stringify(response.data));
         obj.similarity = response.data.similarity;
-        obj.rank = response.data.rank;
+        obj.rank = (response.data.rank === -2 ? "????" : response.data.rank);
 
         obj.count = localStorage.getItem("guessOne")
           ? JSON.parse(localStorage.getItem("guessOne"))[0].length +
@@ -550,7 +544,6 @@ export default function Quiz() {
             setGuessOne(JSON.parse(localStorage.getItem("guessOne")));
           }
         }
-        // console.log(JSON.stringify(obj));
       })
       .catch((error) => {
         console.error("today quiz similarity One request failed: " + error);
@@ -569,9 +562,8 @@ export default function Quiz() {
         }`
       )
       .then((response) => {
-        // console.log(JSON.stringify(response.data));
         obj.similarity = response.data.similarity;
-        obj.rank = response.data.rank;
+        obj.rank = (response.data.rank === -2 ? "????" : response.data.rank);
 
         obj.count = localStorage.getItem("guessTwo")
           ? JSON.parse(localStorage.getItem("guessTwo"))[0].length +
@@ -650,7 +642,6 @@ export default function Quiz() {
             setGuessTwo(JSON.parse(localStorage.getItem("guessTwo")));
           }
         }
-        // console.log(JSON.stringify(obj));
       })
       .catch((error) => {
         console.error("today quiz similarity Two request failed: " + error);
@@ -830,19 +821,16 @@ export default function Quiz() {
   const handleInputChange = (event) => {
     setInputInitialize(event.target.value);
     setInputValue(event.target.value);
-    // console.log("zero: " + inputValue);
   };
 
   const handleInputChangeOne = (event) => {
     setInputInitializeOne(event.target.value);
     setInputValueOne(event.target.value);
-    // console.log("one: " + inputValueOne);
   };
 
   const handleInputChangeTwo = (event) => {
     setInputInitializeTwo(event.target.value);
     setInputValueTwo(event.target.value);
-    // console.log("two: " + inputValueTwo);
   };
 
   return quizSentence ? (
