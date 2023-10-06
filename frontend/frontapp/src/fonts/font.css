@@ -1,0 +1,24 @@
+@font-face {
+    font-family: "KCC-Ganpan";
+    /* font-weight: 80; */
+    /* font-display: swap; */
+    src: local(KCC_Ganpan), url("./KCC-Ganpan.woff2");
+}
+
+@font-face {
+    font-family: "Cafe24";
+    font-weight: 30;
+    src: local(Cafe24), url("./Cafe24Ssurround-v2.0.woff2");
+}
+
+@font-face {
+    font-family: "tmoney";
+    src: local(tm_bold), url("./TmoneyRoundWindExtraBold.ttf");
+}
+
+@font-face {
+    font-family: "tmoney";
+    src: local(tm_reg), url("./TmoneyRoundWindRegular.ttf");
+}
+
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css");
