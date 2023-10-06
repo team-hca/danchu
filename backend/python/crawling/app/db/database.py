@@ -8,11 +8,14 @@ import pandas as pd
 
 # DB 초기화 함수
 async def initialize_db():
-    # 비동기 MongoClient를 사용합니다.
     client = motor.motor_asyncio.AsyncIOMotorClient(config.MONGO_URL)
     db = client[config.DB_NAME]
     collection = db[config.COLLECTION_NAME]
-    await collection.create_index("crawled")  # 비동기로 인덱스 생성
+
+    indexes = await collection.index_information()
+    if "crawled_1" not in indexes:
+        await collection.create_index("crawled")
+
     return collection
 
 
@@ -45,9 +48,15 @@ async def update_document_in_db(document_id, update_data):
         print(f"데이터베이스 업데이트 중 에러: {e}")
 
 
-async def fetch_all_documents_from_db():
+async def fetch_documents_by_date_from_db(start_date: int, end_date: int):
     collection = await initialize_db()
-    documents = await collection.find({}).to_list(None)
+
+    if start_date == end_date:
+        query = {"date": str(start_date)}
+    else:
+        query = {"date": {"$gte": str(start_date), "$lte": str(end_date)}}
+
+    documents = await collection.find(query).to_list(None)
     return pd.DataFrame(documents)
 
 
