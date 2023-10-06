@@ -546,7 +546,8 @@ export default function Quiz() {
         }
       })
       .catch((error) => {
-        console.error("today quiz similarity One request failed: " + error);
+        alert("한글 단어를 입력해주세요!");
+        console.error("today quiz similarity request failed: " + error);
       });
   };
   const saveLocalStorageTwo = () => {
@@ -644,7 +645,8 @@ export default function Quiz() {
         }
       })
       .catch((error) => {
-        console.error("today quiz similarity Two request failed: " + error);
+        alert("한글 단어를 입력해주세요!");
+        console.error("today quiz similarity request failed: " + error);
       });
   };
 
