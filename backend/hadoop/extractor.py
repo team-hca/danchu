@@ -10,7 +10,7 @@ import time
 import re
 
 # 몽고DB 연결
-client = MongoClient(host='j9a302.p.ssafy.io', port=27017, username='hca', password='danchu1213!') # 접속
+client = MongoClient(host=<hostIp>, port=<port>, username=<MongoDBID>, password=<MongoDBPW>) # 접속
 DB = client.danchu # DB 명
 seoul_timezone = pytz.timezone('Asia/Seoul')
 NOW_DATE = datetime.now(seoul_timezone).strftime("%Y%m%d") # 인자로 보낼 오늘 날짜 값
