@@ -28,19 +28,24 @@
     - url : https://drive.google.com/drive/folders/1mn1VGJcy88Uujwrw0CnfsyZeQPwnO-Dw
 
 ### ⚡ 기술 스택 및 프로젝트 아키텍쳐
-<img src="/uploads/416fd671ce0118de68b1b5a86508a572/image__13_.png" width="50%"><br>
-<img src="/uploads/09ddcd35e032b43da338d4fff7bea186/undefined__8_.png" width="50%"><br>
+![image](https://github.com/team-hca/danchu/assets/55910792/bd47fb8b-696d-4584-9f97-ace1f377586d)
+
+![image](https://github.com/team-hca/danchu/assets/55910792/6cb5fd07-0d5a-417d-aff4-7d6ffe016c4f)
+
 
 
 ### 🌎 페이지
 
 - 퀴즈 페이지 메인<br>
-<img src="/uploads/3f0dd2cc52fa57d063a2d2abf77b52dc/main.PNG" width="50%"><br>
+![image](https://github.com/team-hca/danchu/assets/55910792/3f1e5959-b568-49e1-96e9-269bf7bc4022)
+
 - 유사도 추측 기능<br>
-<img src="/uploads/194abda36d9043209fa80538757cd7e1/simialirty.PNG" width="50%"><br>
+![image](https://github.com/team-hca/danchu/assets/55910792/a08a003a-6a01-402e-bbc0-a03c6890dfcd)
+
 - 정답 통과 화면<br>
-<img src="/uploads/397cd24085bce94c9dd5c9f7ece8e47a/cong.PNG" width="50%"><br>
+![image](https://github.com/team-hca/danchu/assets/55910792/4329775e-3e52-4d8c-8244-09de0a6d7826)
+
 - 관련 뉴스 화면<br>
-<img src="/uploads/daab321ccda886afba5a50b1f6533bbb/result.PNG" width="50%"><br>
+![image](https://github.com/team-hca/danchu/assets/55910792/4ad94009-947e-4f7a-ac6f-294e9277a042)
 
     
